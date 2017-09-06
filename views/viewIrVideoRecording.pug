@@ -1,0 +1,38 @@
+doctype html
+html
+  head
+    title IR Video Recording
+    include includes/base.pug
+    script(type='text/javascript').
+      var id = !{id};
+    script(type='text/javascript', src='/javascripts/viewIrVideoRecording.js')
+
+  body
+    include includes/navbar.pug
+    div.container
+      h3.center-block Video Player
+      video#player.center-block(controls)
+        Brouser not supported for playing video.
+      div.form-horizontal
+        div.form-group
+          label.col-xs-2.text-right Time:
+          div#time-text.col-xs-6 Some Time
+        div.form-group
+          label.col-xs-2.text-right Date:
+          div#date-text.col-xs-6 Some Date
+        div.form-group
+          label.col-xs-2.text-right Location:
+          div#location-text.col-xs-6 Some Location
+        div.form-group
+          label.col-xs-2.text-right relativeToDawn:
+          div#relative-to-dawn-text.col-xs-6
+        div.form-group
+          label.col-xs-2.text-right relativeToDusk:
+          div#relative-to-dusk-text.col-xs-6
+        div.form-group
+          label.col-xs-2.text-right Is a video pair.
+          div#isVideoPairText.col-xs-6
+        div.form-group
+          label.col-xs-2.text-right Delete:
+          input#delete-button(type='button', value='Delete')
+    include includes/tags.pug

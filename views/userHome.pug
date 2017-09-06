@@ -1,0 +1,29 @@
+doctype html
+html
+  head
+    title Home
+    include includes/base.pug
+    script(type='text/javascript', src='javascripts/userHome.js')
+
+  body
+    include includes/navbar.pug
+  div(class='container bs-docs-container')
+    h2.
+      Hello User!
+    dt.
+      Username
+    dd#username.
+    dt.
+      First name
+    dd#first-name.
+    dt.
+      Last name
+    dd#last-name.
+    dt.
+      Email
+    dd#email.
+    dt.
+      Groups
+    dd#groups.
+
+    input#new-group(type='button', value='New Group', onclick='newGroup()')
