@@ -56,14 +56,15 @@ user.register = function(passEle1, passEle2, usernameEle) {
     url: api + '/api/v1/Users',
     type: 'post',
     data: "password=" + password.value + "&username=" + username.value,
-    success: function() {
+    success: function(res) {
       localStorage.setItem('userData', JSON.stringify(res.userData));
       localStorage.setItem('JWT', res.token);
       window.location.assign("/user_home");
     },
-    error: function() {
+    error: function(res) {
       console.log("Error");
       console.log(res);
+      window.alert("Error with registering a new user.");
     }
   });
 }
