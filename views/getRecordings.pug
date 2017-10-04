@@ -1,0 +1,73 @@
+doctype html
+html
+  head
+    title Get Recordings
+    include includes/base.pug
+    script(type='text/javascript', src='javascripts/getRecordings.js')
+
+  body
+    include includes/navbar.pug
+
+    .col-md-1
+    .col-md-3
+      h4.
+        Make new condition
+      .input-group
+        label Before date
+        input#before-date(type='date')
+        input(type='button', value='Add', onclick="addBeforeDate()")
+      .input-group
+        label After date
+        input#after-date(type='date')
+        input(type='button', value='Add', onclick="addAfterDate()")
+      .input-group
+        label Longer than (seconds):
+        input#longer-than(type='number')
+        input(type='button', value='Add', onclick="addLongerThan()")
+      .input-group
+        label Shorter than (seconds):
+        input#shorter-than(type='number')
+        input(type='button', value='Add', onclick="addShorterThan()")
+      .input-group
+        label Device ID
+        input#device-id(type='number')
+        input(type='button', value='Add', onClick="addDeviceId()")
+
+    .col-md-4
+      h4.
+        Conditions
+      #conditions
+    .col-md-3
+      h4.
+        Query
+      input(type='button', value='Get all.', onclick='getAll()')
+      br
+      input(type='button', value='Get all from conditions.', onclick='fromConditions()')
+      br
+      label Active query
+      input#active-query(type='text', value='{}')
+      input(type='button', value='Send', onclick="sendQuery()")
+      br
+      label.col-md-2 Limit
+      input#limit.col-md-2(type='number', value=20)
+      label.col-md-2 Offset
+      input#offset.col-md-2(type='number', value=0)
+      input.col-md-1(type='button', value='<', onclick="dec()")
+      input.col-md-1(type='button', value='>', onclick="inc()")
+      label#count 0 results
+
+    .col-md-1
+
+  table#results-table(class="table table-striped")
+    tr
+      th View
+      th ID
+      th Group
+      th Location
+      th Time
+      th Date
+      th Duration
+      th BatteryLevel
+      th BatteryCharging
+      th AirplainMode
+      th File

@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title View Recording
+    include includes/base.pug
+    script(type'text/javascript').
+      var id = !{id};
+    script(type='text/javascript', src='/javascripts/viewRecording.js')
+
+  body
+    include includes/navbar.pug
+    div.container
+      h3.center-block Video Player
+      video#player.center-block(controls)
+        Brouser not supported for playing video.
