@@ -21,6 +21,12 @@ module.exports = function(app) {
     });
   });
 
+  app.get('/get_recordings', function(req, res) {
+    res.render('getRecordings.pug', {
+      'api': config.server.api,
+    });
+  });
+
   app.get('/register', function(req, res) {
     console.log(config.server.api);
     res.render('register.pug', {
@@ -82,6 +88,13 @@ module.exports = function(app) {
       'api': config.server.api,
       'irId': req.params.irId,
       'thermalId': req.params.thermalId,
+    });
+  });
+
+  app.get('/view_recording/:id', (request, response) => {
+    response.render('viewRecording.pug', {
+      'api': config.server.api,
+      'id': request.params.id,
     });
   });
 };
