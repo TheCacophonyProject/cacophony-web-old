@@ -252,7 +252,7 @@ parseDate = function(dateTime) {
 };
 
 // Generates a Download button to download the recording
-parseDownload = function(id) {
+parseDownload = function(id, type) {
   var td = document.createElement("td");
   var button = document.createElement("button");
   button.innerHTML = "Download";
@@ -267,7 +267,7 @@ parseDownload = function(id) {
       type: 'GET',
       headers: headers,
       success: function(res) {
-        var url = api + "/api/v1/signedUrl?jwt=" + res.downloadFileJWT
+        var url = api + "/api/v1/signedUrl?jwt=" + res[type];
         var linkElement = document.createElement('a');
         linkElement.href = url;
         var click = document.createEvent('MouseEvents');
@@ -280,6 +280,14 @@ parseDownload = function(id) {
   td.appendChild(button);
   return td;
 };
+
+parseDownloadRaw = function(id) {
+  return parseDownload(id, 'downloadRawJWT')
+}
+
+parseDownloadFile = function(id) {
+  return parseDownload(id, 'downloadFileJWT')
+}
 
 parseString = function(string) {
   var td = document.createElement("td");
@@ -348,7 +356,12 @@ function getTableData() {
     {
       tableName: "File",
       datapointField: "id",
-      parseFunction: parseDownload
+      parseFunction: parseDownloadFile
+    },
+    {
+      tableName: "File",
+      datapointField: "id",
+      parseFunction: parseDownloadRaw
     },
   ];
 }
