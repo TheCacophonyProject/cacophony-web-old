@@ -33,11 +33,11 @@ html
         input#device-id(type='number')
         input(type='button', value='Add', onClick="addDeviceId()")
 
-    .col-md-4
+    .col-md-3
       h4.
         Conditions
       #conditions
-    .col-md-3
+    .col-md-4
       h4.
         Query
       input(type='button', value='Get all.', onclick='getAll()')
@@ -49,9 +49,9 @@ html
       input(type='button', value='Send', onclick="sendQuery()")
       br
       label.col-md-2 Limit
-      input#limit.col-md-2(type='number', value=20)
+      input#limit.col-md-3(type='number', value=100)
       label.col-md-2 Offset
-      input#offset.col-md-2(type='number', value=0)
+      input#offset.col-md-3(type='number', value=0)
       input.col-md-1(type='button', value='<', onclick="dec()")
       input.col-md-1(type='button', value='>', onclick="inc()")
       label#count 0 results
