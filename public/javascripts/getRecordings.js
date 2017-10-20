@@ -307,11 +307,22 @@ parseGroup = function(group) {
   return td;
 };
 
+parseDevice = function(device) {
+  var td = document.createElement("td");
+  td.innerHTML = device.devicename;
+  return td;
+};
+
 function getTableData() {
   return [{
       tableName: "ID",
       datapointField: "id",
       parseFunction: parseNumber
+    },
+    {
+      tableName: "Device",
+      datapointField: "Device",
+      parseFunction: parseDevice
     },
     {
       tableName: "Group",
