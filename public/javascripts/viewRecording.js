@@ -29,6 +29,7 @@ function getRecordingSuccess(result) {
       parseThermalRaw(result)
       break;
   }
+  tags.load(result.recording.Tags);
 }
 
 function parseThermalRaw(result) {
