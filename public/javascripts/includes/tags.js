@@ -2,7 +2,7 @@
 Contains the tagging functions (delete, load, new).
 */
 
-tags = { recordingsIds: {} };
+tags = {};
 
 /**
  * Deletes a tag.
@@ -130,14 +130,14 @@ tags.new = function() {
     return;
   }
   console.log("New tag:", tag);
-  var data = tags.recordingsIds;
+  var data = {recordingId: id};
   data.tag = JSON.stringify(tag);
   console.log(data);
   // Upload new tag
   $.ajax({
-    url: '/api/v1/tags',
+    url: api + '/api/v1/tags',
     type: 'POST',
-    headers: { 'Authorization': localStorage.getItem('token') },
+    headers: { 'Authorization': user.getJWT() },
     data: data,
     success: function(res) {
       console.log("Success");
