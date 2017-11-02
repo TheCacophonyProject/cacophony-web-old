@@ -62,21 +62,6 @@ tags.addTagToTable = function(tag) {
   var duration = document.createElement('th');
   duration.innerHTML = tag.duration;
   row.appendChild(duration);
-  var killedTime = document.createElement('th');
-  killedTime.innerHTML = tag.killedTime;
-  row.appendChild(killedTime);
-  var poisionedTime = document.createElement('th');
-  poisionedTime.innerHTML = tag.poisionedTime;
-  row.appendChild(poisionedTime);
-  var trapInteractionTime = document.createElement('th');
-  trapInteractionTime.innerHTML = tag.trapInteractionTime;
-  row.appendChild(trapInteractionTime);
-  var trapInteractionDuration = document.createElement('th');
-  trapInteractionDuration.innerHTML = tag.trapInteractionDuration;
-  row.appendChild(trapInteractionDuration);
-  var trappedTime = document.createElement('th');
-  trappedTime.innerHTML = tag.trappedTime;
-  row.appendChild(trappedTime);
   var trapType = document.createElement('th');
   trapType.innerHTML = tag.trapType;
   row.appendChild(trapType);
@@ -118,12 +103,6 @@ tags.new = function() {
     tag.startTime = tags.parseTime('tagStartTimeInput');
     tag.duration = tags.parseDuration(
       'tagStartTimeInput', 'tagStopTimeInput');
-    tag.killedTime = tags.parseTime('tagKilledTimeInput');
-    tag.poisionedTime = tags.parseTime('tagPoisionedTimeInput');
-    tag.trapInteractionTime = tags.parseTime('tagTrapInteractionTimeInput');
-    tag.trapInteractionDuration = tags.parseDuration(
-      'tagTrapInteractionTimeInput', 'tagTrapInteractionStopTimeInput');
-    tag.trappedTime = tags.parseTime('tagTrappedTimeInput');
     tag.trapType = tags.parseSelect('tagTrapTypeInput');
   } catch (err) {
     console.log(err);

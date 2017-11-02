@@ -6,11 +6,31 @@ html
     script(type'text/javascript').
       var id = !{id};
     script(type='text/javascript', src='/javascripts/viewRecording.js')
+    link(href='/stylesheets/videoRecording.css', rel='stylesheet', media='screen')
 
   body
     include includes/navbar.pug
-    div.container
+    .container
       h3.center-block Video Player
-      video#player.center-block(controls)
-        Brouser not supported for playing video.
+      .container.col-md-6
+        video#player.center-block(width=100, controls)
+          Brouser not supported for playing video.
+      .container.col-md-6
+        .form-horizontal
+          .form-group
+            label.col-xs-3.text-right Date:
+            div#date-text
+          .form-group
+            label.col-xs-3.text-right Time:
+            div#time-text
+          .form-group
+            label.col-xs-3.text-right Device:
+            div#device-text
+          .form-group
+            label.col-xs-3.text-right Processing state:
+            div#processing-state-text
+          .form-group
+            button.col-xs-5(onclick="previousRecording()") Previous from device
+          .form-group
+            button.col-xs-5(onclick="nextRecording()") Next from device
     include includes/tags.pug
