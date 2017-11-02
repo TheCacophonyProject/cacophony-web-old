@@ -4,6 +4,7 @@ form.form-horizontal#tagForm(onsubmit="return false")
   .form-group
     label.col-xs-2.text-right Animal:
     select#tagAnimalInput
+      option bird
       option rat
       option possum
       option hedgehog
@@ -16,8 +17,8 @@ form.form-horizontal#tagForm(onsubmit="return false")
       option rabbit
       option hare
       option human
-      option bird
       option other
+      option unidentified
   .form-group
     label.col-xs-2.text-right Number:
     input#tagNumberInput(type="number", value=1)
@@ -68,6 +69,7 @@ form.form-horizontal#tagForm(onsubmit="return false")
   .form-group
     .col-xs-2
     input(type="submit", value="Add new tag", onclick="tags.new()" )
+    button(onclick="falsePositive()") False positive
 table#tags-table(class="table table-striped")
   tr
     th(type='id') ID

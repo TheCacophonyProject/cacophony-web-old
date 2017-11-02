@@ -158,3 +158,7 @@ function setEndTimeAsCurrentTime() {
   var seconds = Math.ceil(document.getElementById('player').currentTime)
   document.getElementById('tagStopTimeInput').value = secondsToMMSS(seconds);
 }
+
+function falsePositive() {
+  tags.send({event: "false positive"})
+}
