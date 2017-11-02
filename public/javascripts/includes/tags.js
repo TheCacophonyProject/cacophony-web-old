@@ -112,6 +112,10 @@ tags.new = function() {
     console.log(err);
     return;
   }
+  tags.send(tag);
+};
+
+tags.send = function(tag) {
   console.log("New tag:", tag);
   var data = {recordingId: id};
   data.tag = JSON.stringify(tag);
@@ -131,7 +135,7 @@ tags.new = function() {
       console.log("Error:", err);
     }
   })
-};
+}
 
 /**
  * Parses a Select input, if input is invalid it will throw an error.

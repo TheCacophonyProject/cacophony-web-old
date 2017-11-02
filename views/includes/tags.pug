@@ -69,6 +69,7 @@ form.form-horizontal#tagForm(onsubmit="return false")
   .form-group
     .col-xs-2
     input(type="submit", value="Add new tag", onclick="tags.new()" )
+    button(onclick="falsePositive()") False positive
 table#tags-table(class="table table-striped")
   tr
     th(type='id') ID
