@@ -50,6 +50,9 @@ tags.addTagToTable = function(tag) {
   var number = document.createElement('th');
   number.innerHTML = tag.number;
   row.appendChild(number);
+  var event = document.createElement('th');
+  event.innerHTML = tag.event;
+  row.appendChild(event);
   var confidence = document.createElement('th');
   confidence.innerHTML = tag.confidence;
   row.appendChild(confidence);
@@ -98,6 +101,7 @@ tags.new = function() {
   try {
     tag.animal = tags.parseSelect('tagAnimalInput');
     tag.number = tags.parseInt('tagNumberInput');
+    tag.event = tags.parseSelect('tagEventInput')
     tag.confidence = tags.parseConfidence('tagConfidenceInput');
     tag.age = tags.parseAge('tagAgeInput');
     tag.startTime = tags.parseTime('tagStartTimeInput');
