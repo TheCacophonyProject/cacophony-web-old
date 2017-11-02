@@ -23,8 +23,14 @@ form.form-horizontal#tagForm(onsubmit="return false")
     input#tagNumberInput(type="number", value=1)
   .form-group
     label.col-xs-2.text-right Event:
-    select#tagEvent
+    select#tagEventInput
+      option just wandering about
       option false positive
+      option interaction with lure
+      option interaction with trap
+      option set trap to activate
+      option trapped in trap
+      option other
   .form-group
     label.col-xs-2.text-right Confidence:
     label Low
@@ -67,6 +73,7 @@ table#tags-table(class="table table-striped")
     th(type='id') ID
     th(type='animal') Animal
     th(type='number') Number
+    th Event
     th Confidence
     th Age
     th Start Time
