@@ -6,6 +6,7 @@ http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 */
 
 var recordingsApiUrl = api + '/api/v1/recordings';
+var devicesApiUrl = api + '/api/v1/devices';
 var viewUrl = '/view_recording/';
 
 queryUtil = {};
@@ -13,6 +14,29 @@ queryUtil = {};
 conditions = {};
 nextId = 1;
 count = 54;
+
+window.onload = function() {
+    headers = {};
+    if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+    $.ajax({
+      url: devicesApiUrl,
+      type: 'GET',
+      headers: headers,
+      success: function(result) {
+          var deviceSelect = document.getElementById("deviceSelect")
+          for (i in result.devices.rows) {
+              var device = result.devices.rows[i];
+              var option = document.createElement("option");
+              option.innerText = device.devicename;
+              option.id = device.id;
+              deviceSelect.appendChild(option);
+          }
+      },
+      error: function(err) {
+          console.log(err);
+      }
+    })
+}
 
 // Adds a Sequelize condition to the query.
 addCondition = function(sequelizeCondition) {
@@ -130,7 +154,10 @@ dec = function() {
 
 // Get all results available
 getAll = function() {
-  document.getElementById('active-query').value = '{}';
+  var deviceId = document.getElementById("deviceSelect").selectedOptions[0].id;
+  var query = '{}'
+  if (deviceId != "") query = '{"DeviceId": '+deviceId+'}'
+  document.getElementById('active-query').value = query;
   sendQuery();
 };
 
