@@ -28,10 +28,6 @@ html
         label Shorter than (seconds):
         input#shorter-than(type='number')
         input(type='button', value='Add', onclick="addShorterThan()")
-      .input-group
-        label Device ID
-        input#device-id(type='number')
-        input(type='button', value='Add', onClick="addDeviceId()")
 
     .col-md-3
       h4.
@@ -41,6 +37,9 @@ html
       h4.
         Query
       input(type='button', value='Get all.', onclick='getAll()')
+      label Devices:
+      select#deviceSelect
+        option all
       br
       input(type='button', value='Get all from conditions.', onclick='fromConditions()')
       br
