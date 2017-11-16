@@ -125,11 +125,6 @@ addShorterThan = function() {
   addCondition({ duration: { "$lt": duration } });
 };
 
-addDeviceId = function() {
-  var id = Number(document.getElementById('device-id').value);
-  addCondition({ DeviceId: id });
-};
-
 // Increase query offset, view next set of results.
 inc = function() {
   var offset = document.getElementById('offset');
