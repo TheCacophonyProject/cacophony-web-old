@@ -11,6 +11,7 @@ window.onload = function() {
     success: getRecordingSuccess,
     error: getRecordingError,
   });
+  tags.loadUserDefaults();
 }
 
 function getRecordingError(result) {

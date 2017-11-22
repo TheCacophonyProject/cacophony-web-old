@@ -4,6 +4,12 @@ Contains the tagging functions (delete, load, new).
 
 tags = {};
 
+tags.loadUserDefaults = function() {
+  var defaults = user.getTagDefaults();
+  if (defaults.tagAnimalInput != undefined)
+    document.getElementById('tagAnimalInput').value = defaults.tagAnimalInput;
+}
+
 /**
  * Deletes a tag.
  */
@@ -108,6 +114,9 @@ tags.new = function() {
     tag.duration = tags.parseDuration(
       'tagStartTimeInput', 'tagStopTimeInput');
     tag.trapType = tags.parseSelect('tagTrapTypeInput');
+
+    // save user tag defaults.
+    user.setTagDefault('tagAnimalInput', tag.animal);
   } catch (err) {
     console.log(err);
     return;

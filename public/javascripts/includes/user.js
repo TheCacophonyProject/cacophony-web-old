@@ -113,3 +113,19 @@ user.updateUserData = function() {
     }
   });
 }
+
+user.getTagDefaults = function() {
+  var defaults = JSON.parse(localStorage.getItem('tagDefaults'));
+  if (defaults == undefined)
+    return {};
+  else
+    return defaults;
+}
+
+user.setTagDefault = function(key, val) {
+  var defaults = localStorage.getItem('tagDefaults');
+  if (defaults == undefined || typeof defaults != "object")
+    defaults = {};
+  defaults[key] = val;
+  localStorage.setItem('tagDefaults', JSON.stringify(defaults));
+}
