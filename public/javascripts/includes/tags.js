@@ -108,6 +108,9 @@ tags.new = function() {
     tag.duration = tags.parseDuration(
       'tagStartTimeInput', 'tagStopTimeInput');
     tag.trapType = tags.parseSelect('tagTrapTypeInput');
+
+    // save user tag defaults.
+    user.setTagDefault('tagAnimalInput', tag.animal);
   } catch (err) {
     console.log(err);
     return;

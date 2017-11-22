@@ -11,6 +11,11 @@ window.onload = function() {
     success: getRecordingSuccess,
     error: getRecordingError,
   });
+
+  // Load tags defaults
+  var defaults = user.getTagDefaults();
+  if (defaults.tagAnimalInput != undefined)
+    document.getElementById('tagAnimalInput').value = defaults.tagAnimalInput;
 }
 
 function getRecordingError(result) {
