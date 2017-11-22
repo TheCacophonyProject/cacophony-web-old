@@ -4,12 +4,6 @@ Contains the tagging functions (delete, load, new).
 
 tags = {};
 
-tags.loadUserDefaults = function() {
-  var defaults = user.getTagDefaults();
-  if (defaults.tagAnimalInput != undefined)
-    document.getElementById('tagAnimalInput').value = defaults.tagAnimalInput;
-}
-
 /**
  * Deletes a tag.
  */
