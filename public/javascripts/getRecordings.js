@@ -149,10 +149,16 @@ dec = function() {
 
 // Get all results available
 getAll = function() {
+  var query = {};
+
   var deviceId = document.getElementById("deviceSelect").selectedOptions[0].id;
-  var query = '{}'
-  if (deviceId != "") query = '{"DeviceId": '+deviceId+'}'
-  document.getElementById('active-query').value = query;
+  if (deviceId != "") query.DeviceId = deviceId;
+
+  var tagVal = $('input[name="tagged-or-not"]:checked').val();
+  if (tagVal == 'tagged') query._tagged = true;
+  else if (tagVal == 'not-tagged') query._tagged = false;
+
+  document.getElementById('active-query').value = JSON.stringify(query);
   sendQuery();
 };
 
