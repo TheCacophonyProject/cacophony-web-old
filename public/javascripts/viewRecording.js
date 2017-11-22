@@ -14,8 +14,11 @@ window.onload = function() {
 
   // Load tags defaults
   var defaults = user.getTagDefaults();
-  if (defaults.tagAnimalInput != undefined)
-    document.getElementById('tagAnimalInput').value = defaults.tagAnimalInput;
+  var setToDefaults = ['tagAnimalInput', 'tagEventInput', 'tagTrapTypeInput'];
+  for (var i in setToDefaults) {
+    if (defaults[setToDefaults[i]] != undefined)
+      document.getElementById([setToDefaults[i]]).value = defaults[setToDefaults[i]];
+  }
 }
 
 function getRecordingError(result) {
