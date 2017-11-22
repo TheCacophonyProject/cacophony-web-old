@@ -41,6 +41,13 @@ html
       select#deviceSelect
         option all
       br
+      label Tagged
+      input(name="tagged-or-not", type="radio", value='tagged')
+      label Not tagged
+      input(name="tagged-or-not", type="radio", value='not-tagged', checked)
+      label Both
+      input(name="tagged-or-not", type="radio", value='both', checked)
+      br
       input(type='button', value='Get all from conditions.', onclick='fromConditions()')
       br
       label Active query
