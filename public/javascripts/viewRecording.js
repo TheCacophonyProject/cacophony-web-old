@@ -176,3 +176,21 @@ function setEndTimeAsCurrentTime() {
 function falsePositive() {
   tags.send({event: "false positive"})
 }
+
+function deleteRecording() {
+  headers = {};
+  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  $.ajax({
+    url: recordingsApiUrl + '/' + id,
+    type: 'DELETE',
+    headers: headers,
+    success: function(res) {
+      console.log(res);
+      window.alert("Deleted recording.")
+    },
+    error: function(err) {
+      console.log(err);
+      window.alert("Error with deleting recording.");
+    },
+  });
+}
