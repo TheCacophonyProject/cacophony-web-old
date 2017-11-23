@@ -111,6 +111,8 @@ tags.new = function() {
 
     // save user tag defaults.
     user.setTagDefault('tagAnimalInput', tag.animal);
+    user.setTagDefault('tagEventInput', tag.event);
+    user.setTagDefault('tagTrapTypeInput', tag.trapType);
   } catch (err) {
     console.log(err);
     return;

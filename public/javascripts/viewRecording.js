@@ -14,8 +14,11 @@ window.onload = function() {
 
   // Load tags defaults
   var defaults = user.getTagDefaults();
-  if (defaults.tagAnimalInput != undefined)
-    document.getElementById('tagAnimalInput').value = defaults.tagAnimalInput;
+  var setToDefaults = ['tagAnimalInput', 'tagEventInput', 'tagTrapTypeInput'];
+  for (var i in setToDefaults) {
+    if (defaults[setToDefaults[i]] != undefined)
+      document.getElementById([setToDefaults[i]]).value = defaults[setToDefaults[i]];
+  }
 }
 
 function getRecordingError(result) {
@@ -23,7 +26,7 @@ function getRecordingError(result) {
   console.log("ERROR");
 }
 
-function previousRecording() {
+function previousRecording(tagged) {
   console.log('Go to previous recording.');
   // Goes to the previous recording from that device.
   if (recording == null) return;
@@ -31,6 +34,9 @@ function previousRecording() {
     DeviceId: recording.Device.id,
     recordingDateTime: {lt: recording.recordingDateTime},
   };
+  if (tagged == false) {
+    query._tagged = false;
+  }
   headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   $.ajax({
@@ -56,7 +62,7 @@ function previousRecording() {
   });
 }
 
-function nextRecording() {
+function nextRecording(tagged) {
   console.log('Go to next recording.')
   // Goes to the next recording from that device
   if (recording == null) return;
@@ -64,6 +70,9 @@ function nextRecording() {
     DeviceId: recording.Device.id,
     recordingDateTime: {gt: recording.recordingDateTime},
   };
+  if (tagged == false) {
+    query._tagged = false;
+  }
   headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   $.ajax({
@@ -130,6 +139,7 @@ function parseThermalRaw(result) {
     result.recording.Device.devicename;
   document.getElementById('processing-state-text').innerHTML =
     result.recording.processingState;
+  document.getElementById('comment-text').value = result.recording.comment;
 }
 
 function secondsToMMSS(seconds) {
@@ -166,4 +176,43 @@ function setEndTimeAsCurrentTime() {
 
 function falsePositive() {
   tags.send({event: "false positive"})
+}
+
+function deleteRecording() {
+  headers = {};
+  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  $.ajax({
+    url: recordingsApiUrl + '/' + id,
+    type: 'DELETE',
+    headers: headers,
+    success: function(res) {
+      console.log(res);
+      window.alert("Deleted recording.")
+    },
+    error: function(err) {
+      console.log(err);
+      window.alert("Error with deleting recording.");
+    },
+  });
+}
+
+function updateComment() {
+  var comment = document.getElementById('comment-text').value;
+  headers = {};
+  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  $.ajax({
+    url: recordingsApiUrl + '/' + id,
+    type: 'PATCH',
+    headers: headers,
+    data: {updates: JSON.stringify({comment: comment})},
+    success: function(res) {
+      console.log(res);
+      window.alert("Saved comment.")
+    },
+    error: function(err) {
+      console.log(err);
+      console.log(err.responseJSON.messages);
+      window.alert("Failed to save comment.");
+    },
+  });
 }

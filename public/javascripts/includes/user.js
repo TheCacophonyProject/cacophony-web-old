@@ -123,7 +123,7 @@ user.getTagDefaults = function() {
 }
 
 user.setTagDefault = function(key, val) {
-  var defaults = localStorage.getItem('tagDefaults');
+  var defaults = JSON.parse(localStorage.getItem('tagDefaults'));
   if (defaults == undefined || typeof defaults != "object")
     defaults = {};
   defaults[key] = val;
