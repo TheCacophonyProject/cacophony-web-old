@@ -26,7 +26,7 @@ function getRecordingError(result) {
   console.log("ERROR");
 }
 
-function previousRecording() {
+function previousRecording(tagged) {
   console.log('Go to previous recording.');
   // Goes to the previous recording from that device.
   if (recording == null) return;
@@ -34,6 +34,9 @@ function previousRecording() {
     DeviceId: recording.Device.id,
     recordingDateTime: {lt: recording.recordingDateTime},
   };
+  if (tagged == false) {
+    query._tagged = false;
+  }
   headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   $.ajax({
@@ -59,7 +62,7 @@ function previousRecording() {
   });
 }
 
-function nextRecording() {
+function nextRecording(tagged) {
   console.log('Go to next recording.')
   // Goes to the next recording from that device
   if (recording == null) return;
@@ -67,6 +70,9 @@ function nextRecording() {
     DeviceId: recording.Device.id,
     recordingDateTime: {gt: recording.recordingDateTime},
   };
+  if (tagged == false) {
+    query._tagged = false;
+  }
   headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   $.ajax({
