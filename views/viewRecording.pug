@@ -31,6 +31,10 @@ html
             label.col-xs-3.text-right Processing state:
             div#processing-state-text
           .form-group
+            label.col-xs-3.text-right Comment:
+            input.col-xs-7#comment-text
+            button.col-xs-2(onclick="updateComment()") Save
+          .form-group
             button.col-xs-5(onclick="previousRecording()") Previous from device
             button.col-xs-5(onclick="previousRecording(false)") Previous not tagged
           .form-group

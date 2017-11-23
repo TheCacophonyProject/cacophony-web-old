@@ -139,6 +139,7 @@ function parseThermalRaw(result) {
     result.recording.Device.devicename;
   document.getElementById('processing-state-text').innerHTML =
     result.recording.processingState;
+  document.getElementById('comment-text').value = result.recording.comment;
 }
 
 function secondsToMMSS(seconds) {
@@ -191,6 +192,27 @@ function deleteRecording() {
     error: function(err) {
       console.log(err);
       window.alert("Error with deleting recording.");
+    },
+  });
+}
+
+function updateComment() {
+  var comment = document.getElementById('comment-text').value;
+  headers = {};
+  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  $.ajax({
+    url: recordingsApiUrl + '/' + id,
+    type: 'PATCH',
+    headers: headers,
+    data: {updates: JSON.stringify({comment: comment})},
+    success: function(res) {
+      console.log(res);
+      window.alert("Saved comment.")
+    },
+    error: function(err) {
+      console.log(err);
+      console.log(err.responseJSON.messages);
+      window.alert("Failed to save comment.");
     },
   });
 }
