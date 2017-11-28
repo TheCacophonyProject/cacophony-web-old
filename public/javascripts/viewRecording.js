@@ -132,6 +132,7 @@ function parseThermalRaw(result) {
     document.getElementById('tagStopTimeInput').value =
       secondsToMMSS(player.duration - 10);
   });
+  player.addEventListener('loadstart', function(res) { res.target.play(); });
 
   // Set source for player
   var source = document.createElement('source');
