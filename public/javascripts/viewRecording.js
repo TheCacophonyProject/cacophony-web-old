@@ -1,6 +1,17 @@
 var recordingsApiUrl = api + '/api/v1/recordings'
 var recording = null;
 
+document.onkeypress = function (e) {
+  var key = e.key;
+  if (key == 'n') {
+    nextRecording(false);
+  } else if (key == 'f') {
+    falsePositive();
+  } else if (key == 'a') {
+    tags.new();
+  }
+};
+
 window.onload = function() {
   headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
