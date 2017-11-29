@@ -199,7 +199,7 @@ function deleteRecording() {
     headers: headers,
     success: function(res) {
       console.log(res);
-      window.alert("Deleted recording.")
+      nextRecording(false);
     },
     error: function(err) {
       console.log(err);
