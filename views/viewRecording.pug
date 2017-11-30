@@ -40,4 +40,7 @@ html
           .form-group
             button.col-xs-5(onclick="nextRecording()") Next from device
             button.col-xs-5(onclick="nextRecording(false)") Next not tagged
+          .form-group
+            input.col-xs-5(type="submit", value="Add new tag", onclick="tags.new()" )
+            button.col-xs-5(onclick="falsePositive()") False positive
     include includes/tags.pug

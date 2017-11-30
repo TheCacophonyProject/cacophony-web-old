@@ -68,10 +68,6 @@ form.form-horizontal#tagForm(onsubmit="return false")
     input#tagStopTimeInput(type="text", placeholder="min:sec", value="", pattern="(\\d)?(\\d):[0-5][0-9]", title="Minutes:Seconds (2:31)")
     button(onclick="goToEndTime()") go to end time
     button(onclick="setEndTimeAsCurrentTime()") set to current time
-  .form-group
-    .col-xs-2
-    input(type="submit", value="Add new tag", onclick="tags.new()" )
-    button(onclick="falsePositive()") False positive
 table#tags-table(class="table table-striped")
   tr
     th(type='id') ID
