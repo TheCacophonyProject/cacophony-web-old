@@ -1,6 +1,17 @@
 var recordingsApiUrl = api + '/api/v1/recordings'
 var recording = null;
 
+document.onkeypress = function (e) {
+  var key = e.key;
+  if (key == 'n') {
+    nextRecording(false);
+  } else if (key == 'f') {
+    falsePositive();
+  } else if (key == 'a') {
+    tags.new();
+  }
+};
+
 window.onload = function() {
   headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
@@ -121,6 +132,7 @@ function parseThermalRaw(result) {
     document.getElementById('tagStopTimeInput').value =
       secondsToMMSS(player.duration - 10);
   });
+  player.addEventListener('loadstart', function(res) { res.target.play(); });
 
   // Set source for player
   var source = document.createElement('source');
@@ -187,7 +199,7 @@ function deleteRecording() {
     headers: headers,
     success: function(res) {
       console.log(res);
-      window.alert("Deleted recording.")
+      nextRecording(false);
     },
     error: function(err) {
       console.log(err);
