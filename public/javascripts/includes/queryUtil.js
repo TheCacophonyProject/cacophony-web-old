@@ -314,10 +314,12 @@ queryUtil.parseTimeOnly = function(time) {
   return td;
 };
 
-queryUtil.parseDateOnly = function(date) {
-  //TODO Change timezone
+queryUtil.parseDateOnly = function(dateTime) {
   var td = document.createElement("td");
-  td.innerHTML = date;
+  if (dateTime == null)
+    return td;
+  var d = new Date(dateTime);
+  td.innerHTML = d.toLocaleDateString();
   return td;
 };
 
