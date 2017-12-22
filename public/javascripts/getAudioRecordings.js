@@ -21,7 +21,7 @@ function getTableData() {
     },
     {
       tableName: "Time",
-      datapointField: "recordingTime",
+      datapointField: "recordingDateTime",
       parseFunction: queryUtil.parseTimeOnly
     },
     {
