@@ -310,8 +310,9 @@ queryUtil.parseDuration = function(duration) {
 
 queryUtil.parseTimeOnly = function(dateTime) {
   var td = document.createElement("td");
-  if (dateTime == null)
+  if (dateTime == null) {
     return td;
+  }
   var d = new Date(dateTime);
   td.innerHTML = d.toLocaleTimeString();
   return td;
@@ -319,8 +320,9 @@ queryUtil.parseTimeOnly = function(dateTime) {
 
 queryUtil.parseDateOnly = function(dateTime) {
   var td = document.createElement("td");
-  if (dateTime == null)
+  if (dateTime == null) {
     return td;
+  }
   var d = new Date(dateTime);
   td.innerHTML = d.toLocaleDateString('en-NZ');
   return td;
