@@ -1,0 +1,20 @@
+#groups {
+  width: 300px;
+  float: left;
+  margin: 10px;
+}
+#users {
+  width: 300px;
+  float: left;
+  margin: 10px;
+}
+#devices {
+  width: 300px;
+  float: left;
+  margin: 10px;
+}
+#group-admin {
+  width: 600px;
+  float: left;
+  margin: 10px;
+}

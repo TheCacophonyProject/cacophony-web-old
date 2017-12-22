@@ -97,4 +97,10 @@ module.exports = function(app) {
       'id': request.params.id,
     });
   });
+
+  app.get('/groups', (request, response) => {
+    response.render('groups.pug', {
+      'api': config.server.api,
+    });
+  });
 };
