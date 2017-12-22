@@ -145,8 +145,8 @@ function parseThermalRaw(result) {
 
   // Get metadata.
   var date = new Date(result.recording.recordingDateTime);
-  document.getElementById('date-text').innerHTML = date.toLocaleDateString();
-  document.getElementById('time-text').innerHTML = date.toLocaleTimeString();
+  document.getElementById('date-text').innerHTML = date.toLocaleDateString('en-NZ');
+  document.getElementById('time-text').innerHTML = date.toLocaleTimeString('en-NZ');
   document.getElementById('device-text').innerHTML =
     result.recording.Device.devicename;
   document.getElementById('processing-state-text').innerHTML =

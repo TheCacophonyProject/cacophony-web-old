@@ -266,7 +266,7 @@ parseTime = function(dateTime) {
   if (dateTime == null)
     return td;
   var d = new Date(dateTime);
-  td.innerHTML = d.toLocaleTimeString();
+  td.innerHTML = d.toLocaleTimeString('en-NZ');
   return td;
 };
 
