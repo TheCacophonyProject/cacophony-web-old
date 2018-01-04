@@ -68,15 +68,17 @@ form.form-horizontal#tagForm(onsubmit="return false")
     input#tagStopTimeInput(type="text", placeholder="min:sec", value="", pattern="(\\d)?(\\d):[0-5][0-9]", title="Minutes:Seconds (2:31)")
     button(onclick="goToEndTime()") go to end time
     button(onclick="setEndTimeAsCurrentTime()") set to current time
-table#tags-table(class="table table-striped")
-  tr
-    th(type='id') ID
-    th(type='animal') Animal
-    th(type='number') Number
-    th Event
-    th Confidence
-    th Age
-    th Start Time
-    th Duration
-    th Trap Type
-    th
+table(class="table table-hover")
+  thead
+    tr
+      th(type='type') Type
+      th(type='animal') Animal
+      th(type='number') Number
+      th Event
+      th Confidence
+      th Age
+      th Start Time
+      th Duration
+      th Trap Type
+      th
+  tbody#tags-table

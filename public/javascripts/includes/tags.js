@@ -9,7 +9,6 @@ tags = {};
  */
 tags.delete = function(event) {
   var id = event.target.tagId;
-  console.log("Deleting tag:", id);
   $.ajax({
     url: api+'/api/v1/tags',
     type: 'DELETE',
@@ -18,7 +17,6 @@ tags.delete = function(event) {
     success: function() {
       var row = event.target.parentNode.parentNode;
       row.parentNode.removeChild(row);
-      console.log("Deleted tag.")
     },
     error: function(err) {
       console.log("Error with deleting tag:", err);
@@ -31,46 +29,51 @@ tags.delete = function(event) {
  */
 tags.addTagToTable = function(tag) {
   var tagsTable = document.getElementById('tags-table');
-  // Make new row.
   var row = tagsTable.insertRow(tagsTable.rows.length);
-  // Add each element to row.
 
-  var elements = [
+  var typeElem = document.createElement('td');
+  if (tag.automatic) {
+    row.className = "bg-danger";
+    typeElem.innerHTML = "Automatic"
+  } else {
+    typeElem.innerHTML = "Human";
+  }
+  row.appendChild(typeElem);
 
-  ];
-
-
-
-  var id = document.createElement('th');
-  id.innerHTML = tag.id;
-  row.appendChild(id);
-  var animal = document.createElement('th');
+  var animal = document.createElement('td');
   animal.innerHTML = tag.animal;
   row.appendChild(animal);
-  var number = document.createElement('th');
+
+  var number = document.createElement('td');
   number.innerHTML = tag.number;
   row.appendChild(number);
-  var event = document.createElement('th');
+
+  var event = document.createElement('td');
   event.innerHTML = tag.event;
   row.appendChild(event);
-  var confidence = document.createElement('th');
+
+  var confidence = document.createElement('td');
   confidence.innerHTML = tag.confidence;
   row.appendChild(confidence);
-  var age = document.createElement('th');
+
+  var age = document.createElement('td');
   age.innerHTML = tag.age;
   row.appendChild(age);
-  var startTime = document.createElement('th');
+
+  var startTime = document.createElement('td');
   startTime.innerHTML = tag.startTime;
   row.appendChild(startTime);
-  var duration = document.createElement('th');
+
+  var duration = document.createElement('td');
   duration.innerHTML = tag.duration;
   row.appendChild(duration);
-  var trapType = document.createElement('th');
+
+  var trapType = document.createElement('td');
   trapType.innerHTML = tag.trapType;
   row.appendChild(trapType);
 
   // Add delete button
-  var del = document.createElement('th');
+  var del = document.createElement('td');
   var deleteButton = document.createElement('button');
   deleteButton.innerHTML = "Delete"
   deleteButton.onclick = tags.delete;
@@ -83,7 +86,6 @@ tags.addTagToTable = function(tag) {
  * Loads all the tags in the list given to the table.
  */
 tags.load = function(loadingTags) {
-  console.log("Loading tags into table.");
   for (var i in loadingTags) {
     tags.addTagToTable(loadingTags[i]);
   }
@@ -121,10 +123,8 @@ tags.new = function() {
 };
 
 tags.send = function(tag) {
-  console.log("New tag:", tag);
   var data = {recordingId: id};
   data.tag = JSON.stringify(tag);
-  console.log(data);
   // Upload new tag
   $.ajax({
     url: api + '/api/v1/tags',
@@ -132,7 +132,6 @@ tags.send = function(tag) {
     headers: { 'Authorization': user.getJWT() },
     data: data,
     success: function(res) {
-      console.log("Success");
       tag.id = res.tagId;
       tags.addTagToTable(tag);
     },

@@ -154,10 +154,6 @@ getAll = function() {
   var deviceId = document.getElementById("deviceSelect").selectedOptions[0].id;
   if (deviceId != "") query.DeviceId = deviceId;
 
-  var tagVal = $('input[name="tagged-or-not"]:checked').val();
-  if (tagVal == 'tagged') query._tagged = true;
-  else if (tagVal == 'not-tagged') query._tagged = false;
-
   document.getElementById('active-query').value = JSON.stringify(query);
   sendQuery();
 };
@@ -171,6 +167,7 @@ sendQuery = function() {
   var query = document.getElementById('active-query').value;
   var limit = Number(document.getElementById('limit').value);
   var offset = Number(document.getElementById('offset').value);
+  var tagMode = $('select#tagMode').val();
 
   var url = recordingsApiUrl
   $.ajax({
@@ -180,6 +177,7 @@ sendQuery = function() {
       where: query,
       limit: limit,
       offset: offset,
+      tagMode: tagMode,
     },
     headers: { Authorization: user.getJWT() },
     success: function(res) {
@@ -251,7 +249,7 @@ parseLocation = function(location) {
     td.innerHTML = latitude + ', ' + longitude;
     return td;
   }
-  td.innerHTML = 'No location.';
+  td.innerHTML = '<span class="text-muted">(unknown)</span>';
   return td;
 };
 
@@ -278,6 +276,33 @@ parseDate = function(dateTime) {
   td.innerHTML = d.toLocaleDateString('en-NZ');
   return td;
 };
+
+parseTags = function(tags) {
+  var td = document.createElement("td");
+  var names = [];
+  for (var i = 0; i < tags.length; i++) {
+    tag = tags[i];
+    animal = tag.animal
+    if (animal == null) {
+      animal = '<i>false-positive</i>'
+    }
+    if (tag.automatic) {
+      names.push('<span class="text-danger">' + animal + '</span>');
+    } else {
+      names.push(animal);
+    }
+  }
+  td.innerHTML = names.join(' ');
+  return td;
+};
+
+parseOther = function(datapoint) {
+  // Airplane and battery status can go here.
+  var td = document.createElement("td");
+  td.innerHTML = '<span class="text-muted">-</span>';
+  return td;
+};
+
 
 // Generates a Download button to download the recording
 parseDownload = function(id, type) {
@@ -378,19 +403,14 @@ function getTableData() {
       parseFunction: parseDuration
     },
     {
-      tableName: "BatteryLevel",
-      datapointField: "batteryLevel",
-      parseFunction: parseNumber
+      tableName: "Tags",
+      datapointField: "Tags",
+      parseFunction: parseTags,
     },
     {
-      tableName: "BatteryCharging",
-      datapointField: "batteryCharging",
-      parseFunction: parseString,
-    },
-    {
-      tableName: "AirplaneMode",
-      datapointField: "airplaneModeOn",
-      parseFunction: parseBoolean,
+      tableName: "Other",
+      datapointField: "datapoint",
+      parseFunction: parseOther,
     },
     {
       tableName: "File",
