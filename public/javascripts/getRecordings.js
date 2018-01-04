@@ -249,7 +249,7 @@ parseLocation = function(location) {
     td.innerHTML = latitude + ', ' + longitude;
     return td;
   }
-  td.innerHTML = 'No location.';
+  td.innerHTML = '<span class="text-muted">(unknown)</span>';
   return td;
 };
 
@@ -276,6 +276,29 @@ parseDate = function(dateTime) {
   td.innerHTML = d.toLocaleDateString('en-NZ');
   return td;
 };
+
+parseTags = function(tags) {
+  var td = document.createElement("td");
+  var names = [];
+  for (var i = 0; i < tags.length; i++) {
+    tag = tags[i];
+    if (tag.automatic) {
+      names.push('<span class="text-danger">' + tag.animal + '</span>');
+    } else {
+      names.push(tag.animal);
+    }
+  }
+  td.innerHTML = names.join(' ');
+  return td;
+};
+
+parseOther = function(datapoint) {
+  // Airplane and battery status can go here.
+  var td = document.createElement("td");
+  td.innerHTML = '<span class="text-muted">-</span>';
+  return td;
+};
+
 
 // Generates a Download button to download the recording
 parseDownload = function(id, type) {
@@ -376,19 +399,14 @@ function getTableData() {
       parseFunction: parseDuration
     },
     {
-      tableName: "BatteryLevel",
-      datapointField: "batteryLevel",
-      parseFunction: parseNumber
+      tableName: "Tags",
+      datapointField: "Tags",
+      parseFunction: parseTags,
     },
     {
-      tableName: "BatteryCharging",
-      datapointField: "batteryCharging",
-      parseFunction: parseString,
-    },
-    {
-      tableName: "AirplaneMode",
-      datapointField: "airplaneModeOn",
-      parseFunction: parseBoolean,
+      tableName: "Other",
+      datapointField: "datapoint",
+      parseFunction: parseOther,
     },
     {
       tableName: "File",
