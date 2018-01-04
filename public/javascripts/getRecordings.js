@@ -282,10 +282,14 @@ parseTags = function(tags) {
   var names = [];
   for (var i = 0; i < tags.length; i++) {
     tag = tags[i];
+    animal = tag.animal
+    if (animal == null) {
+      animal = '<i>false-positive</i>'
+    }
     if (tag.automatic) {
-      names.push('<span class="text-danger">' + tag.animal + '</span>');
+      names.push('<span class="text-danger">' + animal + '</span>');
     } else {
-      names.push(tag.animal);
+      names.push(animal);
     }
   }
   td.innerHTML = names.join(' ');
