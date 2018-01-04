@@ -59,8 +59,10 @@ html
         input.col-md-1(type='button', value='<', onclick="dec()")
         input.col-md-1(type='button', value='>', onclick="inc()")
       .form-group.row
-        input(type='button', value='Get all', onclick='getAll()').col-md-2
-        input(type='button', value='Get all from conditions', onclick='fromConditions()').col-md-3
+        .col-md-offset-2
+          input(type='button', value='Get all', onclick='getAll()')
+          | &nbsp;
+          input(type='button', value='Get all from conditions', onclick='fromConditions()')
       br
       label Active query
       input#active-query(type='text', value='{}')
