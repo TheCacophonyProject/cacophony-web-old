@@ -154,10 +154,6 @@ getAll = function() {
   var deviceId = document.getElementById("deviceSelect").selectedOptions[0].id;
   if (deviceId != "") query.DeviceId = deviceId;
 
-  var tagVal = $('input[name="tagged-or-not"]:checked').val();
-  if (tagVal == 'tagged') query._tagged = true;
-  else if (tagVal == 'not-tagged') query._tagged = false;
-
   document.getElementById('active-query').value = JSON.stringify(query);
   sendQuery();
 };
@@ -171,6 +167,7 @@ sendQuery = function() {
   var query = document.getElementById('active-query').value;
   var limit = Number(document.getElementById('limit').value);
   var offset = Number(document.getElementById('offset').value);
+  var tagMode = $('select#tagMode').val();
 
   var url = recordingsApiUrl
   $.ajax({
@@ -180,6 +177,7 @@ sendQuery = function() {
       where: query,
       limit: limit,
       offset: offset,
+      tagMode: tagMode,
     },
     headers: { Authorization: user.getJWT() },
     success: function(res) {

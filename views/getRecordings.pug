@@ -3,6 +3,7 @@ html
   head
     title Get Recordings
     include includes/base.pug
+    link(href='/stylesheets/getRecordings.css', rel='stylesheet', media='screen')
     script(type='text/javascript', src='javascripts/getRecordings.js')
 
   body
@@ -12,22 +13,22 @@ html
     .col-md-3
       h4.
         Make new condition
-      .input-group
-        label Before date
-        input#before-date(type='date')
-        input(type='button', value='Add', onclick="addBeforeDate()")
-      .input-group
-        label After date
-        input#after-date(type='date')
-        input(type='button', value='Add', onclick="addAfterDate()")
-      .input-group
-        label Longer than (seconds):
-        input#longer-than(type='number')
-        input(type='button', value='Add', onclick="addLongerThan()")
-      .input-group
-        label Shorter than (seconds):
-        input#shorter-than(type='number')
-        input(type='button', value='Add', onclick="addShorterThan()")
+      .form-group.row
+        label.col-md-4 Before date
+        input#before-date(type='date').col-md-4
+        input(type='button', value='Add', onclick="addBeforeDate()").col-md-2
+      .form-group.row
+        label.col-md-4 After date
+        input#after-date(type='date').col-md-4
+        input(type='button', value='Add', onclick="addAfterDate()").col-md-2
+      .form-group.row
+        label.col-md-4 Longer than(s)
+        input#longer-than(type='number').col-md-4
+        input(type='button', value='Add', onclick="addLongerThan()").col-md-2
+      .form-group.row
+        label.col-md-4 Shorter than(s)
+        input#shorter-than(type='number').col-md-4
+        input(type='button', value='Add', onclick="addShorterThan()").col-md-2
 
     .col-md-3
       h4.
@@ -36,30 +37,35 @@ html
     .col-md-4
       h4.
         Query
-      input(type='button', value='Get all.', onclick='getAll()')
-      label Devices:
-      select#deviceSelect
-        option all
-      br
-      label Tagged
-      input(name="tagged-or-not", type="radio", value='tagged')
-      label Not tagged
-      input(name="tagged-or-not", type="radio", value='not-tagged')
-      label Both
-      input(name="tagged-or-not", type="radio", value='both', checked)
-      br
-      input(type='button', value='Get all from conditions.', onclick='fromConditions()')
+      .form-group.row
+        label.col-sm-2 Device
+        select#deviceSelect.col-sm-6
+          option all
+      .form-group.row
+        label.col-sm-2 Tags
+        select#tagMode.col-sm-6
+            option(value="any" selected) any
+            option(value="untagged") untagged only
+            option(value="tagged") tagged only
+            option(value="automatic-only") automatic only
+            option(value="human-only") human only
+            option(value="automatic+human") both automatic & human
+      .form-group.row
+        label.col-md-2 Limit
+        input#limit.col-md-2(type='number', value=100)
+      .form-group.row
+        label.col-md-2 Offset
+        input#offset.col-md-2(type='number', value=0)
+        input.col-md-1(type='button', value='<', onclick="dec()")
+        input.col-md-1(type='button', value='>', onclick="inc()")
+      .form-group.row
+        input(type='button', value='Get all', onclick='getAll()').col-md-2
+        input(type='button', value='Get all from conditions', onclick='fromConditions()').col-md-3
       br
       label Active query
       input#active-query(type='text', value='{}')
       input(type='button', value='Send', onclick="sendQuery()")
       br
-      label.col-md-2 Limit
-      input#limit.col-md-3(type='number', value=100)
-      label.col-md-2 Offset
-      input#offset.col-md-3(type='number', value=0)
-      input.col-md-1(type='button', value='<', onclick="dec()")
-      input.col-md-1(type='button', value='>', onclick="inc()")
       label#count 0 results
 
     .col-md-1
