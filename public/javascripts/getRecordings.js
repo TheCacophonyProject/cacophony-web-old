@@ -186,11 +186,11 @@ sendQuery = function() {
         window.alert('No results for query.');
       for (var i in res.rows)
         appendDatapointToTable(res.rows[i]);
+      limit = res.limit;
+      count = res.count; // number of results from query.
       document.getElementById('offset').value = res.offset;
       document.getElementById('limit').value = res.limit;
-      count = res.count; // number of results from query.
-      document.getElementById('count').innerHTML = count +
-        ' results.';
+      document.getElementById('count').innerHTML = count + " matches found (total)";
     },
     error: function(err) {
       window.alert('Error with query.');
