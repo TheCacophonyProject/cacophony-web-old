@@ -22,10 +22,11 @@ window.onload = function() {
       url: devicesApiUrl,
       type: 'GET',
       headers: headers,
+      data: { userId: user.getData().id, where: '{}' },
       success: function(result) {
           var deviceSelect = document.getElementById("deviceSelect")
-          for (i in result.devices.rows) {
-              var device = result.devices.rows[i];
+          for (i in result.devices) {
+              var device = result.devices[i];
               var option = document.createElement("option");
               option.innerText = device.devicename;
               option.id = device.id;
