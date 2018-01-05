@@ -186,11 +186,11 @@ sendQuery = function() {
         window.alert('No results for query.');
       for (var i in res.rows)
         appendDatapointToTable(res.rows[i]);
+      limit = res.limit;
+      count = res.count; // number of results from query.
       document.getElementById('offset').value = res.offset;
       document.getElementById('limit').value = res.limit;
-      count = res.count; // number of results from query.
-      document.getElementById('count').innerHTML = count +
-        ' results.';
+      document.getElementById('count').innerHTML = count + " matches found (total)";
     },
     error: function(err) {
       window.alert('Error with query.');
@@ -278,21 +278,48 @@ parseDate = function(dateTime) {
 };
 
 parseTags = function(tags) {
-  var td = document.createElement("td");
-  var names = [];
+  // Group tags by animal type
+  var tagMap = new Map();
   for (var i = 0; i < tags.length; i++) {
     tag = tags[i];
-    animal = tag.animal
+    var animal = tag.animal
     if (animal == null) {
-      animal = '<i>false-positive</i>'
+      animal = 'F/P';
+    }
+
+    var tagTypes = tagMap.get(animal);
+    if (tagTypes === undefined) {
+      tagTypes = {
+        human: false,
+        automatic: false,
+      }
     }
     if (tag.automatic) {
-      names.push('<span class="text-danger">' + animal + '</span>');
+      tagTypes.automatic = true;
     } else {
-      names.push(animal);
+      tagTypes.human = true;
+    }
+
+    tagMap.set(animal, tagTypes);
+  }
+
+  // Generate HTML for each tag (different colour according to tag
+  // types seen).
+  var items = [];
+  for (const kv of tagMap.entries()) {
+    animal = kv[0];
+    types = kv[1];
+    if (types.human && types.automatic) {
+      items.push('<span class="text-success">' + animal + '</span>');
+    } else if (types.automatic) {
+      items.push('<span class="text-danger">' + animal + '</span>');
+    } else {
+      items.push(animal);
     }
   }
-  td.innerHTML = names.join(' ');
+
+  var td = document.createElement("td");
+  td.innerHTML = items.join(' ');
   return td;
 };
 
