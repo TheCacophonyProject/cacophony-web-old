@@ -2,7 +2,7 @@ var recordingsApiUrl = api + '/api/v1/recordings'
 var recording = null;
 
 document.onkeypress = function (e) {
-  if (document.activeElement.tagName != 'BODY') { return; }
+  if (document.activeElement.tagName.toUpperCase() != 'BODY') { return; }
   var key = e.key;
   if (key == 'n') {
     nextRecording(false);
