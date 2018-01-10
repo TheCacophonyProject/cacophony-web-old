@@ -103,4 +103,10 @@ module.exports = function(app) {
       'api': config.server.api,
     });
   });
+
+  app.get('/devices', (request, response) => {
+    response.render('devices.pug', {
+      'api': config.server.api,
+    });
+  });
 };

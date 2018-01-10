@@ -1,0 +1,15 @@
+#devices {
+  width: 300px;
+  float: left;
+  margin: 10px;
+}
+#users {
+  width: 300px;
+  float: left;
+  margin: 10px;
+}
+#device-admin {
+  width: 600px;
+  float: left;
+  margin: 10px;
+}
