@@ -1,0 +1,39 @@
+doctype html
+html
+  head
+    title Devices
+    include includes/base.pug
+    link(href='/stylesheets/devices.css', rel='stylesheet', media='screen')
+    script(type='text/javascript', src='/javascripts/devices.js')
+  body
+    include includes/navbar.pug
+
+    h2#device-title Device
+
+    #devices
+      h4 Devices
+      table.table.table-striped#devices-table
+        tr
+          th ID
+          th Name
+          th Admin
+
+    #users
+      h4 Device Users
+      table.table.table-striped#users-table
+        tr
+          th Username
+          th Admin
+
+    #device-admin
+      h4 Device Admin
+      .input-group
+        lable Add user:
+        input#add-user-username(placeholder='username')
+        lable Admin:
+        input#add-user-as-admin(type='checkbox')
+        input#add-user-to-group(type='button', value='Add', onClick='addUserToDeviceButton()')
+      .input-group
+        lable Remove user:
+        input#remove-user-username(placeholder='username')
+        input#remove-user(type='button', value='Remove', onclick='removeUserFromDeviceButton()')
