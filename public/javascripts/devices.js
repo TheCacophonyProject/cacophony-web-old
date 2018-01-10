@@ -34,7 +34,6 @@ function updateDeviceTitle() {
 
 async function loadDevices() {
   await getDevices();
-  //devices = (await getDevices()).rows;
   clearTable('devices-table');
   for (var i in devices) {
     addDeviceToTable(devices[i]);
@@ -56,16 +55,12 @@ function addDeviceToTable(device) {
   devicenameTd.appendChild(devicenameLink);
   newRow.appendChild(devicenameTd);
   var deviceAdminTd = document.createElement('td');
-  if (isAdmin(device)) {
-    deviceAdminTd.innerHTML = "true";
-  } else {
-    deviceAdminTd.innerHTML = "false";
-  }
+  deviceAdminTd.innerHTML = isAdmin(device) ? "true" : "false";
   newRow.appendChild(deviceAdminTd);
 
 }
 
-clearTable = function(tableId) {
+function clearTable(tableId) {
   var table = document.getElementById(tableId);
   var rowCount = table.rows.length;
   while (--rowCount) table.deleteRow(rowCount);
