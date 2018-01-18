@@ -20,7 +20,7 @@ function updateGroupTitle() {
 }
 
 async function loadGroups() {
-  var groups = await getGroups({}, user.getData().id);
+  var groups = await getGroups({});
   clearTable('groups-table');
   for (var i in groups) {
     addGroupToTable(groups[i]);
@@ -173,11 +173,8 @@ async function removeUserFromGroup(username) {
   });
 }
 
-function getGroups(where, userId) {
+function getGroups(where) {
   const data = { where: JSON.stringify(where) };
-  if (userId != null) {
-    data.userId = userId;
-  }
   const headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   return new Promise(function(resolve, reject) {
