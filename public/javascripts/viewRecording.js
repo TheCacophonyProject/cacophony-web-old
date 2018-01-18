@@ -38,7 +38,7 @@ function getRecordingError(result) {
   console.log("ERROR");
 }
 
-function previousRecording(tagged) {
+function previousRecording(tagMode) {
   console.log('Go to previous recording.');
   // Goes to the previous recording from that device.
   if (recording == null) return;
@@ -46,9 +46,6 @@ function previousRecording(tagged) {
     DeviceId: recording.Device.id,
     recordingDateTime: {lt: recording.recordingDateTime},
   };
-  if (tagged == false) {
-    query._tagged = false;
-  }
   headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   $.ajax({
@@ -56,6 +53,7 @@ function previousRecording(tagged) {
     type: 'GET',
     data: {
       where: JSON.stringify(query),
+      tagMode: tagMode,
       limit: 1,
       offset: 0,
     },
@@ -74,7 +72,7 @@ function previousRecording(tagged) {
   });
 }
 
-function nextRecording(tagged) {
+function nextRecording(tagMode) {
   console.log('Go to next recording.')
   // Goes to the next recording from that device
   if (recording == null) return;
@@ -82,9 +80,6 @@ function nextRecording(tagged) {
     DeviceId: recording.Device.id,
     recordingDateTime: {gt: recording.recordingDateTime},
   };
-  if (tagged == false) {
-    query._tagged = false;
-  }
   headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   $.ajax({
@@ -92,6 +87,7 @@ function nextRecording(tagged) {
     type: 'GET',
     data: {
       where: JSON.stringify(query),
+      tagMode: tagMode,
       limit: 1,
       offset: 0,
       order: '[["recordingDateTime", "ASC"]]',
@@ -200,7 +196,7 @@ function deleteRecording() {
     headers: headers,
     success: function(res) {
       console.log(res);
-      nextRecording(false);
+      nextRecording('any');
     },
     error: function(err) {
       console.log(err);
