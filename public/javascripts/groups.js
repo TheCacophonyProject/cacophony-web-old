@@ -6,7 +6,7 @@ const params = new URLSearchParams(location.search);
 window.onload = function() {
   updateGroupTitle();
   loadGroups();
-  loadGroupUsers();
+  loadGroupUsersAndDevices();
 }
 
 function updateGroupTitle() {
@@ -20,7 +20,7 @@ function updateGroupTitle() {
 }
 
 async function loadGroups() {
-  var groups = await getGroups({}, user.getData().id);
+  var groups = await getGroups({});
   clearTable('groups-table');
   for (var i in groups) {
     addGroupToTable(groups[i]);
@@ -66,7 +66,7 @@ function isAdmin(group) {
   return false;
 }
 
-async function loadGroupUsers() {
+async function loadGroupUsersAndDevices() {
   var groupname = params.get('groupname')
   console.log('loading group', groupname);
   if (groupname == null) {
@@ -79,6 +79,22 @@ async function loadGroupUsers() {
   for (var i in users) {
     adduserToTable(users[i]);
   }
+  clearTable('devices-table')
+  const devices = groups[0].Devices;
+  for (var d in devices) {
+    addDeviceToTable(devices[d])
+  }
+}
+
+function addDeviceToTable(device) {
+  var table = document.getElementById('devices-table');
+  var newRow = table.insertRow(table.rows.length);
+  var deviceTd = document.createElement('td');
+  var deviceLink = document.createElement('a');
+  deviceLink.href = '/devices?devicename=' + device.devicename;
+  deviceLink.innerHTML = device.devicename;
+  deviceTd.appendChild(deviceLink);
+  newRow.appendChild(deviceTd);
 }
 
 function adduserToTable(user) {
@@ -128,7 +144,7 @@ async function addUserToGroup(username, admin) {
     data: data,
     success: function(result) {
       console.log(result);
-      loadGroupUsers();
+      loadGroupUsersAndDevices();
     },
     error: function(err) {
       console.log(err.responseJSON);
@@ -165,7 +181,7 @@ async function removeUserFromGroup(username) {
     data: data,
     success: function(result) {
       console.log(result);
-      loadGroupUsers();
+      loadGroupUsersAndDevices();
     },
     error: function(err) {
       console.log(err.responseJSON);
@@ -173,11 +189,8 @@ async function removeUserFromGroup(username) {
   });
 }
 
-function getGroups(where, userId) {
+function getGroups(where) {
   const data = { where: JSON.stringify(where) };
-  if (userId != null) {
-    data.userId = userId;
-  }
   const headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   return new Promise(function(resolve, reject) {
