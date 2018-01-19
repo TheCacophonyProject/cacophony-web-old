@@ -11,36 +11,41 @@ html
   body
     include includes/navbar.pug
     .container
-      h3.center-block Video Player
       .container.col-md-6
         video#player.center-block(width=100, controls)
           Browser not supported for playing video.
-      .container.col-md-6
-        .form-horizontal
+      .col-md-6
+        .form-horizonal
           .form-group
-            label.col-xs-3.text-right Date:
-            div.col-xs-2#date-text
-            button.col-xs-5(onclick="deleteRecording()") Delete
+            label.col-xs-3 Device
+            .col#device-text
           .form-group
-            label.col-xs-3.text-right Time:
-            div#time-text
+            label.col-xs-3 Time
+            .col
+              span#date-text
+              | &nbsp;
+              span#time-text
           .form-group
-            label.col-xs-3.text-right Device:
-            div#device-text
+            label.col-xs-3 Processing
+            .col#processing-state-text
           .form-group
-            label.col-xs-3.text-right Processing state:
-            div#processing-state-text
-          .form-group
-            label.col-xs-3.text-right Comment:
+            label.col-xs-3 Comment
             input.col-xs-7#comment-text
-            button.col-xs-2(onclick="updateComment()") Save
+            | &nbsp;
+            button.col(onclick="updateComment()") Save
           .form-group
-            button.col-xs-5(onclick="previousRecording('any')") Previous from device
-            button.col-xs-5(onclick="nextRecording('any')") Next from device
-          .form-group
-            button.col-xs-5(onclick="previousRecording('no-human')") Previous not tagged
-            button.col-xs-5(onclick="nextRecording('no-human')") Next not tagged
-          .form-group
-            input.col-xs-5(type="submit", value="Add new tag", onclick="tags.new()" )
-            button.col-xs-5(onclick="falsePositive()") False positive
+            button.col(onclick="deleteRecording()") Delete
+          .form-group.button-row
+            button.col-xs-4(onclick="nextRecording('next', 'any')" title="Next for device") < Device
+            button.col-xs-4(onclick="nextRecording('previous', 'any')" title="Previous for device") Device >
+          .form-group.button-row
+            button.col-xs-4(onclick="nextRecording('next', 'no-human')" title="Next for device, not manually tagged") < Untagged
+            button.col-xs-4(onclick="nextRecording('previous', 'no-human')" title="Previous for device, not manually tagged") Untagged >
+          .form-group.button-row
+            button.col-xs-4(onclick="nextRecording('next', 'any', ['interesting'])" title="Next for device, skipping birds & F/P") < Interesting
+            button.col-xs-4(onclick="nextRecording('previous', 'any', ['interesting'])" title="Previous for device, skipping bird & F/P") Interesting >
+          .form-group.button-row
+            input.col-xs-4(type="submit", value="Add new tag", onclick="tags.new()" )
+            button.col-xs-4(onclick="falsePositive()") False positive
+
     include includes/tags.pug
