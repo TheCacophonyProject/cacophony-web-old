@@ -5,7 +5,7 @@ document.onkeypress = function (e) {
   if (document.activeElement.tagName.toUpperCase() != 'BODY') { return; }
   var key = e.key;
   if (key == 'n') {
-    nextRecording(false);
+    nextRecording("next", "no-human");
   } else if (key == 'f') {
     falsePositive();
   } else if (key == 'a') {
@@ -38,17 +38,30 @@ function getRecordingError(result) {
   console.log("ERROR");
 }
 
-function previousRecording(tagged) {
-  console.log('Go to previous recording.');
-  // Goes to the previous recording from that device.
+function nextRecording(direction, tagMode, tags) {
   if (recording == null) return;
+
   var query = {
     DeviceId: recording.Device.id,
-    recordingDateTime: {lt: recording.recordingDateTime},
   };
-  if (tagged == false) {
-    query._tagged = false;
+  var order
+  switch (direction) {
+  case "next":
+    query.recordingDateTime = {gt: recording.recordingDateTime};
+    order = "ASC";
+    break;
+  case "previous":
+    query.recordingDateTime = {lt: recording.recordingDateTime};
+    order = "DESC";
+    break;
+  default:
+    throw `invalid direction: '${direction}'`;
   }
+
+  if (!tags) {
+    tags = null;
+  }
+
   headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   $.ajax({
@@ -56,13 +69,16 @@ function previousRecording(tagged) {
     type: 'GET',
     data: {
       where: JSON.stringify(query),
+      tagMode: tagMode,
+      tags: JSON.stringify(tags),
       limit: 1,
       offset: 0,
+      order: JSON.stringify([["recordingDateTime", order]]),
     },
     headers: headers,
     success: function(res) {
       if (res.rows.length == 0) {
-        window.alert("No previous recording from this device.");
+        window.alert(`No ${direction} recording from this device.`);
         return;
       }
       window.location.href = "/view_recording/"+res.rows[0].id;
@@ -74,42 +90,7 @@ function previousRecording(tagged) {
   });
 }
 
-function nextRecording(tagged) {
-  console.log('Go to next recording.')
-  // Goes to the next recording from that device
-  if (recording == null) return;
-  var query = {
-    DeviceId: recording.Device.id,
-    recordingDateTime: {gt: recording.recordingDateTime},
-  };
-  if (tagged == false) {
-    query._tagged = false;
-  }
-  headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
-  $.ajax({
-    url: recordingsApiUrl,
-    type: 'GET',
-    data: {
-      where: JSON.stringify(query),
-      limit: 1,
-      offset: 0,
-      order: '[["recordingDateTime", "ASC"]]',
-    },
-    headers: headers,
-    success: function(res) {
-      if (res.rows.length == 0) {
-        window.alert("No next recording from this device.");
-        return;
-      }
-      window.location.href = "/view_recording/"+res.rows[0].id;
-    },
-    error: function(err) {
-      console.log('Error');
-      console.log(err);
-    },
-  });
-}
+
 
 function getRecordingSuccess(result, status) {
   if (!result.success)
@@ -200,7 +181,7 @@ function deleteRecording() {
     headers: headers,
     success: function(res) {
       console.log(res);
-      nextRecording(false);
+      nextRecording('next', 'any');
     },
     error: function(err) {
       console.log(err);
