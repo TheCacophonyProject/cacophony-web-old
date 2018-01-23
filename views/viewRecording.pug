@@ -36,14 +36,14 @@ html
           .form-group
             button.col(onclick="deleteRecording()") Delete
           .form-group.button-row
-            button.col-xs-4(onclick="nextRecording('next', 'any')" title="Next for device") < Device
-            button.col-xs-4(onclick="nextRecording('previous', 'any')" title="Previous for device") Device >
+            button.col-xs-4(onclick="nextRecording('previous', 'any')" title="Previous for device") < Device
+            button.col-xs-4(onclick="nextRecording('next', 'any')" title="Next for device") Device >
           .form-group.button-row
-            button.col-xs-4(onclick="nextRecording('next', 'no-human')" title="Next for device, not manually tagged") < Untagged
-            button.col-xs-4(onclick="nextRecording('previous', 'no-human')" title="Previous for device, not manually tagged") Untagged >
+            button.col-xs-4(onclick="nextRecording('previous', 'no-human')" title="Previous for device, not manually tagged") < Untagged
+            button.col-xs-4(onclick="nextRecording('next', 'no-human')" title="Next for device, not manually tagged") Untagged >
           .form-group.button-row
-            button.col-xs-4(onclick="nextRecording('next', 'any', ['interesting'])" title="Next for device, skipping birds & F/P") < Interesting
-            button.col-xs-4(onclick="nextRecording('previous', 'any', ['interesting'])" title="Previous for device, skipping bird & F/P") Interesting >
+            button.col-xs-4(onclick="nextRecording('previous', 'any', ['interesting'])" title="Previous for device, skipping bird & F/P") < Interesting
+            button.col-xs-4(onclick="nextRecording('next', 'any', ['interesting'])" title="Next for device, skipping birds & F/P") Interesting >
           .form-group.button-row
             input.col-xs-4(type="submit", value="Add new tag", onclick="tags.new()" )
             button.col-xs-4(onclick="falsePositive()") False positive

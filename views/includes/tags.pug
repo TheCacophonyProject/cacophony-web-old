@@ -5,6 +5,7 @@ form.form-horizontal#tagForm(onsubmit="return false")
     label.col-xs-2.text-right Animal:
     select#tagAnimalInput
       option bird
+      option bird/kiwi
       option rat
       option possum
       option hedgehog
@@ -71,7 +72,7 @@ form.form-horizontal#tagForm(onsubmit="return false")
 table(class="table table-hover")
   thead
     tr
-      th(type='type') Type
+      th(type='type') Tag Type
       th(type='animal') Animal
       th(type='number') Number
       th Event

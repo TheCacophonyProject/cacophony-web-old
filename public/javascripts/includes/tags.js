@@ -36,7 +36,7 @@ tags.addTagToTable = function(tag) {
     row.className = "bg-danger";
     typeElem.innerHTML = "Automatic"
   } else {
-    typeElem.innerHTML = "Human";
+    typeElem.innerHTML = "Manual";
   }
   row.appendChild(typeElem);
 
@@ -53,7 +53,7 @@ tags.addTagToTable = function(tag) {
   row.appendChild(event);
 
   var confidence = document.createElement('td');
-  confidence.innerHTML = tag.confidence;
+  confidence.innerHTML = precisionRound(tag.confidence, 2);
   row.appendChild(confidence);
 
   var age = document.createElement('td');
@@ -216,4 +216,9 @@ tags.parseString = function(id) {
 tags.parseConfidence = function(id) {
   var val = $('input[name="' + id + '"]:checked').val();
   return val;
+}
+
+function precisionRound(number, precision) {
+  var factor = Math.pow(10, precision);
+  return Math.round(number * factor) / factor;
 }
