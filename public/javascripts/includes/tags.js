@@ -36,7 +36,7 @@ tags.addTagToTable = function(tag) {
     row.className = "bg-danger";
     typeElem.innerHTML = "Automatic"
   } else {
-    typeElem.innerHTML = "Human";
+    typeElem.innerHTML = "Manual";
   }
   row.appendChild(typeElem);
 
