@@ -56,6 +56,14 @@ tags.addTagToTable = function(tag) {
   confidence.innerHTML = precisionRound(tag.confidence, 2);
   row.appendChild(confidence);
 
+  var taggedby = document.createElement('td');
+  taggedby.innerHTML = precisionRound(tag.taggerId, 2);
+  row.appendChild(taggedby);
+  
+  var tagtime = document.createElement('td');
+  tagtime.innerHTML = new Date(tag.createdAt).toLocaleString();
+  row.appendChild(tagtime);
+  
   var age = document.createElement('td');
   age.innerHTML = tag.age;
   row.appendChild(age);
