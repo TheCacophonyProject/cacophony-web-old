@@ -57,7 +57,7 @@ tags.addTagToTable = function(tag) {
   row.appendChild(confidence);
 
   var taggedby = document.createElement('td');
-  taggedby.innerHTML = precisionRound(tag.taggerId, 2);
+  taggedby.innerHTML = tag.taggerId;
   row.appendChild(taggedby);
   
   var tagtime = document.createElement('td');
