@@ -190,10 +190,13 @@ function getDevices() {
 function getUsers(where) {
   const data = {where: JSON.stringify(where) };
   return new Promise(function(resolve, reject) {
+    const headers = {};
+    if (user.isLoggedIn()) headers.Authorization = user.getJWT();
     $.ajax({
       url: usersApiUrl,
       type: 'GET',
       data: data,
+      headers: headers,
       success: function (result) {
         return resolve(result.users);
       },

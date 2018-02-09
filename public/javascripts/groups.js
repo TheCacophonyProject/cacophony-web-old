@@ -209,11 +209,14 @@ function getGroups(where) {
 
 function getUsers(where) {
   const data = {where: JSON.stringify(where) };
+  const headers = {};
+  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   return new Promise(function(resolve, reject) {
     $.ajax({
       url: usersApiUrl,
       type: 'GET',
       data: data,
+      headers: headers,
       success: function (result) {
         return resolve(result.users);
       },
