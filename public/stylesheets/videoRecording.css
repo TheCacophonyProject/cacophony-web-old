@@ -7,14 +7,41 @@
     padding-bottom: 20px;
 }
 
-.video-and-quick-tags {
-    padding-bottom: 10px;
+.view-recording .quicktags {
+    padding-top: 15px;
+    padding-bottom: 20px;
 }
 
 .quicktags input {
     border: 1px solid lightgrey;
+    padding: 2px;
 }
 
-#tagForm {
+.tag-summary {
+    padding-top: 20px;
     border: 1px solid lightgrey;
+}
+
+#detailedAddTagForm {
+    border: 1px solid lightgrey;
+    padding: 20px;
+    margin: 20px 0px 40px 0px;
+}
+
+.delete-btn {
+    padding: 0px;
+    border: none;
+}
+
+table .img {
+    height: 30px;
+}
+
+.form-group.confidence input {
+    margin-left: 20px;
+    margin-right: 5px;
+}
+
+.form-group.confidence input:nth-child(2){
+    margin-left: 0;
 }

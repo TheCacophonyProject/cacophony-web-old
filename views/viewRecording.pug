@@ -11,28 +11,24 @@ html
   body
     include includes/navbar.pug
 
-    .container
-      h2 '
-        i#device-text
-        | '&nbsp;
-        span#date-text
-        | &nbsp;
-        span#time-text
-      .container.col-12.col-lg-8.video-and-quick-tags
-        video#player.center-block(width=100, controls)
-          Browser not supported for playing video.
+    .container.view-recording
+      .div.col-12.col-lg-8
+        .div
+          h2 '
+            i#device-text
+            | '&nbsp;&nbsp;-&nbsp;&nbsp;
+            span#date-text
+            | &nbsp;
+            span#time-text
+          video#player.center-block(width=100, controls)
+            Browser not supported for playing video.
         include includes/tagsQuick.pug
+        div.hidden#detailedAddTagForm
+          include includes/tags.pug
+        include includes/tagSummary.pug
+
       div.col-12.col-lg-4
         .form-horizonal
-          .form-group
-            label.col-xs-3 Device
-            .col#device-text2
-          .form-group
-            label.col-xs-3 Time
-            .col
-              span#date-text2
-              | &nbsp;
-              span#time-text2
           .form-group
             label.col-xs-3 Processing
             .col#processing-state-text
@@ -53,4 +49,3 @@ html
             button.col-xs-4(onclick="nextRecording('previous', 'any', ['interesting'])" title="Previous for device, skipping bird & F/P") < Interesting
             button.col-xs-4(onclick="nextRecording('next', 'any', ['interesting'])" title="Next for device, skipping birds & F/P") Interesting >
 
-    include includes/tags.pug

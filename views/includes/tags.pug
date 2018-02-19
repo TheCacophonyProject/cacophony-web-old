@@ -1,10 +1,10 @@
 script(type='text/javascript', src='/javascripts/includes/tags.js')
 
-form.form-horizontal.col-xs-offset-1.col-xs-10.col-lg-6#tagForm(onsubmit="return false")
+form.form-horizontal#tagForm(onsubmit="return false")
   h3.col-xs-12 Add Tag
-  div.col-xs-10
-    .form-group
-      label.col-xs-2 Animal:
+  div
+    .form-group.clearfix
+      label.col-xs-4 Animal:
       select#tagAnimalInput
         option bird
         option bird/kiwi
@@ -25,10 +25,10 @@ form.form-horizontal.col-xs-offset-1.col-xs-10.col-lg-6#tagForm(onsubmit="return
         option other
         option unidentified
     .form-group
-      label.col-xs-2 Number:
+      label.col-xs-4 Number:
       input#tagNumberInput(type="number", value=1)
     .form-group
-      label.col-xs-2 Event:
+      label.col-xs-4 Event:
       select#tagEventInput
         option just wandering about
         option false positive
@@ -37,19 +37,19 @@ form.form-horizontal.col-xs-offset-1.col-xs-10.col-lg-6#tagForm(onsubmit="return
         option set trap to activate
         option trapped in trap
         option other
-    .form-group
-      label.col-xs-2 Confidence:
-      label Low
+    .form-group.confidence
+      label.col-xs-4 Confidence:
       input(name="tagConfidenceInput", type="radio", value=0.4)
-      label Mid
+      label Low
       input(name="tagConfidenceInput", type="radio", value=0.6)
-      label High
+      label Mid
       input(name="tagConfidenceInput", type="radio", value=0.8, checked)
+      label High
     .form-group
-      label.col-xs-2 Age:
+      label.col-xs-4 Age:
       input#tagAgeInput(type="text", placeholder="Years:Months", value="", pattern="(\\d)?(\\d):(\\d)?(\\d)", title="Years:Months (3:0)")
     .form-group
-      label.col-xs-2 Trap type:
+      label.col-xs-4 Trap type:
       select#tagTrapTypeInput
         option
         option Good Nature possums
@@ -62,32 +62,18 @@ form.form-horizontal.col-xs-offset-1.col-xs-10.col-lg-6#tagForm(onsubmit="return
         option Rat poison station
         option other
     .form-group
-      label.col-xs-2 Start time:
+      label.col-xs-4 Start time:
       input#tagStartTimeInput(type="text", placeholder="min:sec", value="0:00", pattern="(\\d)?(\\d):[0-5][0-9]", title="Minutes:Seconds (2:31)")
       button(onclick="goToStartTime(this)") go to start time
       button(onclick="setStartTimeAsCurrentTime()") set to current time
     .form-group
-      label.col-xs-2 End Time:
+      label.col-xs-4 End Time:
       input#tagStopTimeInput(type="text", placeholder="min:sec", value="", pattern="(\\d)?(\\d):[0-5][0-9]", title="Minutes:Seconds (2:31)")
       button(onclick="goToEndTime()") go to end time
       button(onclick="setEndTimeAsCurrentTime()") set to current time
-  input.col-xs-2(type="submit", value="Add new tag", onclick="tags.new()" )
+    input.col-xs-2(type="submit", value="Add new tag", onclick="tags.new()" )
+    div.clearfix
 
 
   
-table(class="table table-hover")
-  thead
-    tr
-      th(type='type') Tag Type
-      th(type='animal') Animal
-      th(type='number') Number
-      th Event
-      th Confidence
-      th Tagged by
-      th Tagged on
-      th Age
-      th Start Time
-      th Duration
-      th Trap Type
-      th
-  tbody#tags-table
+

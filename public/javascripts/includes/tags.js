@@ -8,14 +8,14 @@ tags = {};
  * Deletes a tag.
  */
 tags.delete = function(event) {
-  var id = event.target.tagId;
+  var id = event.target.parentNode.tagId;
   $.ajax({
     url: api+'/api/v1/tags',
     type: 'DELETE',
     headers: { 'Authorization': user.getJWT() },
     data: { "tagId": id },
     success: function() {
-      var row = event.target.parentNode.parentNode;
+      var row = event.target.parentNode.parentNode.parentNode;
       row.parentNode.removeChild(row);
     },
     error: function(err) {
@@ -34,9 +34,9 @@ tags.addTagToTable = function(tag) {
   var typeElem = document.createElement('td');
   if (tag.automatic) {
     row.className = "bg-danger";
-    typeElem.innerHTML = "Automatic"
+    typeElem.innerHTML = "<img title='Automatic' src='/images/auto.png'/>"
   } else {
-    typeElem.innerHTML = "Manual";
+    typeElem.innerHTML = "<img title='Manual' src='/images/manual.png'/>"
   }
   row.appendChild(typeElem);
 
@@ -44,51 +44,54 @@ tags.addTagToTable = function(tag) {
   animal.innerHTML = tag.animal;
   row.appendChild(animal);
 
-  var number = document.createElement('td');
-  number.innerHTML = tag.number;
-  row.appendChild(number);
-
-  var event = document.createElement('td');
-  event.innerHTML = tag.event;
-  row.appendChild(event);
-
   var confidence = document.createElement('td');
   confidence.innerHTML = precisionRound(tag.confidence, 2);
   row.appendChild(confidence);
 
   var taggedby = document.createElement('td');
-  taggedby.innerHTML = tag.taggerId;
+  if (tag.taggedbyme) {
+    taggedby.innerHTML = "Me!";
+  }
+  else {
+    taggedby.innerHTML = tag.taggerId;
+  }
   row.appendChild(taggedby);
   
   var tagtime = document.createElement('td');
   tagtime.innerHTML = new Date(tag.createdAt).toLocaleString();
   row.appendChild(tagtime);
   
-  var age = document.createElement('td');
-  age.innerHTML = tag.age;
-  row.appendChild(age);
-
-  var startTime = document.createElement('td');
-  startTime.innerHTML = tag.startTime;
-  row.appendChild(startTime);
-
-  var duration = document.createElement('td');
-  duration.innerHTML = tag.duration;
-  row.appendChild(duration);
-
-  var trapType = document.createElement('td');
-  trapType.innerHTML = tag.trapType;
-  row.appendChild(trapType);
 
   // Add delete button
   var del = document.createElement('td');
   var deleteButton = document.createElement('button');
-  deleteButton.innerHTML = "Delete"
+  deleteButton.innerHTML = "<img title='Delete sighting' src='/images/delete.png'/>"
   deleteButton.onclick = tags.delete;
   deleteButton.tagId = tag.id;
   deleteButton.tagRow = row;
   del.appendChild(deleteButton)
   row.appendChild(del);
+
+  // var event = document.createElement('td');
+  // event.innerHTML = tag.event;
+  // row.appendChild(event);
+
+  // var age = document.createElement('td');
+  // age.innerHTML = tag.age;
+  // row.appendChild(age);
+
+  // var startTime = document.createElement('td');
+  // startTime.innerHTML = tag.startTime;
+  // row.appendChild(startTime);
+
+  // var duration = document.createElement('td');
+  // duration.innerHTML = tag.duration;
+  // row.appendChild(duration);
+
+  // var trapType = document.createElement('td');
+  // trapType.innerHTML = tag.trapType;
+  // row.appendChild(trapType);
+
 };
 /**
  * Loads all the tags in the list given to the table.
@@ -134,6 +137,7 @@ tags.quickNew = function(animal) {
   var tag = {};
 
   tag.animal = animal;
+  tag.confidence = .6
 
   tags.send(tag);
 }
@@ -150,6 +154,8 @@ tags.send = function(tag) {
     data: data,
     success: function(res) {
       tag.id = res.tagId;
+      tag.createdAt = new Date();
+      tag.taggedbyme = true;
       tags.addTagToTable(tag);
     },
     error: function(err) {
@@ -238,4 +244,9 @@ tags.parseConfidence = function(id) {
 function precisionRound(number, precision) {
   var factor = Math.pow(10, precision);
   return Math.round(number * factor) / factor;
+}
+
+
+function showTaggingDetails() {
+  document.getElementById('detailedAddTagForm').classList.remove('hidden');
 }
