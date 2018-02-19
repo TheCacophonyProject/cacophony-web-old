@@ -10,21 +10,29 @@ html
 
   body
     include includes/navbar.pug
+
     .container
-      .container.col-md-6
+      h2 '
+        i#device-text
+        | '&nbsp;
+        span#date-text
+        | &nbsp;
+        span#time-text
+      .container.col-12.col-lg-8.video-and-quick-tags
         video#player.center-block(width=100, controls)
           Browser not supported for playing video.
-      .col-md-6
+        include includes/tagsQuick.pug
+      div.col-12.col-lg-4
         .form-horizonal
           .form-group
             label.col-xs-3 Device
-            .col#device-text
+            .col#device-text2
           .form-group
             label.col-xs-3 Time
             .col
-              span#date-text
+              span#date-text2
               | &nbsp;
-              span#time-text
+              span#time-text2
           .form-group
             label.col-xs-3 Processing
             .col#processing-state-text
@@ -44,8 +52,5 @@ html
           .form-group.button-row
             button.col-xs-4(onclick="nextRecording('previous', 'any', ['interesting'])" title="Previous for device, skipping bird & F/P") < Interesting
             button.col-xs-4(onclick="nextRecording('next', 'any', ['interesting'])" title="Next for device, skipping birds & F/P") Interesting >
-          .form-group.button-row
-            input.col-xs-4(type="submit", value="Add new tag", onclick="tags.new()" )
-            button.col-xs-4(onclick="falsePositive()") False positive
 
     include includes/tags.pug

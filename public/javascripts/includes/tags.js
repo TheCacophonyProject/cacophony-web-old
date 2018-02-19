@@ -130,6 +130,15 @@ tags.new = function() {
   tags.send(tag);
 };
 
+tags.quickNew = function(animal) {
+  var tag = {};
+
+  tag.animal = animal;
+
+  tags.send(tag);
+}
+
+
 tags.send = function(tag) {
   var data = {recordingId: id};
   data.tag = JSON.stringify(tag);

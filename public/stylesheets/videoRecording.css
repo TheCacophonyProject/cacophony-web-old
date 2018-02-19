@@ -6,3 +6,15 @@
 .button-row {
     padding-bottom: 20px;
 }
+
+.video-and-quick-tags {
+    padding-bottom: 10px;
+}
+
+.quicktags input {
+    border: 1px solid lightgrey;
+}
+
+#tagForm {
+    border: 1px solid lightgrey;
+}
