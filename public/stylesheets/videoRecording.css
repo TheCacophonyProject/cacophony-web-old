@@ -25,6 +25,7 @@
 #detailedAddTagForm {
     border: 1px solid lightgrey;
     padding: 20px;
+    padding-top: 0;
     margin: 20px 0px 40px 0px;
 }
 
@@ -44,4 +45,8 @@ table .img {
 
 .form-group.confidence input:nth-child(2){
     margin-left: 0;
+}
+
+.view-recordings-page h3  {
+    padding-bottom : 15px;
 }

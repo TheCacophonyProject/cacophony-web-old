@@ -31,15 +31,6 @@ tags.addTagToTable = function(tag) {
   var tagsTable = document.getElementById('tags-table');
   var row = tagsTable.insertRow(tagsTable.rows.length);
 
-  var typeElem = document.createElement('td');
-  if (tag.automatic) {
-    row.className = "bg-danger";
-    typeElem.innerHTML = "<img title='Automatic' src='/images/auto.png'/>"
-  } else {
-    typeElem.innerHTML = "<img title='Manual' src='/images/manual.png'/>"
-  }
-  row.appendChild(typeElem);
-
   var animal = document.createElement('td');
   animal.innerHTML = tag.animal;
   row.appendChild(animal);
@@ -49,18 +40,23 @@ tags.addTagToTable = function(tag) {
   row.appendChild(confidence);
 
   var taggedby = document.createElement('td');
-  if (tag.taggedbyme) {
+  if (tag.automatic) {
+    row.className = "bg-danger";
+    taggedby.innerHTML = "<img title='Cacophony AI' src='/images/auto.png'/>"
+  } else if (tag.taggedbyme) {
     taggedby.innerHTML = "Me!";
   }
   else {
     taggedby.innerHTML = tag.taggerId;
   }
   row.appendChild(taggedby);
-  
+
   var tagtime = document.createElement('td');
   tagtime.innerHTML = new Date(tag.createdAt).toLocaleString();
   row.appendChild(tagtime);
   
+  var additionalInfo = document.createElement('td');
+  row.appendChild(additionalInfo);
 
   // Add delete button
   var del = document.createElement('td');
@@ -72,27 +68,35 @@ tags.addTagToTable = function(tag) {
   del.appendChild(deleteButton)
   row.appendChild(del);
 
-  // var event = document.createElement('td');
-  // event.innerHTML = tag.event;
-  // row.appendChild(event);
+  if (tag.number != null && tag.number > 1.5) {
+    additionalInfo.innerHTML += "<p> Number of animals is '" + tag.number + "'</p>"  
+  }
 
-  // var age = document.createElement('td');
-  // age.innerHTML = tag.age;
-  // row.appendChild(age);
+  if (tag.event != null && tag.event != "just wandering about") {
+    additionalInfo.innerHTML += "<p> Event is '<i>" + tag.event + "'</i></p>"
+  }
 
-  // var startTime = document.createElement('td');
-  // startTime.innerHTML = tag.startTime;
-  // row.appendChild(startTime);
+  if (tag.trapType != null && tag.trapType != "") {
+    additionalInfo.innerHTML += "<p> Trap type is '<i>" + tag.trapType + "'</i></p>"
+  }
 
-  // var duration = document.createElement('td');
-  // duration.innerHTML = tag.duration;
-  // row.appendChild(duration);
+  if (tag.age != null && tag.age != "") {
+    additionalInfo.innerHTML += "<p> Age is " + tag.age + "</p>"
+  }
 
-  // var trapType = document.createElement('td');
-  // trapType.innerHTML = tag.trapType;
-  // row.appendChild(trapType);
-
+  if (tag.startTime != null || tag.duration != null) {
+    if (tag.startTime == null) {
+      tag.startTime == 0;
+    }
+    var timestring = "<p>Animal visible from " + tags.displayTime(tag.startTime);
+    if (tag.duration != null) {
+      timestring += "&nbsp;-&nbsp;" + tags.displayTime(tag.startTime + tag.duration);
+    }
+    timestring += "</p>";
+    additionalInfo.innerHTML += timestring;
+  }
 };
+
 /**
  * Loads all the tags in the list given to the table.
  */
@@ -206,6 +210,19 @@ tags.parseTime = function(id) {
   var time = timeMin * 60 + timeSec;
   if (isNaN(time)) time = null;
   return time;
+}
+
+/**
+ * Takes time in total seconds and parses it back into minutes and seconds format. 
+ */
+tags.displayTime = function(timeInSeconds) {
+  var timeString = "";
+  var seconds = (timeInSeconds % 60);
+
+  timeString += ((timeInSeconds - seconds) / 60);
+  timeString += ":";
+  timeString += (seconds);
+  return timeString;
 }
 
 /**
