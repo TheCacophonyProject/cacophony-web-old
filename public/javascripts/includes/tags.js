@@ -35,6 +35,13 @@ tags.addTagToTable = function(tag) {
   animal.innerHTML = tag.animal;
   row.appendChild(animal);
 
+  var animalpic = document.createElement('td');
+  var image = this.getAnimalImage(tag.animal);
+  if (image) {
+    animalpic.innerHTML = "<img class='animal-icon' title='animal' src='" + image + "'/>";
+  }
+  row.appendChild(animalpic);
+
   var confidence = document.createElement('td');
   confidence.innerHTML = precisionRound(tag.confidence, 2);
   row.appendChild(confidence);
@@ -96,6 +103,34 @@ tags.addTagToTable = function(tag) {
     additionalInfo.innerHTML += timestring;
   }
 };
+
+/**
+ * Gets the image that represents the animal (string) if available else returns null.
+ */
+tags.getAnimalImage = function(animal) {
+  switch(animal) {
+    case "possum":
+        return '/images/possum.png';
+    case "stoat":
+      return '/images/stoat.png';
+    case "rat":
+      return '/images/rat.png'
+    case "hedgehog":
+      return '/images/hedgehog.png'
+    case "cat":
+      return '/images/cat.png'
+    case "human":
+      return '/images/human.png'
+    case "bird":
+      return '/images/bird.png'
+    case "bird/kiwi":
+      return '/images/kiwi.png'
+    case "unidentified":
+      return '/images/unknown.png'
+    default:
+      return null;
+  }
+}
 
 /**
  * Loads all the tags in the list given to the table.
@@ -264,6 +299,12 @@ function precisionRound(number, precision) {
 }
 
 
-function showTaggingDetails() {
-  document.getElementById('detailedAddTagForm').classList.remove('hidden');
+function toggleTaggingDetails() {
+  var tagformClasses = document.getElementById('detailedAddTagForm').classList;
+
+  if (tagformClasses.contains('hidden')) {
+    tagformClasses.remove('hidden');
+  } else {
+    tagformClasses.add('hidden');
+  }
 }

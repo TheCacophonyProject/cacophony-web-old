@@ -9,7 +9,12 @@
 
 .view-recording .quicktags {
     padding-top: 15px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.next-buttons input {
+    border: 1px solid lightgrey;
+    padding: 5px 0;
 }
 
 .quicktags input {
@@ -20,6 +25,17 @@
 .tag-summary {
     padding-top: 20px;
     border: 1px solid lightgrey;
+}
+
+.tag-summary .animal-icon {
+    height: 50px;
+    width: 50px;
+    padding-left: 0;
+}
+
+.tag-summary button {
+    border: none;
+    padding: 0;
 }
 
 #detailedAddTagForm {
@@ -49,4 +65,22 @@ table .img {
 
 .view-recordings-page h3  {
     padding-bottom : 15px;
+    padding-top: 25px;
+}
+
+.vid-properties label {
+    padding-left : 0;
+}
+
+.next-buttons {
+    padding: 0;
+    border: 2px solid black;
+}
+
+tr.no-tags {
+    display: none;
+}
+
+#no-tags:last-child {
+    display: table-row;
 }

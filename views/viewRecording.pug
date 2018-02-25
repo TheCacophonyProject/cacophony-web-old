@@ -23,29 +23,31 @@ html
           video#player.center-block(width=100, controls)
             Browser not supported for playing video.
         include includes/tagsQuick.pug
+        div.next-buttons.col-xs-12.col-md-6.col-md-offset-3
+          input.col-xs-2(type="image", title="Previous for device, skipping bird & false-positives", src='/images/previous-interesting.png'  onclick="nextRecording('previous', 'any'['interesting'])" )
+          input.col-xs-2(type="image", title="Previous for device, not manually tagged", src='/images/previous-no-human.png'  onclick="nextRecording('previous', 'any', 'no-human')" )
+          input.col-xs-2(type="image", title="Previous for device", src='/images/previous.png'  onclick="nextRecording('previous', 'any')" )
+          input.col-xs-2(type="image", title="Next for device", src='/images/next.png'  onclick="nextRecording('next', 'any')" )
+          input.col-xs-2(type="image", title="Next for device, not manually tagged", src='/images/next-no-human.png'  onclick="nextRecording('previous', 'any', 'no-human')" )
+          input.col-xs-2(type="image", title="Next for device, skipping birds & false-positives", src='/images/next-interesting.png'  onclick="nextRecording('previous', 'any', ['interesting'])" )
+        div.clearfix
+
         div.hidden#detailedAddTagForm
           include includes/tags.pug
         include includes/tagSummary.pug
 
-      div.col-12.col-lg-4
+      div.vid-properties.col-12.col-lg-4
+        h3 Video properties
         .form-horizonal
           .form-group
-            label.col-xs-3 Processing
-            .col#processing-state-text
+            label.col-xs-4 Processing
+            col-xs-8#processing-state-text Unknown file state
           .form-group
-            label.col-xs-3 Comment
-            input.col-xs-7#comment-text
+            label.col-xs-4 Comment
+            input.col-xs-6#comment-text
             | &nbsp;
             button.col(onclick="updateComment()") Save
           .form-group
-            button.col(onclick="deleteRecording()") Delete
-          .form-group.button-row
-            button.col-xs-4(onclick="nextRecording('previous', 'any')" title="Previous for device") < Device
-            button.col-xs-4(onclick="nextRecording('next', 'any')" title="Next for device") Device >
-          .form-group.button-row
-            button.col-xs-4(onclick="nextRecording('previous', 'no-human')" title="Previous for device, not manually tagged") < Untagged
-            button.col-xs-4(onclick="nextRecording('next', 'no-human')" title="Next for device, not manually tagged") Untagged >
-          .form-group.button-row
-            button.col-xs-4(onclick="nextRecording('previous', 'any', ['interesting'])" title="Previous for device, skipping bird & F/P") < Interesting
-            button.col-xs-4(onclick="nextRecording('next', 'any', ['interesting'])" title="Next for device, skipping birds & F/P") Interesting >
+            button.col(onclick="deleteRecording()") Delete Recording
+
 
