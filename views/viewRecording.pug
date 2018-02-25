@@ -25,11 +25,11 @@ html
         include includes/tagsQuick.pug
         div.next-buttons.col-xs-12.col-md-6.col-md-offset-3
           input.col-xs-2(type="image", title="Previous for device, skipping bird & false-positives", src='/images/previous-interesting.png'  onclick="nextRecording('previous', 'any', ['interesting'])" )
-          input.col-xs-2(type="image", title="Previous for device, not manually tagged", src='/images/previous-no-human.png'  onclick="nextRecording('previous', 'any', 'no-human')" )
+          input.col-xs-2(type="image", title="Previous for device, not manually tagged", src='/images/previous-no-human.png'  onclick="nextRecording('previous', 'no-human')" )
           input.col-xs-2(type="image", title="Previous for device", src='/images/previous.png'  onclick="nextRecording('previous', 'any')" )
           input.col-xs-2(type="image", title="Next for device", src='/images/next.png'  onclick="nextRecording('next', 'any')" )
-          input.col-xs-2(type="image", title="Next for device, not manually tagged", src='/images/next-no-human.png'  onclick="nextRecording('previous', 'any', 'no-human')" )
-          input.col-xs-2(type="image", title="Next for device, skipping birds & false-positives", src='/images/next-interesting.png'  onclick="nextRecording('previous', 'any', ['interesting'])" )
+          input.col-xs-2(type="image", title="Next for device, not manually tagged", src='/images/next-no-human.png'  onclick="nextRecording('next', 'no-human')" )
+          input.col-xs-2(type="image", title="Next for device, skipping birds & false-positives", src='/images/next-interesting.png'  onclick="nextRecording('next', 'any', ['interesting'])" )
         div.clearfix
 
         div.hidden#detailedAddTagForm
@@ -65,5 +65,5 @@ html
         div.row
           img.col-xs-2.col-lg-3(src='/images/previous-interesting.png')
           img.col-xs-2.col-lg-3(src='/images/next-interesting.png')
-          p.col-xs-6 Move between interesting recordings for device that have not been tagged as birds or false/positive (not animals present)
+          p.col-xs-6 Move between 'interesting' recordings for device that are tagged with something other than a bird or false/positive (no animals present)
 
