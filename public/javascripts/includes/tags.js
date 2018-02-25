@@ -32,11 +32,17 @@ tags.addTagToTable = function(tag) {
   var row = tagsTable.insertRow(tagsTable.rows.length);
 
   var animal = document.createElement('td');
-  animal.innerHTML = tag.animal;
+  if (tag.animal) {
+    animal.innerHTML = tag.animal;
+  }
+  else {
+    animal.innerHTML = "-";
+  }
+
   row.appendChild(animal);
 
   var animalpic = document.createElement('td');
-  var image = this.getAnimalImage(tag.animal);
+  var image = this.getAnimalImage(tag.animal, tag.event);
   if (image) {
     animalpic.innerHTML = "<img class='animal-icon' title='animal' src='" + image + "'/>";
   }
@@ -107,7 +113,11 @@ tags.addTagToTable = function(tag) {
 /**
  * Gets the image that represents the animal (string) if available else returns null.
  */
-tags.getAnimalImage = function(animal) {
+tags.getAnimalImage = function(animal, event) {
+  if (!animal && event == 'false positive') {
+    return '/images/none.png'
+  }
+
   switch(animal) {
     case "possum":
         return '/images/possum.png';
