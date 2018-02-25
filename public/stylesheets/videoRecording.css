@@ -84,3 +84,12 @@ tr.no-tags {
 #no-tags:last-child {
     display: table-row;
 }
+
+.next-buttons-help img:first-child {
+    margin-right:-44px;
+}
+
+.next-buttons-help p {
+    font-size: 14px;
+    padding-left: 10px;
+}
