@@ -24,6 +24,7 @@
 
 .tag-summary {
     padding-top: 20px;
+    margin-bottom: 40px;
     border: 1px solid lightgrey;
 }
 
@@ -65,7 +66,6 @@ table .img {
 
 .view-recordings-page h3  {
     padding-bottom : 15px;
-    padding-top: 25px;
 }
 
 .vid-properties label {
@@ -92,4 +92,9 @@ tr.no-tags {
 .next-buttons-help p {
     font-size: 14px;
     padding-left: 10px;
+}
+
+hr {
+    border-top: 2px solid lightgrey;
+
 }
