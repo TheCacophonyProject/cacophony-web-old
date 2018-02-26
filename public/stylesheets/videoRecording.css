@@ -6,3 +6,99 @@
 .button-row {
     padding-bottom: 20px;
 }
+
+.view-recording .quicktags {
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+.next-buttons input {
+    border: 1px solid lightgrey;
+    padding: 5px 0;
+}
+
+.quicktags input {
+    border: 1px solid lightgrey;
+    padding: 2px;
+}
+
+.tag-summary {
+    padding-top: 20px;
+    margin-bottom: 40px;
+    border: 1px solid lightgrey;
+}
+
+.tag-summary .animal-icon {
+    height: 50px;
+    width: 50px;
+    padding-left: 0;
+}
+
+.tag-summary button {
+    border: none;
+    padding: 0;
+}
+
+#detailedAddTagForm {
+    border: 1px solid lightgrey;
+    padding: 20px;
+    padding-top: 0;
+    margin: 20px 0px 40px 0px;
+}
+
+.delete-btn {
+    padding: 0px;
+    border: none;
+}
+
+table .img {
+    height: 30px;
+}
+
+.form-group.confidence input {
+    margin-left: 20px;
+    margin-right: 5px;
+}
+
+.form-group.confidence input:nth-child(2){
+    margin-left: 0;
+}
+
+.view-recordings-page h3  {
+    padding-bottom : 15px;
+}
+
+.vid-properties label {
+    padding-left : 0;
+}
+
+.next-buttons {
+    padding: 0;
+    border: 2px solid black;
+}
+
+tr.no-tags {
+    display: none;
+}
+
+#no-tags:last-child {
+    display: table-row;
+}
+
+.next-buttons-help img {
+    opacity: 0.5;
+}
+
+.next-buttons-help img:first-child {
+    margin-right:-44px;
+}
+
+.next-buttons-help p {
+    font-size: 14px;
+    padding-left: 10px;
+    color: gray;
+}
+
+hr {
+    border-top: 2px solid lightgrey;
+}

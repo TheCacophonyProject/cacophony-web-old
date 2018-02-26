@@ -8,14 +8,14 @@ tags = {};
  * Deletes a tag.
  */
 tags.delete = function(event) {
-  var id = event.target.tagId;
+  var id = event.target.parentNode.tagId;
   $.ajax({
     url: api+'/api/v1/tags',
     type: 'DELETE',
     headers: { 'Authorization': user.getJWT() },
     data: { "tagId": id },
     success: function() {
-      var row = event.target.parentNode.parentNode;
+      var row = event.target.parentNode.parentNode.parentNode;
       row.parentNode.removeChild(row);
     },
     error: function(err) {
@@ -31,65 +31,117 @@ tags.addTagToTable = function(tag) {
   var tagsTable = document.getElementById('tags-table');
   var row = tagsTable.insertRow(tagsTable.rows.length);
 
-  var typeElem = document.createElement('td');
-  if (tag.automatic) {
-    row.className = "bg-danger";
-    typeElem.innerHTML = "Automatic"
-  } else {
-    typeElem.innerHTML = "Manual";
-  }
-  row.appendChild(typeElem);
-
   var animal = document.createElement('td');
-  animal.innerHTML = tag.animal;
+  if (tag.animal) {
+    animal.innerHTML = tag.animal;
+  }
+  else {
+    animal.innerHTML = "-";
+  }
+
   row.appendChild(animal);
 
-  var number = document.createElement('td');
-  number.innerHTML = tag.number;
-  row.appendChild(number);
-
-  var event = document.createElement('td');
-  event.innerHTML = tag.event;
-  row.appendChild(event);
+  var animalpic = document.createElement('td');
+  var image = this.getAnimalImage(tag.animal, tag.event);
+  if (image) {
+    animalpic.innerHTML = "<img class='animal-icon' title='animal' src='" + image + "'/>";
+  }
+  row.appendChild(animalpic);
 
   var confidence = document.createElement('td');
   confidence.innerHTML = precisionRound(tag.confidence, 2);
   row.appendChild(confidence);
 
   var taggedby = document.createElement('td');
-  taggedby.innerHTML = tag.taggerId;
+  if (tag.automatic) {
+    row.className = "bg-danger";
+    taggedby.innerHTML = "<img title='Cacophony AI' src='/images/auto.png'/>"
+  } else if (tag.taggedbyme) {
+    taggedby.innerHTML = "Me!";
+  }
+  else {
+    taggedby.innerHTML = tag.taggerId;
+  }
   row.appendChild(taggedby);
-  
+
   var tagtime = document.createElement('td');
   tagtime.innerHTML = new Date(tag.createdAt).toLocaleString();
   row.appendChild(tagtime);
   
-  var age = document.createElement('td');
-  age.innerHTML = tag.age;
-  row.appendChild(age);
-
-  var startTime = document.createElement('td');
-  startTime.innerHTML = tag.startTime;
-  row.appendChild(startTime);
-
-  var duration = document.createElement('td');
-  duration.innerHTML = tag.duration;
-  row.appendChild(duration);
-
-  var trapType = document.createElement('td');
-  trapType.innerHTML = tag.trapType;
-  row.appendChild(trapType);
+  var additionalInfo = document.createElement('td');
+  row.appendChild(additionalInfo);
 
   // Add delete button
   var del = document.createElement('td');
   var deleteButton = document.createElement('button');
-  deleteButton.innerHTML = "Delete"
+  deleteButton.innerHTML = "<img title='Delete sighting' src='/images/delete.png'/>"
   deleteButton.onclick = tags.delete;
   deleteButton.tagId = tag.id;
   deleteButton.tagRow = row;
   del.appendChild(deleteButton)
   row.appendChild(del);
+
+  if (tag.number != null && tag.number > 1.5) {
+    additionalInfo.innerHTML += "<p> Number of animals is '" + tag.number + "'</p>"  
+  }
+
+  if (tag.event != null && tag.event != "just wandering about") {
+    additionalInfo.innerHTML += "<p> Event is '<i>" + tag.event + "'</i></p>"
+  }
+
+  if (tag.trapType != null && tag.trapType != "") {
+    additionalInfo.innerHTML += "<p> Trap type is '<i>" + tag.trapType + "'</i></p>"
+  }
+
+  if (tag.age != null && tag.age != "") {
+    additionalInfo.innerHTML += "<p> Age is " + tag.age + "</p>"
+  }
+
+  if (tag.startTime != null || tag.duration != null) {
+    if (tag.startTime == null) {
+      tag.startTime == 0;
+    }
+    var timestring = "<p>Animal visible from " + tags.displayTime(tag.startTime);
+    if (tag.duration != null) {
+      timestring += "&nbsp;-&nbsp;" + tags.displayTime(tag.startTime + tag.duration);
+    }
+    timestring += "</p>";
+    additionalInfo.innerHTML += timestring;
+  }
 };
+
+/**
+ * Gets the image that represents the animal (string) if available else returns null.
+ */
+tags.getAnimalImage = function(animal, event) {
+  if (!animal && event == 'false positive') {
+    return '/images/none.png'
+  }
+
+  switch(animal) {
+    case "possum":
+        return '/images/possum.png';
+    case "stoat":
+      return '/images/stoat.png';
+    case "rat":
+      return '/images/rat.png'
+    case "hedgehog":
+      return '/images/hedgehog.png'
+    case "cat":
+      return '/images/cat.png'
+    case "human":
+      return '/images/human.png'
+    case "bird":
+      return '/images/bird.png'
+    case "bird/kiwi":
+      return '/images/kiwi.png'
+    case "unidentified":
+      return '/images/unknown.png'
+    default:
+      return null;
+  }
+}
+
 /**
  * Loads all the tags in the list given to the table.
  */
@@ -130,6 +182,16 @@ tags.new = function() {
   tags.send(tag);
 };
 
+tags.quickNew = function(animal) {
+  var tag = {};
+
+  tag.animal = animal;
+  tag.confidence = .6
+
+  tags.send(tag);
+}
+
+
 tags.send = function(tag) {
   var data = {recordingId: id};
   data.tag = JSON.stringify(tag);
@@ -141,6 +203,8 @@ tags.send = function(tag) {
     data: data,
     success: function(res) {
       tag.id = res.tagId;
+      tag.createdAt = new Date();
+      tag.taggedbyme = true;
       tags.addTagToTable(tag);
     },
     error: function(err) {
@@ -194,6 +258,19 @@ tags.parseTime = function(id) {
 }
 
 /**
+ * Takes time in total seconds and parses it back into minutes and seconds format. 
+ */
+tags.displayTime = function(timeInSeconds) {
+  var timeString = "";
+  var seconds = (timeInSeconds % 60);
+
+  timeString += ((timeInSeconds - seconds) / 60);
+  timeString += ":";
+  timeString += (seconds);
+  return timeString;
+}
+
+/**
  * Parses a Duration input, if input is invalid it will throw an error.
  * A null/empty result is not considered invalid.
  * The duration is calculated as the secconds from the start time to end time.
@@ -229,4 +306,15 @@ tags.parseConfidence = function(id) {
 function precisionRound(number, precision) {
   var factor = Math.pow(10, precision);
   return Math.round(number * factor) / factor;
+}
+
+
+function toggleTaggingDetails() {
+  var tagformClasses = document.getElementById('detailedAddTagForm').classList;
+
+  if (tagformClasses.contains('hidden')) {
+    tagformClasses.remove('hidden');
+  } else {
+    tagformClasses.add('hidden');
+  }
 }

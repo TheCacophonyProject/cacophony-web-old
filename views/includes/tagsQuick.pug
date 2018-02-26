@@ -1,0 +1,13 @@
+div.quicktags
+    input.col-xs-2.col-md-1(type="image", title="Mark as possum", src='/images/possum.png'  onclick="tags.quickNew('possum')" )
+    input.col-xs-2.col-md-1(type="image", title="Mark as stoat", src='/images/stoat.png'  onclick="tags.quickNew('stoat')" )
+    input.col-xs-2.col-md-1(type="image", title="Mark as rat", src='/images/rat.png' onclick="tags.quickNew('rat')")
+    input.col-xs-2.col-md-1(type="image", title="Mark as hedgehog", src='/images/hedgehog.png', onclick="tags.quickNew('hedgehog')" )
+    input.col-xs-2.col-md-1(type="image", title="Mark as cat", src='/images/cat.png', onclick="tags.quickNew('cat')" )
+    input.col-xs-2.col-md-1(type="image", title="Mark as human", src='/images/human.png', onclick="tags.quickNew('human')" )
+    input.col-xs-2.col-md-1(type="image", title="Mark as bird",  src='/images/bird.png', onclick="tags.quickNew('bird')" )
+    input.col-xs-2.col-md-1(type="image", title="Mark as kiwi",  src='/images/kiwi.png', onclick="tags.quickNew('bird/kiwi')" )
+    input.col-xs-2.col-xs-offset-2.col-md-offset-1.col-md-1(type="image", title="Mark as unidentified (meaning the type of animal is unclear)", src='/images/unknown.png', onclick="tags.quickNew('unidentified')" )
+    input.col-xs-2.col-md-1(type="image", title="Mark as false positive (meaning there is no animal present)", src='/images/none.png', onclick="falsePositive()" )
+    input.col-xs-2.col-md-1(type="image", src='/images/plus.png', title="Open form to add other animal and/or extra details", onclick="toggleTaggingDetails()" )
+    div.clearfix
