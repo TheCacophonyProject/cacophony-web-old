@@ -96,11 +96,11 @@ user.getJWT = function() {
 }
 
 user.updateUserData = function() {
-  if (!user.isLoggedIn)
+  if (!user.isLoggedIn()) {
     return;
-
+  }
   $.ajax({
-    url: api + '/api/v1/users',
+    url: api + '/api/v1/users/' + user.get("username"),
     type: 'get',
     headers: { 'Authorization': user.getJWT() },
     success: function(res) {
