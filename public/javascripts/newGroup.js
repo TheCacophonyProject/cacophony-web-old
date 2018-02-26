@@ -4,7 +4,7 @@ window.onload = function() {
 
 function newGroup() {
   if (!user.isLoggedIn()) {
-    window.alert('No user data found, please log in before making a new Group.');
+    window.alert('Please log in before making a new group');
     return;
   }
   var groupname = document.getElementById('group-name').value;
@@ -25,6 +25,15 @@ function newGroup() {
 }
 
 function newGroupError(err) {
-  console.log(err);
-  window.alert(err);
+  // Try to extract the error for the groupname field.
+  var nameErr;
+  try {
+    nameErr = err.responseJSON.errors.groupname.msg;
+  } catch {}
+
+  var msg = "Failed to add group"
+  if (nameErr !== null) {
+    msg = msg + ": " + nameErr;
+  }
+  window.alert(msg);
 }
