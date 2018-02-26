@@ -85,6 +85,10 @@ tr.no-tags {
     display: table-row;
 }
 
+.next-buttons-help img {
+    opacity: 0.5;
+}
+
 .next-buttons-help img:first-child {
     margin-right:-44px;
 }
@@ -92,9 +96,9 @@ tr.no-tags {
 .next-buttons-help p {
     font-size: 14px;
     padding-left: 10px;
+    color: gray;
 }
 
 hr {
     border-top: 2px solid lightgrey;
-
 }
