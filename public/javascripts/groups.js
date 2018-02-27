@@ -1,5 +1,4 @@
 const groupsApiUrl = api + '/api/v1/groups';
-const usersApiUrl = api + '/api/v1/users';
 const groupUsersApiUrl = api + '/api/v1/groups/users';
 const params = new URLSearchParams(location.search);
 
@@ -7,13 +6,13 @@ window.onload = function() {
   updateGroupTitle();
   loadGroups();
   loadGroupUsersAndDevices();
-}
+};
 
 function updateGroupTitle() {
   const title = document.getElementById('group-title');
   const groupname = params.get('groupname');
   if (groupname == null) {
-    title.innerHTML = 'Groups'
+    title.innerHTML = 'Groups';
   } else {
     title.innerHTML = 'Group ' + groupname;
   }
@@ -67,22 +66,22 @@ function isAdmin(group) {
 }
 
 async function loadGroupUsersAndDevices() {
-  var groupname = params.get('groupname')
+  var groupname = params.get('groupname');
   console.log('loading group', groupname);
   if (groupname == null) {
     return;
   }
   const groups = await getGroups({ groupname: groupname });
   const users = groups[0].Users;
-  clearTable('users-table')
+  clearTable('users-table');
   console.log(users);
   for (var i in users) {
     adduserToTable(users[i]);
   }
-  clearTable('devices-table')
+  clearTable('devices-table');
   const devices = groups[0].Devices;
   for (var d in devices) {
-    addDeviceToTable(devices[d])
+    addDeviceToTable(devices[d]);
   }
 }
 
@@ -120,8 +119,8 @@ function addUserToGroupButton() {
 }
 
 async function addUserToGroup(username, admin) {
-  const users = await getUsers({username: username});
-  if (users.length != 1) {
+  const targetUser = await user.get(username);
+  if (targetUser === null) {
     console.log('user not found');
     return;
   }
@@ -130,11 +129,11 @@ async function addUserToGroup(username, admin) {
     console.log('group not found');
     return;
   }
-  const headers = {}
+  const headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   const data = {
     groupId: groups[0].id,
-    userId: users[0].id,
+    userId: targetUser.id,
     admin: admin,
   };
   $.ajax({
@@ -158,8 +157,8 @@ function removeUserFromGroupButton() {
 }
 
 async function removeUserFromGroup(username) {
-  const users = await getUsers({username: username});
-  if (users.length != 1) {
+  const targetUserl = await user.get(username);
+  if (targetUser === null) {
     console.log('user not found');
     return;
   }
@@ -168,11 +167,11 @@ async function removeUserFromGroup(username) {
     console.log('group not found');
     return;
   }
-  const headers = {}
+  const headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   const data = {
     groupId: groups[0].id,
-    userId: users[0].id,
+    userId: targetUser.id,
   };
   $.ajax({
     url: groupUsersApiUrl,
@@ -203,24 +202,6 @@ function getGroups(where) {
         return resolve(result.groups);
       },
       error: reject,
-    })
-  });
-}
-
-function getUsers(where) {
-  const data = {where: JSON.stringify(where) };
-  const headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
-  return new Promise(function(resolve, reject) {
-    $.ajax({
-      url: usersApiUrl,
-      type: 'GET',
-      data: data,
-      headers: headers,
-      success: function (result) {
-        return resolve(result.users);
-      },
-      error: reject,
-    })
+    });
   });
 }
