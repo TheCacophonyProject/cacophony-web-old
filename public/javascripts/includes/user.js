@@ -69,18 +69,18 @@ user.register = function(passEle1, passEle2, usernameEle) {
   });
 };
 
-user.getData = function() {
+user.getAllAttrs = function() {
   if (user.isLoggedIn())
     return JSON.parse(localStorage.getItem('userData'));
   else
     return null;
 };
 
-user.get = function(field) {
+user.getAttr = function(field) {
   if (user.isLoggedIn() == false)
     return null;
   else
-    return user.getData()[field];
+    return user.getAllAttrs()[field];
 };
 
 user.isLoggedIn = function() {
@@ -100,7 +100,7 @@ user.updateUserData = function() {
     return;
   }
   $.ajax({
-    url: api + '/api/v1/users/' + user.get("username"),
+    url: api + '/api/v1/users/' + user.getAttr("username"),
     type: 'get',
     headers: { 'Authorization': user.getJWT() },
     success: function(res) {

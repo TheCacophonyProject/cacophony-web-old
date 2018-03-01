@@ -3,5 +3,5 @@ window.onload = function() {
 };
 
 function login() {
-  user.login(document.getElementById('inputPassword').value, document.getElementById('inputUsername').value)
+  user.login(document.getElementById('inputPassword').value, document.getElementById('inputUsername').value);
 }

@@ -67,7 +67,7 @@ function clearTable(tableId) {
 
 function isAdmin(device) {
   for (var i in device.Users) {
-    if (device.Users[i].id == user.getData().id) {
+    if (device.Users[i].id == user.getAttr('id')) {
       return device.Users[i].DeviceUsers.admin;
     }
   }

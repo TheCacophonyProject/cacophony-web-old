@@ -58,7 +58,7 @@ clearTable = function(tableId) {
 
 function isAdmin(group) {
   for (var i in group.Users) {
-    if (group.Users[i].id == user.getData().id) {
+    if (group.Users[i].id == user.getAttr('id')) {
       return group.Users[i].GroupUsers.admin;
     }
   }
