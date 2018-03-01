@@ -1,5 +1,4 @@
 const devicesApiUrl = api + '/api/v1/devices';
-const usersApiUrl = api + '/api/v1/users';
 const deviceUsersApiUrl = api + '/api/v1/devices/users';
 const params = new URLSearchParams(location.search);
 var devices = [];
@@ -10,7 +9,7 @@ window.onload = async function() {
   await loadDevices();
   updateActiveDevice();
   loadDeviceUsers();
-}
+};
 
 function updateActiveDevice() {
   activeDevice = null;
@@ -26,7 +25,7 @@ function updateDeviceTitle() {
   const title = document.getElementById('device-title');
   const devicename = params.get('devicename');
   if (devicename == null) {
-    title.innerHTML = 'Devices'
+    title.innerHTML = 'Devices';
   } else {
     title.innerHTML = 'Device ' + devicename;
   }
@@ -64,11 +63,11 @@ function clearTable(tableId) {
   var table = document.getElementById(tableId);
   var rowCount = table.rows.length;
   while (--rowCount) table.deleteRow(rowCount);
-};
+}
 
 function isAdmin(device) {
   for (var i in device.Users) {
-    if (device.Users[i].id == user.getData().id) {
+    if (device.Users[i].id == user.getAttr('id')) {
       return device.Users[i].DeviceUsers.admin;
     }
   }
@@ -76,7 +75,7 @@ function isAdmin(device) {
 }
 
 async function loadDeviceUsers() {
-  var devicename = params.get('devicename')
+  var devicename = params.get('devicename');
   if (devicename == null) {
     return;
   }
@@ -109,16 +108,16 @@ function addUserToDeviceButton() {
 }
 
 async function addUserToDevice(username, admin) {
-  const users = await getUsers({username: username});
-  if (users.length != 1) {
+  const targetUser = await user.get(username);
+  if (targetUser === null) {
     return;
   }
 
-  const headers = {}
+  const headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   const data = {
     deviceId: activeDevice.id,
-    userId: users[0].id,
+    userId: targetUser.id,
     admin: admin,
   };
   $.ajax({
@@ -139,15 +138,16 @@ function removeUserFromDeviceButton() {
 }
 
 async function removeUserFromDevice(username) {
-  const users = await getUsers({username: username});
-  if (users.length != 1) {
+  const targetUser = await user.get(username);
+  if (targetUser === null) {
     return;
   }
-  const headers = {}
+
+  const headers = {};
   if (user.isLoggedIn()) headers.Authorization = user.getJWT();
   const data = {
     deviceId: activeDevice.id,
-    userId: users[0].id,
+    userId: targetUser.id,
   };
   $.ajax({
     url: deviceUsersApiUrl,
@@ -183,24 +183,6 @@ function getDevices() {
         return resolve();
       },
       error: reject,
-    })
-  });
-}
-
-function getUsers(where) {
-  const data = {where: JSON.stringify(where) };
-  return new Promise(function(resolve, reject) {
-    const headers = {};
-    if (user.isLoggedIn()) headers.Authorization = user.getJWT();
-    $.ajax({
-      url: usersApiUrl,
-      type: 'GET',
-      data: data,
-      headers: headers,
-      success: function (result) {
-        return resolve(result.users);
-      },
-      error: reject,
-    })
+    });
   });
 }
