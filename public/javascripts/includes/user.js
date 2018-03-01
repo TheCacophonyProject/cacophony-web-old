@@ -126,8 +126,8 @@ user.get = async function(username) {
       headers: { 'Authorization': user.getJWT() },
       success: (result) => resolve(result.userData),
       error: (resp) => {
-        // 400 status means the user doesn't exist.
-        if (resp.status == 400) {
+        // 422 status means the user doesn't exist.
+        if (resp.status == 422) {
           resolve(null);
         }
         return reject(resp.statusText);
