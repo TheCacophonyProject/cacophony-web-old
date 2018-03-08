@@ -57,7 +57,12 @@ function getRelativeToDuskText() {
 }
 
 function getRecordingDateText() {
-  return recording.recordingDateTime;
+  if (recording.recordingDateTime == null) {
+    return "no date given."
+  } else {
+    var d = new Date(recording.recordingDateTime);
+    return d.toLocaleDateString('en-NZ');
+  }
 }
 
 function getStartTimeText() {
