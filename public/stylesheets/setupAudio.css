@@ -1,0 +1,15 @@
+.schedulesave input {
+    border: 1px solid lightgrey;
+    padding: 5px 5px;
+    max-height: 80px;
+    max-width: 80px;
+}
+
+.soundcombo {
+    border: 1px solid lightgray;
+}
+
+.scheduleblock {
+  margin: 2px;
+}
+

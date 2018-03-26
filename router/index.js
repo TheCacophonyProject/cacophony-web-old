@@ -75,4 +75,10 @@ module.exports = function(app) {
       'api': config.server.api,
     });
   });
+
+  app.get('/setup_audio', (request, response) => {
+    response.render('setupAudio.pug', {
+      'api': config.server.api,
+    });
+  });
 };
