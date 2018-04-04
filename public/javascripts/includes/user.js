@@ -22,10 +22,7 @@ user.login = function(passwordElement, usernameElement) {
     error: function(res) {
       document.getElementById('inputUsername').value = '';
       document.getElementById('inputPassword').value = '';
-      var messages = JSON.parse(res.responseText).messages.join('.');
-      console.log(messages);
-      window.alert(messages);
-      document.getElementById('messages').innerHTML = messages;
+      window.alert('login failed');
     }
   });
 };
