@@ -1,4 +1,10 @@
-var recordingsApiUrl = api + '/api/v1/recordings'
+/* global api, tags, user, id */
+
+/* exported goToStartTime, goToEndTime, setStartTimeAsCurrentTime, setEndTimeAsCurrentTime,
+  deleteRecording, updateComment */
+
+
+var recordingsApiUrl = api + '/api/v1/recordings';
 var recording = null;
 
 document.onkeypress = function (e) {
@@ -14,8 +20,8 @@ document.onkeypress = function (e) {
 };
 
 window.onload = function() {
-  headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  var headers = {};
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   $.ajax({
     url: recordingsApiUrl + '/' + id,
     type: 'GET',
@@ -29,9 +35,9 @@ window.onload = function() {
   var setToDefaults = ['tagAnimalInput', 'tagEventInput', 'tagTrapTypeInput'];
   for (var i in setToDefaults) {
     if (defaults[setToDefaults[i]] != undefined)
-      document.getElementById([setToDefaults[i]]).value = defaults[setToDefaults[i]];
+    {document.getElementById([setToDefaults[i]]).value = defaults[setToDefaults[i]];}
   }
-}
+};
 
 function getRecordingError(result) {
   console.log(result);
@@ -39,12 +45,12 @@ function getRecordingError(result) {
 }
 
 function nextRecording(direction, tagMode, tags) {
-  if (recording == null) return;
+  if (recording == null) {return;}
 
   var query = {
     DeviceId: recording.Device.id,
   };
-  var order
+  var order;
   switch (direction) {
   case "next":
     query.recordingDateTime = {gt: recording.recordingDateTime};
@@ -62,8 +68,8 @@ function nextRecording(direction, tagMode, tags) {
     tags = null;
   }
 
-  headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  var headers = {};
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   $.ajax({
     url: recordingsApiUrl,
     type: 'GET',
@@ -92,25 +98,26 @@ function nextRecording(direction, tagMode, tags) {
 
 
 
-function getRecordingSuccess(result, status) {
-  if (!result.success)
+function getRecordingSuccess(result) {
+  if (!result.success) {
     //TODO deal with not getting a recording back
     return;
+  }
   recording = result.recording;
   console.log(recording);
   switch(result.recording.type) {
-    case 'thermalRaw':
-      parseThermalRaw(result)
-      break;
+  case 'thermalRaw':
+    parseThermalRaw(result);
+    break;
   }
   tags.load(result.recording.Tags);
 }
 
 function parseThermalRaw(result) {
   console.log("Got a thermal raw data");
-  // Add event listned to set end time to lenght - 10 seconds.
+  // Add event listner to set end time to length - 10 seconds.
   var player = document.getElementById('player');
-  player.addEventListener('loadedmetadata', function(res) {
+  player.addEventListener('loadedmetadata', function() {
     document.getElementById('tagStopTimeInput').value =
       secondsToMMSS(player.duration - 10);
   });
@@ -122,7 +129,7 @@ function parseThermalRaw(result) {
     source.src = api + "/api/v1/signedUrl?jwt=" + result.downloadFileJWT;
     player.appendChild(source);
   } else {
-    window.alert("Recording has not been processed yet.")
+    window.alert("Recording has not been processed yet.");
   }
 
   // Get metadata.
@@ -137,44 +144,45 @@ function parseThermalRaw(result) {
 }
 
 function secondsToMMSS(seconds) {
-  seconds = Math.ceil(seconds)
-  minutes = Math.floor(seconds/60);
-  seconds = seconds%60;
-  if (seconds < 10)
+  seconds = Math.ceil(seconds);
+  var minutes = Math.floor(seconds/60);
+  seconds = seconds % 60;
+  if (seconds < 10) {
     return minutes + ":0" + seconds;
-  else
+  } else {
     return minutes + ":" + seconds;
+  }
 }
 
 function goToStartTime() {
-  minutes = document.getElementById('tagStartTimeInput').value.split(':')[0]
-  seconds = document.getElementById('tagStartTimeInput').value.split(':')[1]
+  var minutes = document.getElementById('tagStartTimeInput').value.split(':')[0];
+  var seconds = document.getElementById('tagStartTimeInput').value.split(':')[1];
   document.getElementById('player').currentTime = minutes * 60 + seconds;
 }
 
 function goToEndTime() {
-  minutes = document.getElementById('tagStopTimeInput').value.split(':')[0]
-  seconds = document.getElementById('tagStopTimeInput').value.split(':')[1]
+  var minutes = document.getElementById('tagStopTimeInput').value.split(':')[0];
+  var seconds = document.getElementById('tagStopTimeInput').value.split(':')[1];
   document.getElementById('player').currentTime = minutes * 60 + seconds;
 }
 
 function setStartTimeAsCurrentTime() {
-  var seconds = Math.floor(document.getElementById('player').currentTime)
+  var seconds = Math.floor(document.getElementById('player').currentTime);
   document.getElementById('tagStartTimeInput').value = secondsToMMSS(seconds);
 }
 
 function setEndTimeAsCurrentTime() {
-  var seconds = Math.ceil(document.getElementById('player').currentTime)
+  var seconds = Math.ceil(document.getElementById('player').currentTime);
   document.getElementById('tagStopTimeInput').value = secondsToMMSS(seconds);
 }
 
 function falsePositive() {
-  tags.send({event: "false positive"})
+  tags.send({event: "false positive"});
 }
 
 function deleteRecording() {
-  headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  var headers = {};
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   $.ajax({
     url: recordingsApiUrl + '/' + id,
     type: 'DELETE',
@@ -192,8 +200,8 @@ function deleteRecording() {
 
 function updateComment() {
   var comment = document.getElementById('comment-text').value;
-  headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  var headers = {};
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   $.ajax({
     url: recordingsApiUrl + '/' + id,
     type: 'PATCH',
@@ -201,7 +209,7 @@ function updateComment() {
     data: {updates: JSON.stringify({comment: comment})},
     success: function(res) {
       console.log(res);
-      window.alert("Saved comment.")
+      window.alert("Saved comment.");
     },
     error: function(err) {
       console.log(err);

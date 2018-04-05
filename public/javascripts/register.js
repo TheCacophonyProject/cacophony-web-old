@@ -1,3 +1,5 @@
+/* global user */
+
 window.onload = function() {
   $("#register").click(register);
 };

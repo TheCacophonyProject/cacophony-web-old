@@ -1,3 +1,6 @@
+/* global user */
+/* exported newGroup */
+
 window.onload = function() {
   document.getElementById('username').innerText = user.getAttr("username");
   document.getElementById('first-name').innerText = user.getAttr("firstname");
@@ -10,13 +13,8 @@ function getGroupsListText() {
   var groups = [];
   var userGroups = user.getAttr("groups");
   for (var i in userGroups)
-    groups.push(userGroups[i].groupname);
+  {groups.push(userGroups[i].groupname);}
   return groups.join(', ');
-}
-
-function userRequestError(res) {
-  console.log('Request Error');
-  console.log(res);
 }
 
 function newGroup() {
