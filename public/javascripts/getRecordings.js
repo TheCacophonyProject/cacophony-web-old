@@ -5,56 +5,59 @@ for security, so it should follow the format given from Sequelize.
 http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 */
 
+/* global api, user, Map */
+
+/* exported deleteCondition, addBeforeDate, addAfterDate,
+ * addLongerThan, addShorterThan, fromConditions, inc, dec, getAll */
+
 var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
 var viewUrl = '/view_recording/';
 
-queryUtil = {};
-
-conditions = {};
-nextId = 1;
-count = 54;
+const conditions = {};
+var nextId = 1;
+var count = 54;
 
 window.onload = function() {
-    headers = {};
-    if (user.isLoggedIn()) headers.Authorization = user.getJWT();
-    $.ajax({
-      url: devicesApiUrl,
-      type: 'GET',
-      headers: headers,
-      success: function(result) {
-          var deviceSelect = document.getElementById("deviceSelect")
-          for (i in result.devices.rows) {
-              var device = result.devices.rows[i];
-              var option = document.createElement("option");
-              option.innerText = device.devicename;
-              option.id = device.id;
-              deviceSelect.appendChild(option);
-          }
-      },
-      error: function(err) {
-          console.log(err);
+  var headers = {};
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  $.ajax({
+    url: devicesApiUrl,
+    type: 'GET',
+    headers: headers,
+    success: function(result) {
+      var deviceSelect = document.getElementById("deviceSelect");
+      for (var i in result.devices.rows) {
+        var device = result.devices.rows[i];
+        var option = document.createElement("option");
+        option.innerText = device.devicename;
+        option.id = device.id;
+        deviceSelect.appendChild(option);
       }
-    })
-}
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  });
+};
 
 // Adds a Sequelize condition to the query.
-addCondition = function(sequelizeCondition) {
+function addCondition(sequelizeCondition) {
   console.log('Add condition:', sequelizeCondition);
   var id = nextId++;
   conditions[id] = sequelizeCondition;
   updateConditions();
-};
+}
 
 // Removes a Sequelize condition with the given ID.
-deleteCondition = function(id) {
+function deleteCondition(id) {
   console.log('Delete condition: ', id);
   delete conditions[id];
   updateConditions();
-};
+}
 
 // Removes the display of the previous query and displays the new one.
-updateConditions = function() {
+function updateConditions() {
   console.log('Update conditions');
   // Delete display of old query.
   var conditionsElement = document.getElementById('conditions');
@@ -73,10 +76,10 @@ updateConditions = function() {
     conditionsElement.appendChild(deleteButton);
     conditionsElement.appendChild(br);
   }
-};
+}
 
 // Makes a Sequelize query from the user defined conditions.
-fromConditions = function() {
+function fromConditions() {
   var query = {type: 'thermalRaw'};
   for (var i in conditions) {
     var condition = conditions[i];
@@ -85,82 +88,82 @@ fromConditions = function() {
     // {duration: 2}        Duration should be equal to 2.
     for (var key in condition) {
       // Adding empty object if one is not already defined for that key.
-      if (query[key] === undefined) query[key] = {};
+      if (query[key] === undefined) {query[key] = {};}
 
       // If condition is an object append each condition. {duration: {$lt: 4}}
       // Just one condition in this case.
       // query.duration.$lt = 4;
       if (typeof condition[key] === 'object')
-        for (var j in condition[key]) query[key][j] = condition[key][j];
+      {for (var j in condition[key]) {query[key][j] = condition[key][j];}}
 
       // If not a object just set key to that value. {duration: 2}
       // query.duration = 2;
       else
-        query[key] = condition[key];
+      {query[key] = condition[key];}
     }
   }
 
   document.getElementById('active-query').value = JSON.stringify(query);
   sendQuery();
-};
+}
 
 //===============ADD CONDITIONS==================
-addBeforeDate = function() {
+function addBeforeDate() {
   var date = document.getElementById('before-date').value;
   addCondition({ recordingDateTime: { "$lt": date} });
-};
+}
 
-addAfterDate = function() {
+function addAfterDate() {
   var date = document.getElementById('after-date').value;
   addCondition({ recordingDateTime: { "$gt": date } });
-};
+}
 
-addLongerThan = function() {
+function addLongerThan() {
   var duration = document.getElementById('longer-than').value;
   addCondition({ duration: { "$gt": duration } });
-};
+}
 
-addShorterThan = function() {
+function addShorterThan() {
   var duration = document.getElementById('shorter-than').value;
   addCondition({ duration: { "$lt": duration } });
-};
+}
 
 // Increase query offset, view next set of results.
-inc = function() {
+function inc() {
   var offset = document.getElementById('offset');
   var offsetN = Number(offset.value);
   var limitN = Number(document.getElementById('limit').value);
   if (offsetN + limitN < count)
-    offset.value = offsetN + limitN;
+  {offset.value = offsetN + limitN;}
   sendQuery();
-};
+}
 
 // Decrease query offset, vew previous set of results.
-dec = function() {
+function dec() {
   var offset = document.getElementById('offset');
   var offsetN = Number(offset.value);
   var limitN = Number(document.getElementById('limit').value);
   var newOffsetVal = offsetN - limitN;
   if (newOffsetVal <= 0)
-    newOffsetVal = 0;
+  {newOffsetVal = 0;}
   offset.value = newOffsetVal;
   sendQuery();
-};
+}
 
 // Get all results available
-getAll = function() {
+function getAll() {
   var query = {};
 
   var deviceId = document.getElementById("deviceSelect").selectedOptions[0].id;
-  if (deviceId != "") query.DeviceId = deviceId;
+  if (deviceId != "") {query.DeviceId = deviceId;}
 
   document.getElementById('active-query').value = JSON.stringify(query);
   sendQuery();
-};
+}
 
 // Send the active query. Takes the query in the 'active-query' element and
 // updates the table with the new results.
-sendQuery = function() {
+function sendQuery() {
   clearTable();
 
   // Get query params.
@@ -169,7 +172,7 @@ sendQuery = function() {
   var offset = Number(document.getElementById('offset').value);
   var tagMode = $('select#tagMode').val();
 
-  var url = recordingsApiUrl
+  var url = recordingsApiUrl;
   $.ajax({
     url: url,
     type: 'GET',
@@ -183,9 +186,9 @@ sendQuery = function() {
     success: function(res) {
       console.log('Successful request:', res);
       if (res.count === 0)
-        window.alert('No results for query.');
+      {window.alert('No results for query.');}
       for (var i in res.rows)
-        appendDatapointToTable(res.rows[i]);
+      {appendDatapointToTable(res.rows[i]);}
       limit = res.limit;
       count = res.count; // number of results from query.
       document.getElementById('offset').value = res.offset;
@@ -197,17 +200,19 @@ sendQuery = function() {
       console.log('Error:', err);
     },
   });
-};
+}
 
 // Clears the results table.
-clearTable = function() {
+function clearTable() {
   var table = document.getElementById('results-table');
   var rowCount = table.rows.length;
-  while (--rowCount) table.deleteRow(rowCount);
-};
+  while (--rowCount) {
+    table.deleteRow(rowCount);
+  }
+}
 
 // Parses throug a Datapoint and adds it to the result table.
-appendDatapointToTable = function(datapoint) {
+function appendDatapointToTable(datapoint) {
   var table = document.getElementById('results-table');
   var newRow = table.insertRow(table.rows.length);
   var tableData = getTableData();
@@ -216,16 +221,20 @@ appendDatapointToTable = function(datapoint) {
   // field in tableData. tableData describes what the columns should look like.
   for (var i in tableData) {
     // Some columns need the whole datapoint to parse not just one element.
-    if (tableData[i].datapointField == 'datapoint')
-      var value = datapoint; // parsing the whole datapoint.
-    else
-      var value = datapoint[tableData[i].datapointField]; // parsing just one element
+    var value;
+    if (tableData[i].datapointField == 'datapoint') {
+      // parsing the whole datapoint.
+      value = datapoint;
+    } else {
+      // parsing just one element
+      value = datapoint[tableData[i].datapointField];
+    }
     newRow.appendChild(tableData[i].parseFunction(value));
   }
-};
+}
 
 // Returns an element that links to a page to view the recording.
-datapointViewElement = function(datapoint) {
+function datapointViewElement(datapoint) {
   var link = document.createElement("a");
   link.setAttribute('href', viewUrl + datapoint.id);
   link.setAttribute('target', '_blank');
@@ -233,15 +242,15 @@ datapointViewElement = function(datapoint) {
   var td = document.createElement("td");
   td.appendChild(link);
   return td;
-};
+}
 
-parseNumber = function(number) {
+function parseNumber(number) {
   var td = document.createElement("td");
   td.innerHTML = number;
   return td;
-};
+}
 
-parseLocation = function(location) {
+function parseLocation(location) {
   var td = document.createElement("td");
   if (location && typeof location === 'object') {
     var latitude = location.coordinates[0];
@@ -251,38 +260,38 @@ parseLocation = function(location) {
   }
   td.innerHTML = '<span class="text-muted">(unknown)</span>';
   return td;
-};
+}
 
-parseDuration = function(duration) {
+function parseDuration(duration) {
   var td = document.createElement("td");
   td.innerHTML = duration;
   return td;
-};
+}
 
-parseTime = function(dateTime) {
+function parseTime(dateTime) {
   var td = document.createElement("td");
   if (dateTime == null)
-    return td;
+  {return td;}
   var d = new Date(dateTime);
   td.innerHTML = d.toLocaleTimeString();
   return td;
-};
+}
 
-parseDate = function(dateTime) {
+function parseDate(dateTime) {
   var td = document.createElement("td");
   if (dateTime == null)
-    return td;
+  {return td;}
   var d = new Date(dateTime);
   td.innerHTML = d.toLocaleDateString('en-NZ');
   return td;
-};
+}
 
-parseTags = function(tags) {
+function parseTags(tags) {
   // Group tags by animal type
   var tagMap = new Map();
   for (var i = 0; i < tags.length; i++) {
-    tag = tags[i];
-    var animal = tag.animal
+    var tag = tags[i];
+    var animal = tag.animal;
     if (animal == null) {
       animal = 'F/P';
     }
@@ -292,7 +301,7 @@ parseTags = function(tags) {
       tagTypes = {
         human: false,
         automatic: false,
-      }
+      };
     }
     if (tag.automatic) {
       tagTypes.automatic = true;
@@ -308,7 +317,7 @@ parseTags = function(tags) {
   var items = [];
   for (const kv of tagMap.entries()) {
     animal = kv[0];
-    types = kv[1];
+    var types = kv[1];
     if (types.human && types.automatic) {
       items.push('<span class="text-success">' + animal + '</span>');
     } else if (types.automatic) {
@@ -321,18 +330,18 @@ parseTags = function(tags) {
   var td = document.createElement("td");
   td.innerHTML = items.join(' ');
   return td;
-};
+}
 
-parseOther = function(datapoint) {
+function parseOther() {
   // Airplane and battery status can go here.
   var td = document.createElement("td");
   td.innerHTML = '<span class="text-muted">-</span>';
   return td;
-};
+}
 
 
 // Generates a Download button to download the recording
-parseDownload = function(id, type) {
+function parseDownload(id, type) {
   var td = document.createElement("td");
   var button = document.createElement("button");
   button.innerHTML = "Download";
@@ -340,7 +349,7 @@ parseDownload = function(id, type) {
   button.onclick = function() {
     // Get server to generate a JWT for downloading the file.
     var headers = {};
-    if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+    if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
     var url = recordingsApiUrl + '/' + id;
     $.ajax({
       url: url,
@@ -359,95 +368,83 @@ parseDownload = function(id, type) {
   };
   td.appendChild(button);
   return td;
-};
-
-parseDownloadRaw = function(id) {
-  return parseDownload(id, 'downloadRawJWT')
 }
 
-parseDownloadFile = function(id) {
-  return parseDownload(id, 'downloadFileJWT')
+function parseDownloadRaw(id) {
+  return parseDownload(id, 'downloadRawJWT');
 }
 
-parseString = function(string) {
-  var td = document.createElement("td");
-  td.innerHTML = string;
-  return td;
-};
+function parseDownloadFile(id) {
+  return parseDownload(id, 'downloadFileJWT');
+}
 
-parseBoolean = function(boolean) {
-  var td = document.createElement("td");
-  td.innerHTML = boolean;
-  return td;
-};
-
-parseGroup = function(group) {
+function parseGroup(group) {
   var td = document.createElement("td");
   td.innerHTML = group.groupname;
   return td;
-};
+}
 
-parseDevice = function(device) {
+function parseDevice(device) {
   var td = document.createElement("td");
   td.innerHTML = device.devicename;
   return td;
-};
+}
 
 function getTableData() {
   return [{
-      tableName: "ID",
-      datapointField: "id",
-      parseFunction: parseNumber
-    },
-    {
-      tableName: "Device",
-      datapointField: "Device",
-      parseFunction: parseDevice
-    },
-    {
-      tableName: "Group",
-      datapointField: "Group",
-      parseFunction: parseGroup
-    },
-    {
-      tableName: "Location",
-      datapointField: "location",
-      parseFunction: parseLocation
-    },
-    {
-      tableName: "Time",
-      datapointField: "recordingDateTime",
-      parseFunction: parseTime
-    },
-    {
-      tableName: "Date",
-      datapointField: "recordingDateTime",
-      parseFunction: parseDate
-    },
-    {
-      tableName: "Duration",
-      datapointField: "duration",
-      parseFunction: parseDuration
-    },
-    {
-      tableName: "Tags",
-      datapointField: "Tags",
-      parseFunction: parseTags,
-    },
-    {
-      tableName: "Other",
-      datapointField: "datapoint",
-      parseFunction: parseOther,
-    },
-    {
-      tableName: "File",
-      datapointField: "id",
-      parseFunction: parseDownloadFile
-    },
-    {
-      tableName: "File",
-      datapointField: "id",
-      parseFunction: parseDownloadRaw
-    },
+    tableName: "ID",
+    datapointField: "id",
+    parseFunction: parseNumber
+  },
+  {
+    tableName: "Device",
+    datapointField: "Device",
+    parseFunction: parseDevice
+  },
+  {
+    tableName: "Group",
+    datapointField: "Group",
+    parseFunction: parseGroup
+  },
+  {
+    tableName: "Location",
+    datapointField: "location",
+    parseFunction: parseLocation
+  },
+  {
+    tableName: "Time",
+    datapointField: "recordingDateTime",
+    parseFunction: parseTime
+  },
+  {
+    tableName: "Date",
+    datapointField: "recordingDateTime",
+    parseFunction: parseDate
+  },
+  {
+    tableName: "Duration",
+    datapointField: "duration",
+    parseFunction: parseDuration
+  },
+  {
+    tableName: "Tags",
+    datapointField: "Tags",
+    parseFunction: parseTags,
+  },
+  {
+    tableName: "Other",
+    datapointField: "datapoint",
+    parseFunction: parseOther,
+  },
+  {
+    tableName: "File",
+    datapointField: "id",
+    parseFunction: parseDownloadFile
+  },
+  {
+    tableName: "File",
+    datapointField: "id",
+    parseFunction: parseDownloadRaw
+  },
   ];
 }

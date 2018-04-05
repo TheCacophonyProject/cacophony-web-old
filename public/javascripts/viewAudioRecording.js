@@ -1,9 +1,11 @@
+/* global id, api, user, tags */
+
 var audioApiUrl = api + "/api/v1/audiorecordings";
 var recording = null;
 
 window.onload = function() {
   var headers = { where: '{"id": ' + id + '}' };
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   $.ajax({
     url: audioApiUrl,
     type: 'get',
@@ -58,7 +60,7 @@ function getRelativeToDuskText() {
 
 function getRecordingDateText() {
   if (recording.recordingDateTime == null) {
-    return "no date given."
+    return "no date given.";
   } else {
     var d = new Date(recording.recordingDateTime);
     return d.toLocaleDateString('en-NZ');
@@ -80,7 +82,7 @@ function getPlayerSource(player) {
     headers: { Authorization: user.getJWT() },
     success: function(response) {
       var source = document.createElement('source');
-      source.src = api + "/api/v1/signedUrl?jwt=" + response.jwt;;
+      source.src = api + "/api/v1/signedUrl?jwt=" + response.jwt;
       player.appendChild(source);
     },
     error: function(err) { console.log(err); }

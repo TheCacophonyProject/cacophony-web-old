@@ -1,3 +1,7 @@
+/* global api, user, Promise */
+
+/* exported addUserToGroupButton, removeUserFromGroupButton */
+
 const groupsApiUrl = api + '/api/v1/groups';
 const groupUsersApiUrl = api + '/api/v1/groups/users';
 const params = new URLSearchParams(location.search);
@@ -50,11 +54,11 @@ function addGroupToTable(group) {
 
 }
 
-clearTable = function(tableId) {
+function clearTable(tableId) {
   var table = document.getElementById(tableId);
   var rowCount = table.rows.length;
-  while (--rowCount) table.deleteRow(rowCount);
-};
+  while (--rowCount) {table.deleteRow(rowCount);}
+}
 
 function isAdmin(group) {
   for (var i in group.Users) {
@@ -130,7 +134,7 @@ async function addUserToGroup(username, admin) {
     return;
   }
   const headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   const data = {
     groupId: groups[0].id,
     userId: targetUser.id,
@@ -157,7 +161,7 @@ function removeUserFromGroupButton() {
 }
 
 async function removeUserFromGroup(username) {
-  const targetUserl = await user.get(username);
+  const targetUser = await user.get(username);
   if (targetUser === null) {
     console.log('user not found');
     return;
@@ -168,7 +172,7 @@ async function removeUserFromGroup(username) {
     return;
   }
   const headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   const data = {
     groupId: groups[0].id,
     userId: targetUser.id,
@@ -191,7 +195,7 @@ async function removeUserFromGroup(username) {
 function getGroups(where) {
   const data = { where: JSON.stringify(where) };
   const headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   return new Promise(function(resolve, reject) {
     $.ajax({
       url: groupsApiUrl,

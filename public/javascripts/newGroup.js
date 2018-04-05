@@ -1,3 +1,5 @@
+/* global api, user */
+
 window.onload = function() {
   $("#new-group").click(newGroup);
 };

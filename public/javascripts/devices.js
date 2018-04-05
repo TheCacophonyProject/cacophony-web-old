@@ -1,3 +1,7 @@
+/* global api, user, Promise */
+
+/* exported addUserToDeviceButton, removeUserFromDeviceButton */
+
 const devicesApiUrl = api + '/api/v1/devices';
 const deviceUsersApiUrl = api + '/api/v1/devices/users';
 const params = new URLSearchParams(location.search);
@@ -62,7 +66,7 @@ function addDeviceToTable(device) {
 function clearTable(tableId) {
   var table = document.getElementById(tableId);
   var rowCount = table.rows.length;
-  while (--rowCount) table.deleteRow(rowCount);
+  while (--rowCount) {table.deleteRow(rowCount);}
 }
 
 function isAdmin(device) {
@@ -114,7 +118,7 @@ async function addUserToDevice(username, admin) {
   }
 
   const headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   const data = {
     deviceId: activeDevice.id,
     userId: targetUser.id,
@@ -144,7 +148,7 @@ async function removeUserFromDevice(username) {
   }
 
   const headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   const data = {
     deviceId: activeDevice.id,
     userId: targetUser.id,
@@ -172,7 +176,7 @@ function update() {
 
 function getDevices() {
   const headers = {};
-  if (user.isLoggedIn()) headers.Authorization = user.getJWT();
+  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
   return new Promise(function(resolve, reject) {
     $.ajax({
       url: devicesApiUrl,

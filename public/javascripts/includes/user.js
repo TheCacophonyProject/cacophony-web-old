@@ -1,3 +1,6 @@
+/* global api, Promise */
+/* exported user */
+
 var user = {};
 
 user.logout = function() {
@@ -6,10 +9,7 @@ user.logout = function() {
   window.location.reload(false);
 };
 
-user.login = function(passwordElement, usernameElement) {
-  var password = document.getElementById('inputPassword').value;
-  var username = document.getElementById('inputUsername').value;
-
+user.login = function(password, username) {
   $.ajax({
     url: api + '/authenticate_user',
     type: 'post',
@@ -19,7 +19,7 @@ user.login = function(passwordElement, usernameElement) {
       localStorage.setItem('userData', JSON.stringify(res.userData));
       window.location.assign("/user_home");
     },
-    error: function(res) {
+    error: function() {
       document.getElementById('inputUsername').value = '';
       document.getElementById('inputPassword').value = '';
       window.alert('login failed');
@@ -29,30 +29,33 @@ user.login = function(passwordElement, usernameElement) {
 
 user.register = function(passEle1, passEle2, usernameEle) {
 
-  // Check that username and password are valid.
-  if (passEle1.value != passEle2.value) {
-    passEle1.value = "";
-    passEle2.value = "";
-    window.alert("Passwords don't match.");
-    return;
-  }
-  if (passEle1.value.length < 5) {
-    passEle1.value = "";
-    passEle2.value = "";
-    window.alert("Password not long enough.");
-    return;
-  }
+  var password1 = passEle1.value;
+  var password2 = passEle2.value;
+  var username = usernameEle.value;
 
-  if (usernameEle.value.length < 5) {
+  if (username < 5) {
     passEle1.value = "";
     passEle2.value = "";
     window.alert("Username not long enough.");
     return;
   }
+  if (password1.length < 5) {
+    passEle1.value = "";
+    passEle2.value = "";
+    window.alert("Password not long enough.");
+    return;
+  }
+  if (password1 != password2) {
+    passEle1.value = "";
+    passEle2.value = "";
+    window.alert("Passwords don't match.");
+    return;
+  }
+
   $.ajax({
     url: api + '/api/v1/Users',
     type: 'post',
-    data: "password=" + password.value + "&username=" + username.value,
+    data: "password=" + password1.value + "&username=" + username.value,
     success: function(res) {
       localStorage.setItem('userData', JSON.stringify(res.userData));
       localStorage.setItem('JWT', res.token);
@@ -68,23 +71,23 @@ user.register = function(passEle1, passEle2, usernameEle) {
 
 user.getAllAttrs = function() {
   if (user.isLoggedIn())
-    return JSON.parse(localStorage.getItem('userData'));
+  {return JSON.parse(localStorage.getItem('userData'));}
   else
-    return null;
+  {return null;}
 };
 
 user.getAttr = function(field) {
   if (user.isLoggedIn() == false)
-    return null;
+  {return null;}
   else
-    return user.getAllAttrs()[field];
+  {return user.getAllAttrs()[field];}
 };
 
 user.isLoggedIn = function() {
   if (JSON.parse(localStorage.getItem('userData')))
-    return true;
+  {return true;}
   else
-    return false;
+  {return false;}
 };
 
 // Returns the JSON Web Token
@@ -137,15 +140,15 @@ user.get = async function(username) {
 user.getTagDefaults = function() {
   var defaults = JSON.parse(localStorage.getItem('tagDefaults'));
   if (defaults == undefined)
-    return {};
+  {return {};}
   else
-    return defaults;
+  {return defaults;}
 };
 
 user.setTagDefault = function(key, val) {
   var defaults = JSON.parse(localStorage.getItem('tagDefaults'));
   if (defaults == undefined || typeof defaults != "object")
-    defaults = {};
+  {defaults = {};}
   defaults[key] = val;
   localStorage.setItem('tagDefaults', JSON.stringify(defaults));
 };
