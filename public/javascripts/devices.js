@@ -8,6 +8,8 @@ const params = new URLSearchParams(location.search);
 var devices = [];
 var activeDevice = null;
 
+foo = 42
+
 window.onload = async function() {
   updateDeviceTitle();
   await loadDevices();
