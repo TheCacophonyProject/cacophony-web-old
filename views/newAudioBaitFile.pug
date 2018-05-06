@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    title Setup Audio Lure Schedule
+    include includes/base.pug
+    //- link(href='/stylesheets/newAudioBaitFile.css', rel='stylesheet', media='screen')
+    script(type='text/javascript', src='javascripts/newAudioBaitFile.js')
+
+  body
+    include includes/navbar.pug
+
+    .cacophony-page.max-width
+      h1#Setup.col-xs-12 Upload new audio bait
+
+      form(onsubmit="uploadAudioBait()")
+        input(type="file", name="photo", id="audio_bait_file")
+        input(type="submit", value="blah")
