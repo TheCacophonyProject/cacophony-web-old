@@ -3,6 +3,8 @@ env:
 parserOptions:
   ecmaVersion: 8
 extends: 'eslint:recommended'
+globals:
+  "$": false
 rules:
   indent:
     - error
@@ -15,9 +17,12 @@ rules:
   semi:
     - error
     - always
+  curly:
+    - error
+    - all
   no-console:
     - off
   no-undef:
-    - warn
+    - error
   no-unused-vars:
-    - warn
+    - error

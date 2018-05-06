@@ -81,4 +81,10 @@ module.exports = function(app) {
       'api': config.server.api,
     });
   });
+
+  app.get('/new_audio', (request, response) => {
+    response.render('newAudioBaitFile.pug', {
+      'api': config.server.api,
+    });
+  });
 };

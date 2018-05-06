@@ -2,7 +2,10 @@
 Contains the tagging functions (delete, load, new).
 */
 
-tags = {};
+/* global api, user, id */
+/* exported toggleTaggingDetails */
+
+const tags = {};
 
 /**
  * Deletes a tag.
@@ -21,7 +24,7 @@ tags.delete = function(event) {
     error: function(err) {
       console.log("Error with deleting tag:", err);
     }
-  })
+  });
 };
 
 /**
@@ -55,7 +58,7 @@ tags.addTagToTable = function(tag) {
   var taggedby = document.createElement('td');
   if (tag.automatic) {
     row.className = "bg-danger";
-    taggedby.innerHTML = "<img title='Cacophony AI' src='/images/auto.png'/>"
+    taggedby.innerHTML = "<img title='Cacophony AI' src='/images/auto.png'/>";
   } else if (tag.taggedbyme) {
     taggedby.innerHTML = "Me!";
   }
@@ -74,27 +77,27 @@ tags.addTagToTable = function(tag) {
   // Add delete button
   var del = document.createElement('td');
   var deleteButton = document.createElement('button');
-  deleteButton.innerHTML = "<img title='Delete sighting' src='/images/delete.png'/>"
+  deleteButton.innerHTML = "<img title='Delete sighting' src='/images/delete.png'/>";
   deleteButton.onclick = tags.delete;
   deleteButton.tagId = tag.id;
   deleteButton.tagRow = row;
-  del.appendChild(deleteButton)
+  del.appendChild(deleteButton);
   row.appendChild(del);
 
   if (tag.number != null && tag.number > 1.5) {
-    additionalInfo.innerHTML += "<p> Number of animals is '" + tag.number + "'</p>"  
+    additionalInfo.innerHTML += "<p> Number of animals is '" + tag.number + "'</p>";  
   }
 
   if (tag.event != null && tag.event != "just wandering about") {
-    additionalInfo.innerHTML += "<p> Event is '<i>" + tag.event + "'</i></p>"
+    additionalInfo.innerHTML += "<p> Event is '<i>" + tag.event + "'</i></p>";
   }
 
   if (tag.trapType != null && tag.trapType != "") {
-    additionalInfo.innerHTML += "<p> Trap type is '<i>" + tag.trapType + "'</i></p>"
+    additionalInfo.innerHTML += "<p> Trap type is '<i>" + tag.trapType + "'</i></p>";
   }
 
   if (tag.age != null && tag.age != "") {
-    additionalInfo.innerHTML += "<p> Age is " + tag.age + "</p>"
+    additionalInfo.innerHTML += "<p> Age is " + tag.age + "</p>";
   }
 
   if (tag.startTime != null || tag.duration != null) {
@@ -115,32 +118,32 @@ tags.addTagToTable = function(tag) {
  */
 tags.getAnimalImage = function(animal, event) {
   if (!animal && event == 'false positive') {
-    return '/images/none.png'
+    return '/images/none.png';
   }
 
   switch(animal) {
-    case "possum":
-        return '/images/possum.png';
-    case "stoat":
-      return '/images/stoat.png';
-    case "rat":
-      return '/images/rat.png'
-    case "hedgehog":
-      return '/images/hedgehog.png'
-    case "cat":
-      return '/images/cat.png'
-    case "human":
-      return '/images/human.png'
-    case "bird":
-      return '/images/bird.png'
-    case "bird/kiwi":
-      return '/images/kiwi.png'
-    case "unidentified":
-      return '/images/unknown.png'
-    default:
-      return null;
+  case "possum":
+    return '/images/possum.png';
+  case "stoat":
+    return '/images/stoat.png';
+  case "rat":
+    return '/images/rat.png';
+  case "hedgehog":
+    return '/images/hedgehog.png';
+  case "cat":
+    return '/images/cat.png';
+  case "human":
+    return '/images/human.png';
+  case "bird":
+    return '/images/bird.png';
+  case "bird/kiwi":
+    return '/images/kiwi.png';
+  case "unidentified":
+    return '/images/unknown.png';
+  default:
+    return null;
   }
-}
+};
 
 /**
  * Loads all the tags in the list given to the table.
@@ -163,7 +166,7 @@ tags.new = function() {
   try {
     tag.animal = tags.parseSelect('tagAnimalInput');
     tag.number = tags.parseInt('tagNumberInput');
-    tag.event = tags.parseSelect('tagEventInput')
+    tag.event = tags.parseSelect('tagEventInput');
     tag.confidence = tags.parseConfidence('tagConfidenceInput');
     tag.age = tags.parseAge('tagAgeInput');
     tag.startTime = tags.parseTime('tagStartTimeInput');
@@ -186,10 +189,10 @@ tags.quickNew = function(animal) {
   var tag = {};
 
   tag.animal = animal;
-  tag.confidence = .6
+  tag.confidence = .6;
 
   tags.send(tag);
-}
+};
 
 
 tags.send = function(tag) {
@@ -210,8 +213,8 @@ tags.send = function(tag) {
     error: function(err) {
       console.log("Error:", err);
     }
-  })
-}
+  });
+};
 
 /**
  * Parses a Select input, if input is invalid it will throw an error.
@@ -219,7 +222,7 @@ tags.send = function(tag) {
  */
 tags.parseSelect = function(id) {
   return document.getElementById(id).value;
-}
+};
 
 /**
  * Parses a Integer input, if input is invalid it will throw an error.
@@ -227,9 +230,9 @@ tags.parseSelect = function(id) {
  */
 tags.parseInt = function(id) {
   var i = parseInt(document.getElementById(id).value);
-  if (isNaN(i)) i = null;
+  if (isNaN(i)) {i = null;}
   return i;
-}
+};
 
 /**
  * Parses a Age input, if input is invalid it will throw an error.
@@ -240,9 +243,9 @@ tags.parseAge = function(id) {
   var ageYears = parseInt(ageString.split(':')[0]);
   var ageMonths = parseInt(ageString.split(':')[1]);
   var age = ageYears * 12 + ageMonths;
-  if (isNaN(age)) age = null;
-  return age
-}
+  if (isNaN(age)) {age = null;}
+  return age;
+};
 
 /**
  * Parses a Time input, if input is invalid it will throw an error.
@@ -253,9 +256,9 @@ tags.parseTime = function(id) {
   var timeMin = parseInt(timeString.split(':')[0]);
   var timeSec = parseInt(timeString.split(':')[1]);
   var time = timeMin * 60 + timeSec;
-  if (isNaN(time)) time = null;
+  if (isNaN(time)) {time = null;}
   return time;
-}
+};
 
 /**
  * Takes time in total seconds and parses it back into minutes and seconds format. 
@@ -268,7 +271,7 @@ tags.displayTime = function(timeInSeconds) {
   timeString += ":";
   timeString += (seconds);
   return timeString;
-}
+};
 
 /**
  * Parses a Duration input, if input is invalid it will throw an error.
@@ -276,13 +279,13 @@ tags.displayTime = function(timeInSeconds) {
  * The duration is calculated as the secconds from the start time to end time.
  */
 tags.parseDuration = function(startId, endId) {
-  var endTime = tags.parseTime(endId)
-  var startTime = tags.parseTime(startId)
+  var endTime = tags.parseTime(endId);
+  var startTime = tags.parseTime(startId);
   var duration = tags.parseTime(endId) - tags.parseTime(startId);
-  if (endTime == null || startTime == null) return null
-  if (duration <= 0) throw { message: "duration can't be negative" };
+  if (endTime == null || startTime == null) {return null;}
+  if (duration <= 0) {throw { message: "duration can't be negative" };}
   return duration;
-}
+};
 
 /**
  * Parses a String input, if input is invalid it will throw an error.
@@ -290,9 +293,9 @@ tags.parseDuration = function(startId, endId) {
  */
 tags.parseString = function(id) {
   var val = document.getElementById(id).value;
-  if (val === "") val = null;
+  if (val === "") {val = null;}
   return val;
-}
+};
 
 /**
  * Parses a Confidence input, if input is invalid it will throw an error.
@@ -301,7 +304,7 @@ tags.parseString = function(id) {
 tags.parseConfidence = function(id) {
   var val = $('input[name="' + id + '"]:checked').val();
   return val;
-}
+};
 
 function precisionRound(number, precision) {
   var factor = Math.pow(10, precision);

@@ -1,3 +1,5 @@
+/* global api, user */
+
 window.onload = function() {
   $("#new-group").click(newGroup);
 };
@@ -29,9 +31,11 @@ function newGroupError(err) {
   var nameErr;
   try {
     nameErr = err.responseJSON.errors.groupname.msg;
-  } catch {}
+  } catch(error) {
+    // ignore
+  }
 
-  var msg = "Failed to add group"
+  var msg = "Failed to add group";
   if (nameErr !== null) {
     msg = msg + ": " + nameErr;
   }
