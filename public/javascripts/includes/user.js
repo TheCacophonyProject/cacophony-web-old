@@ -33,7 +33,7 @@ user.register = function(passEle1, passEle2, usernameEle) {
   var password2 = passEle2.value;
   var username = usernameEle.value;
 
-  if (username < 5) {
+  if (username.length < 5) {
     passEle1.value = "";
     passEle2.value = "";
     window.alert("Username not long enough.");
@@ -55,7 +55,7 @@ user.register = function(passEle1, passEle2, usernameEle) {
   $.ajax({
     url: api + '/api/v1/Users',
     type: 'post',
-    data: "password=" + password1.value + "&username=" + username.value,
+    data: "password=" + password1 + "&username=" + username,
     success: function(res) {
       localStorage.setItem('userData', JSON.stringify(res.userData));
       localStorage.setItem('JWT', res.token);
