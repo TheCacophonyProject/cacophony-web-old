@@ -5,6 +5,9 @@ html
     title Setup Audio Lure Schedule
     include includes/base.pug
     link(href='/stylesheets/setupAudio.css', rel='stylesheet', media='screen')
+    script(src="javascripts/includes/jquery.serializejson.min.js")
+    script(type='text/javascript', src='javascripts/includes/util.js')
+    script(src="javascripts/setupAudio.js")
 
   body
     include includes/navbar.pug
@@ -12,72 +15,66 @@ html
     .cacophony-page.max-width
       h1#Setup.col-xs-12.col-sm-8 Setup Audio Lure Schedule
 
-      div.schedulesave.col-sm-4.col-xs-12.right
-        input.col-xs-4(type="image", title="Get device settings", src='/images/load.png'  onclick="tags.quickNew('possum')" )
-        input.col-xs-4(type="image", title="Save", src='/images/save.png'  onclick="tags.quickNew('stoat')" )
-        input.col-xs-4(type="image", title="Save to a different device", src='/images/saveas.png' onclick="tags.quickNew('rat')")
-      div.clearfix
+      div#loading-message.col-xs-12 Loading your devices...
 
-      h3.col-xs-12
-        label Device:
-        label#device-name ZIP-01
+      #choose-device.hide.form-group.row.col-xs-12
+        label.col-sm-4 Choose device
+        select#deviceSelect.cml-sm-6(onchange="getSchedule()")
+          option &lt;select your device&gt;
 
-      .scheduleblock
+      form#audio-schedule.hide
+        div.schedulesave.col-sm-4.col-xs-12.right
+          input.col-xs-4(type="image", title="Get device settings", src='/images/load.png'  onclick="" )
+          input.col-xs-4(type="image", title="Save", src='/images/save.png', onclick="saveSchedule(event);" )
+          //- input.col-xs-4(type="image", title="Save to a different device", src='/images/saveas.png' onclick="")
+        div.clearfix
+
+        div.schedule-devices.col-xs-12.col-sm-6
+          h3.col-xs-10 Devices
+          input.col-xs-2(type="image", title="Add device", src='/images/plus.png'  onclick="" )
+          label#device-name.col-xs-12 ZIP-01
+
+          label.col-xs-4 Schedule name
+          input.col-xs-12(name="name", value="")
+
+          label.col-xs-12 Schedule description
+          input.col-xs-12(name="description", value="")
+
+    #schedulecomboTemplate.hide
+      .schedulecombo
         h3.col-xs-12 Play sound combo
-        .block-timing.col-xs-12.col-sm-6
+        .combo-timing.col-xs-12.col-sm-6
 
           .form-group.row
             label.col-xs-4 Every
-            input.col-xs-7(value="10 mins")
+            input.col-xs-7(name="[every]", value="10 mins")
 
           .form-group.row
             label.col-xs-4 from time
-            input.col-xs-7(value="7:30pm")
+            input.col-xs-7(name="[from]", value="7:30pm")
 
           .form-group.row
             label.col-xs-4 until
-            input.col-xs-7(value="9:30pm")
+            input.col-xs-7(name="[until]", value="9:30pm")
 
-        #combo-1.soundcombo.col-xs-12.col-sm-6
-          h4 Sounds
+          .soundcombo.col-xs-12.col-sm-6
+            h4 Sounds
 
-          #sound1-1
-            .form-group.row
-              label.col-xs-4 Play sound
-              select.sound_file.col-xs-6
-                  option(value="1" selected) angry_possum
-                  option(value="2") dying_possum
-                  option(value="3") possum 03
-                  option(value="4") possum 04
-              input.col-xs-1(type='button', value='+', onClick="window.alert('Upload new audio file dialog here.');")
-            div.clearfix
-            #sound1-1more.form-group.row.col-xs-4
-              input(type='button', value='Add another sound', onClick="document.getElementById('sound1-1more').classList.add('hidden');document.getElementById('sound1-2').classList.remove('hidden');")
-          #sound1-2.hidden
-            .form-group.row
-              label.right.col-xs-4 then wait
-              input.col-xs-6(value="10 mins")
-            .form-group.row
-              label.col-xs-4 play sound
-              select.sound_file.col-xs-6
-                  option(value="1" selected) angry_possum
-                  option(value="2") dying_possum
-                  option(value="3") possum 03
-                  option(value="4") possum 04
-              input.col-xs-1(type='button', value='+', onClick="window.alert('Upload new audio file dialog here.');")
-              div.clearfix
-            .form-group.row#sound1-2more.form-group.row.col-xs-4
-              input(type='button', value='Add another sound', onClick="document.getElementById('sound1-2more').classList.add('hidden');document.getElementById('sound1-3').classList.remove('hidden');")
-          #sound1-3.hidden
-            .form-group.row
-              label.col-xs-4 then wait
-              input.col-xs-6(value="10 mins")
-            .form-group.row
-              label.col-xs-4 play sound
-              select.sound_file.col-xs-6
-                  option(value="1" selected) angry_possum
-                  option(value="2") dying_possum
-                  option(value="3") possum 03
-                  option(value="4") possum 04
-              input.col-xs-1(type='button', value='+', onClick="window.alert('Upload new audio file dialog here.');")
-              div.clearfix
+            .sounds
+
+            .form-group.row.col-xs-4
+              input.add-another-button(type='button', value='Add another sound', onClick="")
+
+      #soundTemplate.hide
+        .sound
+          .wait.form-group.row
+            label.right.col-xs-4 then wait
+            input.col-xs-6(name="[wait][]", value="10 mins")
+          .form-group.row
+            label.col-xs-4 play sound
+            select.sound_file.col-xs-6(name="[sound][]")
+                option(value="1" selected) angry_possum
+                option(value="2") dying_possum
+                option(value="3") possum 03
+                option(value="4") possum 04
+          div.clearfix

@@ -5,6 +5,18 @@
     max-width: 80px;
 }
 
+.schedule-devices {
+    margin: 10px 0 0 0;
+}
+
+.schedule-devices input {
+    border: 1px solid lightgrey;
+    padding: 0px 0px;
+    max-height: 40px;
+    max-width: 40px;
+    margin: 10px 0 0 0;
+}
+
 .soundcombo {
     border: 1px solid lightgray;
 }
