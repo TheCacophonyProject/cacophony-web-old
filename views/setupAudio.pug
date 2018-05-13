@@ -33,18 +33,19 @@ html
 
         div.schedule-devices.col-xs-12.col-sm-6
           h3.col-xs-10 Devices
-          input.col-xs-2(type="image", title="Add device", src='/images/plus.png'  onclick="" )
+          img.col-xs-2(type="image", title="Add device", src='/images/plus.png')
           label#device-name.col-xs-12 ZIP-01
         div.clearfix
 
+        h3.col-xs-12 Schedule
         .combos
 
-        input.add-another-button.col-xs-12.col-sm-7(type='button', value='Add another combo', onClick="addNewCombo()")
+        input.add-another-button.col-xs-8.col-xs-offset-2.col-sm-4.col-sm-offset-4(type='button', value='Add another combo', onClick="addNewCombo()")
 
-    #schedulecomboTemplate.hide
-      .schedulecombo
-        h3.col-xs-12 Play sound combo
-        .combo-timing.col-xs-12.col-sm-6
+    #schedule-combo-template.hide
+      .schedule-combo
+        img.delete.col-xs-1(type="image", title="Delete combo", src='/images/delete.png')
+        .combo-timing.col-xs-11.col-sm-5
 
           .form-group.row
             label.col-xs-4 Every
@@ -64,14 +65,15 @@ html
           .sounds
 
           .form-group.row.col-xs-4
-            input.add-another-button(type='button', value='Add another sound', onClick="")
+            input.add-another-button(type='button', value='Add another sound')
 
-      #soundTemplate.hide
+      #sound-template.hide
         .sound
           .wait.form-group.row
             label.right.col-xs-4 then wait
-            input.col-xs-6(name="[waits][]", value="10 mins")
+            input.col-xs-7(name="[waits][]", value="10 mins")
           .form-group.row
             label.col-xs-4 play sound
-            select.sound_file.col-xs-6(name="[sounds][]")
+            select.sound_file.col-xs-7(name="[sounds][]")
+            img.delete.col-xs-1(type="image", title="Delete sound", src='/images/delete.png')
           div.clearfix

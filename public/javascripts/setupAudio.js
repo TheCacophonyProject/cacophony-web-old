@@ -9,6 +9,8 @@ var schedule = {
   devices: [],
   audioBaits: [],
   nextcombo:100,
+  comboSelector: ".schedule-combo",
+  soundSelector: ".sound",
 };
 
 window.onload = function() {
@@ -95,7 +97,7 @@ function loadSchedule(result) {
 }
 
 function addNewCombo(comboData = null) {
-  var combo = $("#schedulecomboTemplate .schedulecombo").clone();
+  var combo = $("#schedule-combo-template .schedule-combo").clone();
   if (comboData) {
     util.populateElements(combo, comboData);
   }
@@ -103,6 +105,7 @@ function addNewCombo(comboData = null) {
   util.appendNameTag(combo, comboName);
   combo.find(".add-another-button").attr("onClick", 'addAnotherSound("' + comboName + '");');
   combo.attr("data-id", comboName);
+  combo.find(".delete").click(deleteCombo);
   $('#audio-schedule .combos').append(combo);
 
   if (comboData && comboData.sounds && comboData.sounds.length > 0) {
@@ -116,15 +119,22 @@ function addNewCombo(comboData = null) {
   return combo;
 }
 
+function deleteCombo(element) {
+  $(element.target).closest(".schedule-combo").remove();
+}
+
 // adds the sound but also hides the wait fields.
 function addFirstSound(comboName, combo, data = null) {
   var firstSound = addSound(comboName, combo, data);
   firstSound.find(".wait").addClass('hide');
   firstSound.find(".wait input").attr('value', '0s');
+  firstSound.find(".delete").addClass('hide');
 }
 
 function addSound(comboName, combo, data = null, counter = 0) {
-  var sound =$("#soundTemplate .sound").clone();
+  var sound =$("#sound-template .sound").clone();
+
+  sound.find(".delete").click(deleteSound);
 
   var soundFileSelect = sound.find("select.sound_file")[0];
   for (var i = 0; i < schedule.audioBaits.length; i++) {
@@ -143,8 +153,12 @@ function addSound(comboName, combo, data = null, counter = 0) {
 }
 
 function addAnotherSound (comboName) {
-  var combo = $('.schedulecombo[data-id="' + comboName + '"]');
+  var combo = $('.schedule-combo[data-id="' + comboName + '"]');
   addSound(comboName, combo);
+}
+
+function deleteSound(element) {
+  $(element.target).closest(".sound").remove();
 }
 
 function makeScheduleJson() {

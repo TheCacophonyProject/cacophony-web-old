@@ -25,3 +25,9 @@
   margin: 2px;
 }
 
+img.delete {
+    padding: 0 0 0 3px;
+    margin-top: -5px;
+    max-height: 32px;
+    max-width: 32px;
+}
