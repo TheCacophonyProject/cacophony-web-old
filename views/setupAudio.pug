@@ -17,7 +17,7 @@ html
 
       div#loading-message.col-xs-12 Loading your devices...
 
-      #choose-device.hide.form-group.row.col-xs-12
+      #choose-device.hide.row.col-xs-12
         label.col-sm-4 Choose device
         select#deviceSelect.cml-sm-6(onchange="getSchedule()")
           option &lt;select your device&gt;
@@ -26,19 +26,20 @@ html
         div.schedulesave.col-sm-4.col-xs-12.right
           input.col-xs-4(type="image", title="Get device settings", src='/images/load.png'  onclick="" )
           input.col-xs-4(type="image", title="Save", src='/images/save.png', onclick="saveSchedule(event);" )
-          //- input.col-xs-4(type="image", title="Save to a different device", src='/images/saveas.png' onclick="")
         div.clearfix
+
+        label.col-xs-4 Schedule description
+        input.col-xs-8(name="description", value="")
 
         div.schedule-devices.col-xs-12.col-sm-6
           h3.col-xs-10 Devices
           input.col-xs-2(type="image", title="Add device", src='/images/plus.png'  onclick="" )
           label#device-name.col-xs-12 ZIP-01
+        div.clearfix
 
-          label.col-xs-4 Schedule name
-          input.col-xs-12(name="name", value="")
+        .combos
 
-          label.col-xs-12 Schedule description
-          input.col-xs-12(name="description", value="")
+        input.add-another-button.col-xs-12.col-sm-7(type='button', value='Add another combo', onClick="addNewCombo()")
 
     #schedulecomboTemplate.hide
       .schedulecombo
@@ -57,24 +58,20 @@ html
             label.col-xs-4 until
             input.col-xs-7(name="[until]", value="9:30pm")
 
-          .soundcombo.col-xs-12.col-sm-6
-            h4 Sounds
+        .soundcombo.col-xs-12.col-sm-6
+          h4 Sounds
 
-            .sounds
+          .sounds
 
-            .form-group.row.col-xs-4
-              input.add-another-button(type='button', value='Add another sound', onClick="")
+          .form-group.row.col-xs-4
+            input.add-another-button(type='button', value='Add another sound', onClick="")
 
       #soundTemplate.hide
         .sound
           .wait.form-group.row
             label.right.col-xs-4 then wait
-            input.col-xs-6(name="[wait][]", value="10 mins")
+            input.col-xs-6(name="[waits][]", value="10 mins")
           .form-group.row
             label.col-xs-4 play sound
-            select.sound_file.col-xs-6(name="[sound][]")
-                option(value="1" selected) angry_possum
-                option(value="2") dying_possum
-                option(value="3") possum 03
-                option(value="4") possum 04
+            select.sound_file.col-xs-6(name="[sounds][]")
           div.clearfix

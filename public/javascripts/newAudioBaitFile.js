@@ -1,7 +1,10 @@
+/* global api, user, jQuery */
+
+/* exported uploadAudioBait */
 
 var filesApiUrl = api + '/api/v1/files';
 
-uploadAudioBait = function() {
+function uploadAudioBait() {
   var headers = {};
   if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
 
@@ -10,11 +13,11 @@ uploadAudioBait = function() {
   var props = {
     "type":"audiobait",
     "details": {},
-  }
+  };
 
   jQuery.each($('#audio_bait_file')[0].files, function(i, file) {
-      data.append('file', file);
-      props.details.originalName = file.name;
+    data.append('file', file);
+    props.details.originalName = file.name;
   });
   data.append("data", JSON.stringify(props));
 
@@ -26,27 +29,27 @@ uploadAudioBait = function() {
     contentType: false,
     processData: false,
     method: 'POST',
-    success: function(data){
-        alert('Success upload');
+    success: function(){
+      alert('Success upload');
     },
     error: function (jqXHR, exception) {
       var msg = '';
       if (jqXHR.status === 0) {
-          msg = 'Not connect.\n Verify Network.';
+        msg = 'Not connect.\n Verify Network.';
       } else if (jqXHR.status == 404) {
-          msg = 'Requested page not found. [404]';
+        msg = 'Requested page not found. [404]';
       } else if (jqXHR.status == 500) {
-          msg = 'Internal Server Error [500].';
+        msg = 'Internal Server Error [500].';
       } else if (exception === 'parsererror') {
-          msg = 'Requested JSON parse failed.';
+        msg = 'Requested JSON parse failed.';
       } else if (exception === 'timeout') {
-          msg = 'Time out error.';
+        msg = 'Time out error.';
       } else if (exception === 'abort') {
-          msg = 'Ajax request aborted.';
+        msg = 'Ajax request aborted.';
       } else {
-          msg = 'Uncaught Error.\n' + jqXHR.responseText;
+        msg = 'Uncaught Error.\n' + jqXHR.responseText;
       }
       alert(msg);
     },
   });
-};
+}
