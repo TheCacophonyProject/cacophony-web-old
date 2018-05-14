@@ -24,17 +24,19 @@ html
 
       form#audio-schedule.hide
         div.schedulesave.col-sm-4.col-xs-12.right
-          input.col-xs-4(type="image", title="Get device settings", src='/images/load.png'  onclick="" )
+          input.col-xs-4(type="image", title="Get device settings", src='/images/load.png')
           input.col-xs-4(type="image", title="Save", src='/images/save.png', onclick="saveSchedule(event);" )
         div.clearfix
 
-        label.col-xs-4 Schedule description
-        input.col-xs-8(name="description", value="")
+        div.row
+          label.col-xs-4 Schedule description
+          input.col-xs-8(name="description", value="")
 
-        div.schedule-devices.col-xs-12.col-sm-6
-          h3.col-xs-10 Devices
-          img.col-xs-2(type="image", title="Add device", src='/images/plus.png')
-          label#device-name.col-xs-12 ZIP-01
+        div.schedule-devices
+          div.row
+            h3.col-xs-10 Devices
+            img.add.col-xs-2(type="image", title="Add device", src='/images/plus.png')
+          .devices
         div.clearfix
 
         h3.col-xs-12 Schedule
@@ -75,5 +77,16 @@ html
           .form-group.row
             label.col-xs-4 play sound
             select.sound_file.col-xs-7(name="[sounds][]")
-            img.delete.col-xs-1(type="image", title="Delete sound", src='/images/delete.png')
+            input.delete.col-xs-1(type="image", title="Delete sound", src='/images/delete.png')
           div.clearfix
+
+      #device-template.hide
+        .device.row.col-xs-12.col-sm-6
+          input.delete.col-xs-1(type="image", title="Remove device", src='/images/delete.png')
+          label.col-xs-11
+
+      #additional-device-template.hide
+        .additional-device.row.col-xs-12.col-sm-6
+          input.delete.col-xs-1(type="image", title="Remove device", src='/images/delete.png')
+          select.cml-xs-11
+            option &lt;select your device&gt;

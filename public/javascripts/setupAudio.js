@@ -37,14 +37,7 @@ window.onload = function() {
     headers: user.getHeaders(),
     success: function(result) {
       schedule.devices = result.devices;
-      var deviceSelect = document.getElementById("deviceSelect");
-      for (var i in result.devices.rows) {
-        var device = result.devices.rows[i];
-        var option = document.createElement("option");
-        option.innerText = device.devicename;
-        option.id = device.id;
-        deviceSelect.appendChild(option);
-      }
+      populateDevicesSelect(document.getElementById("deviceSelect"));
       $("#loading-message").addClass("hide");
       $("#choose-device").removeClass("hide");
     },
@@ -55,6 +48,12 @@ window.onload = function() {
   });
 };
 
+function populateDevicesSelect(deviceSelect) {
+  for (var i in schedule.devices.rows) {
+    device = schedule.devices.rows[i];
+    util.addOptionElement(deviceSelect, device.devicename, device.id);
+  }
+}
 
 function getSchedule() {
   var selectDevice = document.getElementById("deviceSelect").selectedOptions[0].textContent;
@@ -75,25 +74,46 @@ function getSchedule() {
 }
 
 function loadSchedule(result) {
-  $('#device-name').text(result.devicename);
-  $('#device-name').attr("data-id", result.deviceid);
+  var devices = result.devices.rows;
+  for (var i in devices)  {
+    loadDevice(devices[i]);
+  }
+  $(".schedule-devices .add").click(additionalDevice);
 
   var form = $("form");
   var schedule = result.schedule;
-  if (schedule) {
-
+  if (schedule && schedule.combos) {
     util.populateElements(form, schedule);
-
-    if (schedule.combos) {
-      for (var i = 0; i < schedule.combos.length; i++)  {
-        addNewCombo(schedule.combos[i]);
+    for (var i = 0; i < schedule.combos.length; i++)  {
+      addNewCombo(schedule.combos[i]);
       }
     }
-    else {
-      addNewCombo();
-    }
+  else {
+    addNewCombo();
   }
+}
 
+function loadDevice(deviceData) {
+  var device = $("#device-template .device").clone();
+  device.find("label").text(deviceData.devicename)
+  device.attr("data-id", deviceData.id);
+  device.find("input").click(deleteDevice);
+  $('#audio-schedule .devices').append(device);
+}
+
+function deleteDevice(element) {
+  $(element.target).closest(".device").remove();
+}
+
+function deleteAdditionalDevice(element) {
+  $(element.target).closest(".additional-device").remove();
+}
+
+function additionalDevice() {
+  var deviceSelect = $("#additional-device-template .additional-device").clone();
+  deviceSelect.find("input").click(deleteAdditionalDevice);
+  populateDevicesSelect(deviceSelect.find("select")[0]);
+  $('#audio-schedule .devices').append(deviceSelect);
 }
 
 function addNewCombo(comboData = null) {
@@ -142,7 +162,6 @@ function addSound(comboName, combo, data = null, counter = 0) {
     util.addOptionElement(soundFileSelect, "file " + audioBait.id, audioBait.id);
   }
 
-
   if (data) {
     util.populateFromNthElements(sound, data, counter);
   }
@@ -168,12 +187,27 @@ function makeScheduleJson() {
   return schedule;
 }
 
+function makeDevicesArray() {
+  const allDeviceIds = []
+  $(".devices .device").each(function() {
+    allDeviceIds.push(parseInt($(this).attr("data-id")));
+  });
+
+  $(".devices .additional-device select").each(function() {
+    const selected_id = parseInt($(this).val());
+    if (selected_id) {
+      allDeviceIds.push(selected_id);
+    }
+  });
+
+  return allDeviceIds;
+}
+
 function saveSchedule(event) {
   event.preventDefault();
   var schedule = makeScheduleJson();
 
-  var devices = "[" + $('#device-name').attr("data-id") + "]";
-  devices.replace('"','');
+  var devices = JSON.stringify(makeDevicesArray())
 
   var props = {
     devices : devices,
