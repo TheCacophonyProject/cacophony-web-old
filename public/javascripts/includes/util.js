@@ -1,5 +1,7 @@
 
-var util = {};
+var util = {
+  customTypes : {}
+};
 
 util.addOptionElement = function(parent, text, hiddenId) {
   var option = document.createElement("option");
@@ -26,7 +28,9 @@ util.combineElementsStartingWith = function(map, name) {
   return map;
 };
 
-util.splitInputNameIntoKeysArray = function(name) {
+util.splitInputNameIntoKeysArray = function(element) {
+  let name = $(element).attr("name").split(':')[0]; //remove the type which comes after the :
+
   name = name.replace(/\]/g, '');
   var keys = name.split('[');
   if (keys[0] === '') {
@@ -35,9 +39,19 @@ util.splitInputNameIntoKeysArray = function(name) {
   return keys;
 };
 
+util.getValueTypeFromName = function (element) {
+  let name = $(element).attr("name");
+  let keys = name.split(':');
+
+  if (keys.length == 2) {
+    return keys[1];
+  }
+  return null;
+};
+
 util.populateElements = function(parent, values) {
   parent.find("[name]").each(function() {
-    var names = util.splitInputNameIntoKeysArray($(this).attr("name"));
+    var names = util.splitInputNameIntoKeysArray(this);
     if (names.length === 1 ) {
       if (values[names[0]]) {
         util.setValue($(this), values[names[0]]);
@@ -48,17 +62,30 @@ util.populateElements = function(parent, values) {
 
 util.populateFromNthElements = function(parent, values, counter) {
   parent.find("[name]").each(function() {
-    var names = util.splitInputNameIntoKeysArray($(this).attr("name"));
+    var names = util.splitInputNameIntoKeysArray(this);
     if (names.length === 2 && names[1] === "" ) {
       var fieldname = names[0];
       if (values[fieldname] && values[fieldname].length > counter) {
-        util.setValue($(this), values[fieldname][counter]);
+        util.setValue(this, values[fieldname][counter]);
       }
     }
   });
 };
 
+util.addCustomTypeParser = function(type, parserFunction) {
+  util.customTypes[type] = parserFunction;
+};
+
+
 util.setValue = function(element, value) {
+  let valueType = util.getValueTypeFromName(element);
+
+  if (valueType && util.customTypes[valueType]) {
+    value = util.customTypes[valueType](value);
+  }
+
+  element = $(element);
+
   if (element.prop("tagName") === "SELECT") {
     element.find('option[value="' + value + '"]').prop("selected", true);
   }

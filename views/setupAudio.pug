@@ -7,6 +7,7 @@ html
     link(href='/stylesheets/setupAudio.css', rel='stylesheet', media='screen')
     script(src="javascripts/includes/jquery.serializejson.min.js")
     script(type='text/javascript', src='javascripts/includes/util.js')
+    script(type='text/javascript', src='javascripts/includes/timeUtil.js')
     script(src="javascripts/setupAudio.js")
 
   body
@@ -51,7 +52,7 @@ html
 
           .form-group.row
             label.col-xs-4 Every
-            input.col-xs-7(name="[every]", value="10 mins")
+            input.col-xs-7(name="[every]:asWait", value="10 mins")
 
           .form-group.row
             label.col-xs-4 from time
@@ -73,7 +74,7 @@ html
         .sound
           .wait.form-group.row
             label.right.col-xs-4 then wait
-            input.col-xs-7(name="[waits][]", value="10 mins")
+            input.col-xs-7(name="[waits][]:asWait", value="10 mins")
           .form-group.row
             label.col-xs-4 play sound
             select.sound_file.col-xs-7(name="[sounds][]")

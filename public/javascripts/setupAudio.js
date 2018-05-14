@@ -1,4 +1,4 @@
-/* global api, user, util */
+/* global api, timeUtil, user, util */
 
 /* exported getSchedule, saveSchedule, addNewCombo, addAnotherSound */
 
@@ -8,14 +8,13 @@ var filesApiUrl = api + '/api/v1/files';
 var schedule = {
   devices: [],
   audioBaits: [],
-  nextcombo:100,
-  comboSelector: ".schedule-combo",
-  soundSelector: ".sound",
+  nextcombo:100
 };
 
 window.onload = function() {
   var headers = {};
   headers = user.getHeaders();
+  util.addCustomTypeParser("asWait", timeUtil.secondsToReadableTime);
 
   $.ajax({
     url: filesApiUrl,
@@ -50,7 +49,7 @@ window.onload = function() {
 
 function populateDevicesSelect(deviceSelect) {
   for (var i in schedule.devices.rows) {
-    device = schedule.devices.rows[i];
+    const device = schedule.devices.rows[i];
     util.addOptionElement(deviceSelect, device.devicename, device.id);
   }
 }
@@ -84,10 +83,10 @@ function loadSchedule(result) {
   var schedule = result.schedule;
   if (schedule && schedule.combos) {
     util.populateElements(form, schedule);
-    for (var i = 0; i < schedule.combos.length; i++)  {
-      addNewCombo(schedule.combos[i]);
-      }
+    for (var j = 0; j < schedule.combos.length; j++)  {
+      addNewCombo(schedule.combos[j]);
     }
+  }
   else {
     addNewCombo();
   }
@@ -95,7 +94,7 @@ function loadSchedule(result) {
 
 function loadDevice(deviceData) {
   var device = $("#device-template .device").clone();
-  device.find("label").text(deviceData.devicename)
+  device.find("label").text(deviceData.devicename);
   device.attr("data-id", deviceData.id);
   device.find("input").click(deleteDevice);
   $('#audio-schedule .devices').append(device);
@@ -181,14 +180,22 @@ function deleteSound(element) {
 }
 
 function makeScheduleJson() {
-  var schedule = $('form#audio-schedule').serializeJSON();
+  var customTypes = {
+    customTypes: {
+      asWait: function(valueAsStr) {
+        return timeUtil.parseTimeToSeconds(valueAsStr);
+      }
+    }
+  };
+
+  var schedule = $('form#audio-schedule').serializeJSON(customTypes);
   schedule = util.combineElementsStartingWith(schedule, "combo");
 
   return schedule;
 }
 
 function makeDevicesArray() {
-  const allDeviceIds = []
+  const allDeviceIds = [];
   $(".devices .device").each(function() {
     allDeviceIds.push(parseInt($(this).attr("data-id")));
   });
@@ -207,7 +214,7 @@ function saveSchedule(event) {
   event.preventDefault();
   var schedule = makeScheduleJson();
 
-  var devices = JSON.stringify(makeDevicesArray())
+  var devices = JSON.stringify(makeDevicesArray());
 
   var props = {
     devices : devices,
