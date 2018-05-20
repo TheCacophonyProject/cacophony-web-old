@@ -1,8 +1,35 @@
 /* global api, user, jQuery */
 
-/* exported uploadAudioBait */
-
 var filesApiUrl = api + '/api/v1/files';
+
+window.onload = function() {
+  $(".upload-button").click(uploadAudioBait);
+  $('form input[name="animal"]').change(setCacophonyName);
+  $('form input[name="sound"]').change(setCacophonyName);
+  setCacophonyName();
+}
+
+function setCacophonyName() {
+    let animal = $('form input[name="animal"]').val();
+    let sound = $('form input[name="sound"]').val();
+
+    let cacophonyName = "";
+    if (animal) {
+        cacophonyName = animal;
+    }
+    if (animal && sound) {
+        cacophonyName += "-";
+    }
+    if (sound) {
+        cacophonyName += sound;
+    }
+
+    if (cacophonyName === "") {
+        cacophonyName = "sound";
+    }
+
+    $('form input[name="name"]').val(cacophonyName);
+}
 
 function uploadAudioBait() {
   var headers = {};
@@ -11,8 +38,8 @@ function uploadAudioBait() {
   var data = new FormData();
 
   var props = {
-    "type":"audiobait",
-    "details": {},
+    "type":"audioBait",
+    "details": $('form').serializeJSON(),
   };
 
   jQuery.each($('#audio_bait_file')[0].files, function(i, file) {

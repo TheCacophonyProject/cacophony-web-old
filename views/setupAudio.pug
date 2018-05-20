@@ -14,53 +14,67 @@ html
     include includes/navbar.pug
 
     .cacophony-page.max-width
-      h1#Setup.col-xs-12.col-sm-8 Setup Audio Lure Schedule
+      h1.col-xs-12.col-sm-9.no-padding Setup Audio Bait Schedule
 
-      div#loading-message.col-xs-12 Loading your devices...
+      div#loading-message.col-xs-12.no-padding Loading your devices...
 
       #choose-device.hide.row.col-xs-12
-        label.col-sm-4 Choose device
+        label.col-sm-4.no-padding Choose device
         select#deviceSelect.cml-sm-6(onchange="getSchedule()")
           option &lt;select your device&gt;
 
-      form#audio-schedule.hide
-        div.schedulesave.col-sm-4.col-xs-12.right
-          input.col-xs-4(type="image", title="Get device settings", src='/images/load.png')
-          input.col-xs-4(type="image", title="Save", src='/images/save.png', onclick="saveSchedule(event);" )
+      form#audio-schedule.hide(onsubmit="return false;")
+        div.schedule-buttons.right
+          input.save(type="image", title="Save", src='/images/save.png')
         div.clearfix
-
-        div.row
-          label.col-xs-4 Schedule description
-          input.col-xs-8(name="description", value="")
 
         div.schedule-devices
           div.row
-            h3.col-xs-10 Devices
-            img.add.col-xs-2(type="image", title="Add device", src='/images/plus.png')
-          .devices
-        div.clearfix
+            h3.col-xs-9 Devices
+            img.add.right(type="image", title="Add device", src='/images/plus.png')
+          div.devices
 
-        h3.col-xs-12 Schedule
+        h3.schedule-title.col-xs-12.no-padding Schedule
+
+        div.description.row.form-group
+          label.col-xs-3 Description
+          input.col-xs-9(name="description", value="")
+
+        div.control.row.form-group
+          label.col-xs-3 Play sounds
+          div.col-xs-9.no-padding
+            span for
+            input(name="playNights:number", value=3)
+            span nights then have
+            input(name="controlNights:number", value=2)
+            span nights without sound (as a control)
+
         .combos
 
-        input.add-another-button.col-xs-8.col-xs-offset-2.col-sm-4.col-sm-offset-4(type='button', value='Add another combo', onClick="addNewCombo()")
+        img.add-another-combo(type='image', title='Add another combo', src='/images/plus.png')
+
+        div.schedule-buttons.right
+          input.save(type="image", title="Save", src='/images/save.png')
 
     #schedule-combo-template.hide
-      .schedule-combo
-        img.delete.col-xs-1(type="image", title="Delete combo", src='/images/delete.png')
-        .combo-timing.col-xs-11.col-sm-5
+      .schedule-combo.row
+        .combo-timing.col-xs-12.col-sm-6.no-padding
+          img.delete.col-xs-2.no-padding(type="image", title="Delete", src='/images/delete.png')
 
-          .form-group.row
-            label.col-xs-4 Every
-            input.col-xs-7(name="[every]:asWait", value="10 mins")
+          div.time.col-xs-10
+            h4 Timing
 
-          .form-group.row
-            label.col-xs-4 from time
-            input.col-xs-7(name="[from]", value="7:30pm")
+            .form-group.row
+              label.col-xs-4 Play every
+              input.col-xs-7(name="[every]:asWait", value="10 mins")
 
-          .form-group.row
-            label.col-xs-4 until
-            input.col-xs-7(name="[until]", value="9:30pm")
+            .form-group.row
+              label.col-xs-4 from time
+              input.col-xs-7(name="[from]:timeOfDay", value="7:30pm")
+
+            .form-group.row
+              label.col-xs-4 until
+              input.col-xs-7(name="[until]:timeOfDay", value="9:30pm")
 
         .soundcombo.col-xs-12.col-sm-6
           h4 Sounds
@@ -70,21 +84,27 @@ html
           .form-group.row.col-xs-4
             input.add-another-button(type='button', value='Add another sound')
 
+
       #sound-template.hide
         .sound
           .wait.form-group.row
-            label.right.col-xs-4 then wait
+            label.col-xs-4 then wait
             input.col-xs-7(name="[waits][]:asWait", value="10 mins")
           .form-group.row
-            label.col-xs-4 play sound
-            select.sound_file.col-xs-7(name="[sounds][]")
+            label.play-sound.col-xs-4 then play sound
+            select.sound-file.col-xs-7(name="[sounds][]")
+              option(value="same") same sound
+              option(value="random") random sound
             input.delete.col-xs-1(type="image", title="Delete sound", src='/images/delete.png')
+          .form-group.row
+            label.col-xs-4 at volume
+            input.col-xs-7(name="[volume][]:number", value="10")
           div.clearfix
 
       #device-template.hide
         .device.row.col-xs-12.col-sm-6
-          input.delete.col-xs-1(type="image", title="Remove device", src='/images/delete.png')
-          label.col-xs-11
+          input.delete.col-xs-2(type="image", title="Remove device", src='/images/delete.png')
+          label.col-xs-10
 
       #additional-device-template.hide
         .additional-device.row.col-xs-12.col-sm-6

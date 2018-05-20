@@ -83,7 +83,6 @@ timeUtil.secondsToReadableTime = function(totalSecs) {
     let count = timeLeft % 60;
     timeLeft = (timeLeft - count) / 60;
     timeString = timeUtil.addToPrintedTime(timeString, count, units[i]);
-    console.log(timeString);
   }
 
   return timeString;
@@ -103,3 +102,32 @@ timeUtil.addToPrintedTime = function(timeString, value, unit) {
   }
   return timeString;
 };
+
+
+timeUtil.parseTimeOfDay = function(timeString) {
+  let parts = timeString.toLowerCase().match(/([01]?[0-9]|2[0-3]):([0-5][0-9]) ?(am|pm)?/);
+
+  if (!parts) {
+    return "12:01am";
+  }
+
+
+  let hours = parseInt(parts[1]);
+  let minutes = parts[2];
+  let amOrPm = parts[3];
+
+  if (hours > 11) {
+    amOrPm = "pm";
+    hours = hours - 12;
+  }
+  else if (!amOrPm) {
+    amOrPm = "am";
+  }
+
+  if (hours === 0) {
+    hours = 12;
+  }
+
+  return hours + ":" + minutes + amOrPm;
+}
+

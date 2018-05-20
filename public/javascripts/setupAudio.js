@@ -1,7 +1,5 @@
 /* global api, timeUtil, user, util */
 
-/* exported getSchedule, saveSchedule, addNewCombo, addAnotherSound */
-
 var devicesApiUrl = api + '/api/v1/devices';
 var scheduleApiUrl = api + '/api/v1/schedules';
 var filesApiUrl = api + '/api/v1/files';
@@ -14,7 +12,8 @@ var schedule = {
 window.onload = function() {
   var headers = {};
   headers = user.getHeaders();
-  util.addCustomTypeParser("asWait", timeUtil.secondsToReadableTime);
+  util.addCustomTypeParser("asWait", timeUtil.parseTimeToSeconds, timeUtil.secondsToReadableTime);
+  util.addCustomTypeParser("timeOfDay", timeUtil.parseTimeOfDay);
 
   $.ajax({
     url: filesApiUrl,
@@ -38,7 +37,7 @@ window.onload = function() {
       schedule.devices = result.devices;
       populateDevicesSelect(document.getElementById("deviceSelect"));
       $("#loading-message").addClass("hide");
-      $("#choose-device").removeClass("hide");
+      $("#choose-device").click(getSchedule).removeClass("hide");
     },
     error: function(err) {
       $("#loading-message").text("Failed to find any devices that you can set.");
@@ -62,6 +61,8 @@ function getSchedule() {
     type: 'GET',
     headers: user.getHeaders(),
     success: function(result) {
+      $(".schedule-buttons .save").click(saveSchedule);
+      $(".add-another-combo").click(addNewCombo);
       $("#audio-schedule").removeClass("hide");
       $("#choose-device").addClass("hide");
       loadSchedule(result);
@@ -73,6 +74,7 @@ function getSchedule() {
 }
 
 function loadSchedule(result) {
+
   var devices = result.devices.rows;
   for (var i in devices)  {
     loadDevice(devices[i]);
@@ -122,7 +124,7 @@ function addNewCombo(comboData = null) {
   }
   var comboName = "combo" + schedule.nextcombo++;
   util.appendNameTag(combo, comboName);
-  combo.find(".add-another-button").attr("onClick", 'addAnotherSound("' + comboName + '");');
+  combo.find(".add-another-button").click(addAnotherSound);
   combo.attr("data-id", comboName);
   combo.find(".delete").click(deleteCombo);
   $('#audio-schedule .combos').append(combo);
@@ -148,30 +150,43 @@ function addFirstSound(comboName, combo, data = null) {
   firstSound.find(".wait").addClass('hide');
   firstSound.find(".wait input").attr('value', '0s');
   firstSound.find(".delete").addClass('hide');
+  firstSound.find("label.play-sound").text("Play sound");
+  firstSound.find('option[value="same"]').addClass('hide');
+  firstSound.find('option[value="random"]').prop("selected", true);
 }
 
 function addSound(comboName, combo, data = null, counter = 0) {
   var sound =$("#sound-template .sound").clone();
-
-  sound.find(".delete").click(deleteSound);
-
-  var soundFileSelect = sound.find("select.sound_file")[0];
-  for (var i = 0; i < schedule.audioBaits.length; i++) {
-    var audioBait = schedule.audioBaits[i];
-    util.addOptionElement(soundFileSelect, "file " + audioBait.id, audioBait.id);
-  }
+  populateWithAllSounds(sound.find("select.sound-file")[0]);
 
   if (data) {
     util.populateFromNthElements(sound, data, counter);
   }
+
+  sound.find(".delete").click(deleteSound);
+
 
   util.appendNameTag(sound, comboName);
   combo.find(".sounds").append(sound);
   return sound;
 }
 
-function addAnotherSound (comboName) {
-  var combo = $('.schedule-combo[data-id="' + comboName + '"]');
+function populateWithAllSounds(soundFileSelect) {
+  if (soundFileSelect) {
+   for (var i = 0; i < schedule.audioBaits.length; i++) {
+      var audioBait = schedule.audioBaits[i];
+      let audioName = "sound";
+      if (audioBait.details && audioBait.details.name) {
+        audioName = audioBait.details.name;
+      }
+      util.addOptionElement(soundFileSelect, audioName + "-(" + audioBait.id + ")", audioBait.id);
+    }
+  }
+}
+
+function addAnotherSound (element) {
+  var combo = $(element.target).closest(".schedule-combo");
+  var comboName = combo.attr("data-id");
   addSound(comboName, combo);
 }
 
@@ -184,6 +199,9 @@ function makeScheduleJson() {
     customTypes: {
       asWait: function(valueAsStr) {
         return timeUtil.parseTimeToSeconds(valueAsStr);
+      },
+      timeOfDay: function(valueAsStr) {
+        return valueAsStr;
       }
     }
   };
@@ -210,8 +228,7 @@ function makeDevicesArray() {
   return allDeviceIds;
 }
 
-function saveSchedule(event) {
-  event.preventDefault();
+function saveSchedule() {
   var schedule = makeScheduleJson();
 
   var devices = JSON.stringify(makeDevicesArray());

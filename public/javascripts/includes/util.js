@@ -1,6 +1,6 @@
 
 var util = {
-  customTypes : {}
+  customType : {},
 };
 
 util.addOptionElement = function(parent, text, hiddenId) {
@@ -72,25 +72,35 @@ util.populateFromNthElements = function(parent, values, counter) {
   });
 };
 
-util.addCustomTypeParser = function(type, parserFunction) {
-  util.customTypes[type] = parserFunction;
+util.addCustomTypeParser = function(type, toStoreFunction, toDisplayFunction = util.noParseNeeded) {
+  util.customType[type] = {
+    store : toStoreFunction,
+    display: toDisplayFunction
+  };
 };
 
+util.noParseNeeded = function(value) {
+  return value;
+};
 
 util.setValue = function(element, value) {
   let valueType = util.getValueTypeFromName(element);
 
-  if (valueType && util.customTypes[valueType]) {
-    value = util.customTypes[valueType](value);
-  }
-
   element = $(element);
+  if (valueType && util.customType[valueType]) {
+    var typeParser = util.customType[valueType]
+    value = typeParser.display(value);
+    element.change(function(event) {
+      // parse the string and back to check it will parse
+      $(event.target).val(typeParser.display(typeParser.store($(event.target).val())));
+    });
+  }
 
   if (element.prop("tagName") === "SELECT") {
     element.find('option[value="' + value + '"]').prop("selected", true);
   }
   else {
-    element.attr("value", value);
+    element.val(value);
   }
 };
 

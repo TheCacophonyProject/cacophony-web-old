@@ -1,9 +1,9 @@
 doctype html
 html
   head
-    title Setup Audio Lure Schedule
+    title Upload new audio bait file
     include includes/base.pug
-    //- link(href='/stylesheets/newAudioBaitFile.css', rel='stylesheet', media='screen')
+    script(src="javascripts/includes/jquery.serializejson.min.js")
     script(type='text/javascript', src='javascripts/newAudioBaitFile.js')
 
   body
@@ -12,6 +12,31 @@ html
     .cacophony-page.max-width
       h1#Setup.col-xs-12 Upload new audio bait
 
-      form(onsubmit="uploadAudioBait()")
-        input(type="file", name="photo", id="audio_bait_file")
-        input(type="submit", value="blah")
+      form.col-xs-12.col-sm-6(onsubmit="return false;")
+        .form-group.row
+          label.col-xs-5 Animal
+          input.col-xs-7(name="animal", value="")
+
+        .form-group.row
+          label.col-xs-5 Short description
+          input.col-xs-7(name="sound", value="")
+
+        .form-group.row
+          label.col-xs-5 Long description
+          input.col-xs-7(name="description", value="")
+
+        .form-group.row
+          label.col-xs-5 Source/copywrite
+          input.col-xs-7(name="source", value="")
+
+        .form-group.row
+          label.col-xs-5 Audio file
+          input.col.xs-7(type="file", name="Audio bait file", id="audio_bait_file")
+
+        .form-group.row
+          label.col-xs-5 Cacophony name
+          input.col-xs-7(name="name", value="", readonly)
+
+        input.right.upload-button(type="button", value="Upload file")
+
+
