@@ -24,6 +24,7 @@ window.onload = function() {
 
     success: function(result) {
       schedule.audioBaits = result.rows;
+      populateWithAllSounds($("#sound-template select.sound-file")[0]);
     },
     error: function(err) {
       console.log(err);
@@ -55,22 +56,24 @@ function populateDevicesSelect(deviceSelect) {
 
 function getSchedule() {
   var selectDevice = document.getElementById("deviceSelect").selectedOptions[0].textContent;
-  var scheduleDeviceUrl = scheduleApiUrl + "/" + selectDevice;
-  $.ajax({
-    url: scheduleDeviceUrl,
-    type: 'GET',
-    headers: user.getHeaders(),
-    success: function(result) {
-      $(".schedule-buttons .save").click(saveSchedule);
-      $(".add-another-combo").click(addNewCombo);
-      $("#audio-schedule").removeClass("hide");
-      $("#choose-device").addClass("hide");
-      loadSchedule(result);
-    },
-    error: function(err) {
-      console.log(err);
-    }
-  });
+  if (selectDevice !== "<select your device>") {
+    var scheduleDeviceUrl = scheduleApiUrl + "/" + selectDevice;
+    $.ajax({
+      url: scheduleDeviceUrl,
+      type: 'GET',
+      headers: user.getHeaders(),
+      success: function(result) {
+        $(".schedule-buttons .save").click(saveSchedule);
+        $(".add-another-combo").click(addNewCombo);
+        $("#audio-schedule").removeClass("hide");
+        $("#choose-device").addClass("hide");
+        loadSchedule(result);
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
+  }
 }
 
 function loadSchedule(result) {
@@ -118,11 +121,9 @@ function additionalDevice() {
 }
 
 function addNewCombo(comboData = null) {
-  var combo = $("#schedule-combo-template .schedule-combo").clone();
-  if (comboData) {
-    util.populateElements(combo, comboData);
-  }
-  var comboName = "combo" + schedule.nextcombo++;
+  let combo = util.createNewAndPopulate("#schedule-combo-template", comboData);
+
+  let comboName = "combo" + schedule.nextcombo++;
   util.appendNameTag(combo, comboName);
   combo.find(".add-another-button").click(addAnotherSound);
   combo.attr("data-id", comboName);
@@ -156,16 +157,9 @@ function addFirstSound(comboName, combo, data = null) {
 }
 
 function addSound(comboName, combo, data = null, counter = 0) {
-  var sound =$("#sound-template .sound").clone();
-  populateWithAllSounds(sound.find("select.sound-file")[0]);
-
-  if (data) {
-    util.populateFromNthElements(sound, data, counter);
-  }
+  let sound = util.createNewAndPopulateFromArray("#sound-template", data, counter);
 
   sound.find(".delete").click(deleteSound);
-
-
   util.appendNameTag(sound, comboName);
   combo.find(".sounds").append(sound);
   return sound;
@@ -229,6 +223,8 @@ function makeDevicesArray() {
 }
 
 function saveSchedule() {
+  $(document.activeElement).trigger("change");
+
   var schedule = makeScheduleJson();
 
   var devices = JSON.stringify(makeDevicesArray());

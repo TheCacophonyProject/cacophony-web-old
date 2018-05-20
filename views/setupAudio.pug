@@ -19,9 +19,9 @@ html
       div#loading-message.col-xs-12.no-padding Loading your devices...
 
       #choose-device.hide.row.col-xs-12
-        label.col-sm-4.no-padding Choose device
-        select#deviceSelect.cml-sm-6(onchange="getSchedule()")
-          option &lt;select your device&gt;
+        label.col-xs-4.no-padding Choose device
+        select#deviceSelect.cml-xs-6(onchange="getSchedule()")
+          option(value="select") &lt;select your device&gt;
 
       form#audio-schedule.hide(onsubmit="return false;")
         div.schedule-buttons.right

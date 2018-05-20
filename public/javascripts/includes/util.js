@@ -49,6 +49,15 @@ util.getValueTypeFromName = function (element) {
   return null;
 };
 
+util.createNewAndPopulate = function(template, values) {
+  const parent = $(template).children().first().clone();
+  if (values) {
+    util.populateElements(parent, values);
+  }
+  util.addOnChangeParsing(parent);
+  return parent;
+}
+
 util.populateElements = function(parent, values) {
   parent.find("[name]").each(function() {
     var names = util.splitInputNameIntoKeysArray(this);
@@ -60,7 +69,16 @@ util.populateElements = function(parent, values) {
   });
 };
 
-util.populateFromNthElements = function(parent, values, counter) {
+util.createNewAndPopulateFromArray = function(template, values, arrayPosition) {
+  const parent = $(template).children().first().clone();
+  if (values) {
+    util.populateFromArray(parent, values, arrayPosition);
+  }
+  util.addOnChangeParsing(parent);
+  return parent;
+}
+
+util.populateFromArray = function(parent, values, counter) {
   parent.find("[name]").each(function() {
     var names = util.splitInputNameIntoKeysArray(this);
     if (names.length === 2 && names[1] === "" ) {
@@ -68,6 +86,20 @@ util.populateFromNthElements = function(parent, values, counter) {
       if (values[fieldname] && values[fieldname].length > counter) {
         util.setValue(this, values[fieldname][counter]);
       }
+    }
+  });
+};
+
+util.addOnChangeParsing = function(parent) {
+  parent.find("[name]").each(function() {
+    let element = $(this);
+    let valueType = util.getValueTypeFromName(element);
+    let typeParser = util.customType[valueType];
+    if (valueType && typeParser) {
+      element.change(function(event) {
+        // parse the string and convert back
+        $(event.target).val(typeParser.display(typeParser.store($(event.target).val())));
+      });
     }
   });
 };
@@ -88,12 +120,7 @@ util.setValue = function(element, value) {
 
   element = $(element);
   if (valueType && util.customType[valueType]) {
-    var typeParser = util.customType[valueType]
-    value = typeParser.display(value);
-    element.change(function(event) {
-      // parse the string and back to check it will parse
-      $(event.target).val(typeParser.display(typeParser.store($(event.target).val())));
-    });
+    value = util.customType[valueType].display(value);
   }
 
   if (element.prop("tagName") === "SELECT") {
