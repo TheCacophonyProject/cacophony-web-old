@@ -51,43 +51,43 @@ util.getValueTypeFromName = function (element) {
 
 util.createNewAndPopulate = function(template, values) {
   const parent = $(template).children().first().clone();
-  if (values) {
-    util.populateElements(parent, values);
-  }
-  util.addOnChangeParsing(parent);
-  return parent;
-}
+  return util.populateElements(parent, values);
+};
 
 util.populateElements = function(parent, values) {
-  parent.find("[name]").each(function() {
-    var names = util.splitInputNameIntoKeysArray(this);
-    if (names.length === 1 ) {
-      if (values[names[0]]) {
-        util.setValue($(this), values[names[0]]);
+  util.addOnChangeParsing(parent);
+  if (values) {
+    parent.find("[name]").each(function() {
+      var names = util.splitInputNameIntoKeysArray(this);
+      if (names.length === 1 ) {
+        if (values[names[0]]) {
+          util.setValue($(this), values[names[0]]);
+        }
       }
-    }
-  });
+    });
+  }
+  return parent;
 };
 
 util.createNewAndPopulateFromArray = function(template, values, arrayPosition) {
   const parent = $(template).children().first().clone();
+  return util.populateFromArray(parent, values, arrayPosition);
+};
+
+util.populateFromArray = function(parent, values, counter) {
   if (values) {
-    util.populateFromArray(parent, values, arrayPosition);
+    parent.find("[name]").each(function() {
+      var names = util.splitInputNameIntoKeysArray(this);
+      if (names.length === 2 && names[1] === "" ) {
+        var fieldname = names[0];
+        if (values[fieldname] && values[fieldname].length > counter) {
+          util.setValue(this, values[fieldname][counter]);
+        }
+      }
+    });
   }
   util.addOnChangeParsing(parent);
   return parent;
-}
-
-util.populateFromArray = function(parent, values, counter) {
-  parent.find("[name]").each(function() {
-    var names = util.splitInputNameIntoKeysArray(this);
-    if (names.length === 2 && names[1] === "" ) {
-      var fieldname = names[0];
-      if (values[fieldname] && values[fieldname].length > counter) {
-        util.setValue(this, values[fieldname][counter]);
-      }
-    }
-  });
 };
 
 util.addOnChangeParsing = function(parent) {

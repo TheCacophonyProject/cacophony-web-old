@@ -111,7 +111,6 @@ timeUtil.parseTimeOfDay = function(timeString) {
     return "12:01am";
   }
 
-
   let hours = parseInt(parts[1]);
   let minutes = parts[2];
   let amOrPm = parts[3];
@@ -123,11 +122,8 @@ timeUtil.parseTimeOfDay = function(timeString) {
   else if (!amOrPm) {
     amOrPm = "am";
   }
-
   if (hours === 0) {
     hours = 12;
   }
-
   return hours + ":" + minutes + amOrPm;
-}
-
+};

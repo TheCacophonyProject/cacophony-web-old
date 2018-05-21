@@ -167,7 +167,7 @@ function addSound(comboName, combo, data = null, counter = 0) {
 
 function populateWithAllSounds(soundFileSelect) {
   if (soundFileSelect) {
-   for (var i = 0; i < schedule.audioBaits.length; i++) {
+    for (var i = 0; i < schedule.audioBaits.length; i++) {
       var audioBait = schedule.audioBaits[i];
       let audioName = "sound";
       if (audioBait.details && audioBait.details.name) {

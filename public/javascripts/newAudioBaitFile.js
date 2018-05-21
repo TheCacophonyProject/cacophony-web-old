@@ -7,28 +7,27 @@ window.onload = function() {
   $('form input[name="animal"]').change(setCacophonyName);
   $('form input[name="sound"]').change(setCacophonyName);
   setCacophonyName();
-}
+};
 
 function setCacophonyName() {
-    let animal = $('form input[name="animal"]').val();
-    let sound = $('form input[name="sound"]').val();
+  let animal = $('form input[name="animal"]').val();
+  let sound = $('form input[name="sound"]').val();
 
-    let cacophonyName = "";
-    if (animal) {
-        cacophonyName = animal;
-    }
-    if (animal && sound) {
-        cacophonyName += "-";
-    }
-    if (sound) {
-        cacophonyName += sound;
-    }
+  let cacophonyName = "";
+  if (animal) {
+    cacophonyName = animal;
+  }
+  if (animal && sound) {
+    cacophonyName += "-";
+  }
+  if (sound) {
+    cacophonyName += sound;
+  }
+  if (cacophonyName === "") {
+    cacophonyName = "sound";
+  }
 
-    if (cacophonyName === "") {
-        cacophonyName = "sound";
-    }
-
-    $('form input[name="name"]').val(cacophonyName);
+  $('form input[name="name"]').val(cacophonyName);
 }
 
 function uploadAudioBait() {
