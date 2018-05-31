@@ -77,3 +77,11 @@ h3 {
 h3.schedule-title {
     padding-top: 15px;
 }
+
+.centre {
+    text-align: center;
+}
+
+.or_label {
+    padding: 30px;
+}

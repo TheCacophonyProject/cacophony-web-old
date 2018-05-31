@@ -13,7 +13,7 @@ window.onload = function() {
   var headers = {};
   headers = user.getHeaders();
   util.addCustomTypeParser("asWait", timeUtil.parseTimeToSeconds, timeUtil.secondsToReadableTime);
-  util.addCustomTypeParser("timeOfDay", timeUtil.parseTimeOfDay);
+  util.addCustomTypeParser("timeOfDay", timeUtil.timeOfDayTo24Clock, timeUtil.timeOfDayToAmPm);
 
   $.ajax({
     url: filesApiUrl,
@@ -66,7 +66,7 @@ function getSchedule() {
         $(".schedule-buttons .save").click(saveSchedule);
         $(".add-another-combo").click(addNewCombo);
         $("#audio-schedule").removeClass("hide");
-        $("#choose-device").addClass("hide");
+        $("#choose-action").addClass("hide");
         loadSchedule(result);
       },
       error: function(err) {
@@ -195,7 +195,7 @@ function makeScheduleJson() {
         return timeUtil.parseTimeToSeconds(valueAsStr);
       },
       timeOfDay: function(valueAsStr) {
-        return valueAsStr;
+        return timeUtil.timeOfDayTo24Clock(valueAsStr);
       }
     }
   };

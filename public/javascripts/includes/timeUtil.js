@@ -104,7 +104,7 @@ timeUtil.addToPrintedTime = function(timeString, value, unit) {
 };
 
 
-timeUtil.parseTimeOfDay = function(timeString) {
+timeUtil.timeOfDayToAmPm = function(timeString) {
   let parts = timeString.toLowerCase().match(/([01]?[0-9]|2[0-3]):([0-5][0-9]) ?(am|pm)?/);
 
   if (!parts) {
@@ -117,13 +117,33 @@ timeUtil.parseTimeOfDay = function(timeString) {
 
   if (hours > 11) {
     amOrPm = "pm";
-    hours = hours - 12;
   }
   else if (!amOrPm) {
     amOrPm = "am";
   }
+
+  hours = hours % 12;
   if (hours === 0) {
     hours = 12;
   }
   return hours + ":" + minutes + amOrPm;
+};
+
+timeUtil.timeOfDayTo24Clock = function(timeString) {
+  let parts = timeString.toLowerCase().match(/([01]?[0-9]|2[0-3]):([0-5][0-9]) ?(am|pm)?/);
+
+  if (!parts) {
+    return "12:01am";
+  }
+
+  let hours = parseInt(parts[1]);
+  let minutes = parts[2];
+  let amOrPm = parts[3];
+
+  if (amOrPm === "pm" && hours < 12) {
+    hours += 12;
+  }
+  hours = hours % 24;
+
+  return hours + ":" + minutes;
 };

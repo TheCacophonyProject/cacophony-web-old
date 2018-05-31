@@ -16,12 +16,19 @@ html
     .cacophony-page.max-width
       h1.col-xs-12.col-sm-9.no-padding Setup Audio Bait Schedule
 
-      div#loading-message.col-xs-12.no-padding Loading your devices...
+      #choose-action
 
-      #choose-device.hide.row.col-xs-12
-        label.col-xs-4.no-padding Choose device
-        select#deviceSelect.cml-xs-6(onchange="getSchedule()")
-          option(value="select") &lt;select your device&gt;
+        div#loading-message.col-xs-12.no-padding Loading your devices...
+
+        #choose-device.hide.row.col-xs-12
+          label.col-xs-6 Choose Device
+          select#deviceSelect.col-xs-6(onchange="getSchedule()")
+            option(value="select") &lt;select your device&gt;
+          span.col-xs-12 (To edit an existing schedule choose a device on that schedule)
+
+        label.or_label.centre.row.col-xs-12 or
+
+        input.row.col-xs-offset-3.col-xs-6(type='button', value='Upload new sound', onClick="window.location='/new_audio'")
 
       form#audio-schedule.hide(onsubmit="return false;")
         div.schedule-buttons.right
@@ -98,7 +105,7 @@ html
             input.delete.col-xs-1(type="image", title="Delete sound", src='/images/delete.png')
           .form-group.row
             label.col-xs-4 at volume
-            input.col-xs-7(name="[volume][]:number", value="10")
+            input.col-xs-7(name="[volumes][]:number", value="10")
           div.clearfix
 
       #device-template.hide
