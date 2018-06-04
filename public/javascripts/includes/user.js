@@ -152,3 +152,11 @@ user.setTagDefault = function(key, val) {
   defaults[key] = val;
   localStorage.setItem('tagDefaults', JSON.stringify(defaults));
 };
+
+user.getHeaders = function() {
+  var headers = {};
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
+  return headers;
+};
