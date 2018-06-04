@@ -12,8 +12,8 @@ var schedule = {
 window.onload = function() {
   var headers = {};
   headers = user.getHeaders();
-  util.addCustomTypeParser("asWait", timeUtil.parseTimeToSeconds, timeUtil.secondsToReadableTime);
-  util.addCustomTypeParser("timeOfDay", timeUtil.timeOfDayTo24Clock, timeUtil.timeOfDayToAmPm);
+  templateUtil.addCustomTypeParser("asWait", timeUtil.parseTimeToSeconds, timeUtil.secondsToReadableTime);
+  templateUtil.addCustomTypeParser("timeOfDay", timeUtil.timeOfDayTo24Clock, timeUtil.timeOfDayToAmPm);
 
   $.ajax({
     url: filesApiUrl,
@@ -53,7 +53,7 @@ window.onload = function() {
 function populateDevicesSelect(deviceSelect) {
   for (var i in schedule.devices.rows) {
     const device = schedule.devices.rows[i];
-    util.addOptionElement(deviceSelect, device.devicename, device.id);
+    templateUtil.addOptionElement(deviceSelect, device.devicename, device.id);
   }
 }
 
@@ -90,7 +90,7 @@ function loadSchedule(result) {
   var form = $("form");
   var schedule = result.schedule;
   if (schedule && schedule.combos) {
-    util.populateElements(form, schedule);
+    templateUtil.populateElements(form, schedule);
     for (var j = 0; j < schedule.combos.length; j++)  {
       addNewCombo(schedule.combos[j]);
     }
@@ -124,10 +124,10 @@ function additionalDevice() {
 }
 
 function addNewCombo(comboData = null) {
-  let combo = util.createNewAndPopulate("#schedule-combo-template", comboData);
+  let combo = templateUtil.createNewAndPopulate("#schedule-combo-template", comboData);
 
   let comboName = "combo" + schedule.nextcombo++;
-  util.appendNameTag(combo, comboName);
+  templateUtil.appendNameTag(combo, comboName);
   combo.find(".add-another-button").click(addAnotherSound);
   combo.attr("data-id", comboName);
   combo.find(".delete").click(deleteCombo);
@@ -155,15 +155,20 @@ function addFirstSound(comboName, combo, data = null) {
   firstSound.find(".wait input").attr('value', '0s');
   firstSound.find(".delete").addClass('hide');
   firstSound.find("label.play-sound").text("Play sound");
-  firstSound.find('option[value="same"]').addClass('hide');
-  firstSound.find('option[value="random"]').prop("selected", true);
+
+  // hide same option
+  sameSound = firstSound.find('option[value="same"]');
+  if (sameSound.prop("selected")) {
+    firstSound.find('option[value="random"]').prop("selected", true);
+  }
+  sameSound.addClass('hide');
 }
 
 function addSound(comboName, combo, data = null, counter = 0) {
-  let sound = util.createNewAndPopulateFromArray("#sound-template", data, counter);
+  let sound = templateUtil.createNewAndPopulateFromArray("#sound-template", data, counter);
 
   sound.find(".delete").click(deleteSound);
-  util.appendNameTag(sound, comboName);
+  templateUtil.appendNameTag(sound, comboName);
   combo.find(".sounds").append(sound);
   return sound;
 }
@@ -176,7 +181,7 @@ function populateWithAllSounds(audiobaits, soundFileSelect) {
       if (audioBait.details && audioBait.details.name) {
         audioName = audioBait.details.name;
       }
-      util.addOptionElement(soundFileSelect[0], audioName + "-(" + audioBait.id + ")", audioBait.id);
+      templateUtil.addOptionElement(soundFileSelect[0], audioName + "-(" + audioBait.id + ")", audioBait.id);
     }
   }
 }
@@ -204,7 +209,7 @@ function makeScheduleMap() {
   };
 
   var scheduleMap = $('form#audio-schedule').serializeJSON(customTypes);
-  scheduleMap = util.combineElementsStartingWith(scheduleMap, "combo");
+  scheduleMap = templateUtil.combineElementsStartingWith(scheduleMap, "combo");
   scheduleMap.allsounds = schedule.allAudioBaitIds;
 
   return scheduleMap;

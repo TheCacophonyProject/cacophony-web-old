@@ -1,22 +1,22 @@
 
-var util = {
+var templateUtil = {
   customType : {},
 };
 
-util.addOptionElement = function(parent, text, hiddenId) {
+templateUtil.addOptionElement = function(parent, text, hiddenId) {
   var option = document.createElement("option");
   option.innerText = text;
   option.setAttribute("value", hiddenId);
   parent.appendChild(option);
 };
 
-util.appendNameTag = function(parent, appendString) {
+templateUtil.appendNameTag = function(parent, appendString) {
   parent.find("[name]").attr("name", function( i, val ) {
     return appendString + val;
   });
 };
 
-util.combineElementsStartingWith = function(map, name) {
+templateUtil.combineElementsStartingWith = function(map, name) {
   var list = [];
   Object.keys(map).forEach(function(key) {
     if (key.startsWith(name)) {
@@ -28,7 +28,7 @@ util.combineElementsStartingWith = function(map, name) {
   return map;
 };
 
-util.splitInputNameIntoKeysArray = function(element) {
+templateUtil.splitInputNameIntoKeysArray = function(element) {
   let name = $(element).attr("name").split(':')[0]; //remove the type which comes after the :
 
   name = name.replace(/\]/g, '');
@@ -39,7 +39,7 @@ util.splitInputNameIntoKeysArray = function(element) {
   return keys;
 };
 
-util.getValueTypeFromName = function (element) {
+templateUtil.getValueTypeFromName = function (element) {
   let name = $(element).attr("name");
   let keys = name.split(':');
 
@@ -49,19 +49,19 @@ util.getValueTypeFromName = function (element) {
   return null;
 };
 
-util.createNewAndPopulate = function(template, values) {
+templateUtil.createNewAndPopulate = function(template, values) {
   const parent = $(template).children().first().clone();
-  return util.populateElements(parent, values);
+  return templateUtil.populateElements(parent, values);
 };
 
-util.populateElements = function(parent, values) {
-  util.addOnChangeParsing(parent);
+templateUtil.populateElements = function(parent, values) {
+  templateUtil.addOnChangeParsing(parent);
   if (values) {
     parent.find("[name]").each(function() {
-      var names = util.splitInputNameIntoKeysArray(this);
+      var names = templateUtil.splitInputNameIntoKeysArray(this);
       if (names.length === 1 ) {
         if (values[names[0]]) {
-          util.setValue($(this), values[names[0]]);
+          templateUtil.setValue($(this), values[names[0]]);
         }
       }
     });
@@ -69,32 +69,32 @@ util.populateElements = function(parent, values) {
   return parent;
 };
 
-util.createNewAndPopulateFromArray = function(template, values, arrayPosition) {
+templateUtil.createNewAndPopulateFromArray = function(template, values, arrayPosition) {
   const parent = $(template).children().first().clone();
-  return util.populateFromArray(parent, values, arrayPosition);
+  return templateUtil.populateFromArray(parent, values, arrayPosition);
 };
 
-util.populateFromArray = function(parent, values, counter) {
+templateUtil.populateFromArray = function(parent, values, counter) {
   if (values) {
     parent.find("[name]").each(function() {
-      var names = util.splitInputNameIntoKeysArray(this);
+      var names = templateUtil.splitInputNameIntoKeysArray(this);
       if (names.length === 2 && names[1] === "" ) {
         var fieldname = names[0];
         if (values[fieldname] && values[fieldname].length > counter) {
-          util.setValue(this, values[fieldname][counter]);
+          templateUtil.setValue(this, values[fieldname][counter]);
         }
       }
     });
   }
-  util.addOnChangeParsing(parent);
+  templateUtil.addOnChangeParsing(parent);
   return parent;
 };
 
-util.addOnChangeParsing = function(parent) {
+templateUtil.addOnChangeParsing = function(parent) {
   parent.find("[name]").each(function() {
     let element = $(this);
-    let valueType = util.getValueTypeFromName(element);
-    let typeParser = util.customType[valueType];
+    let valueType = templateUtil.getValueTypeFromName(element);
+    let typeParser = templateUtil.customType[valueType];
     if (valueType && typeParser) {
       element.change(function(event) {
         // parse the string and convert back
@@ -104,23 +104,23 @@ util.addOnChangeParsing = function(parent) {
   });
 };
 
-util.addCustomTypeParser = function(type, toStoreFunction, toDisplayFunction = util.noParseNeeded) {
-  util.customType[type] = {
+templateUtil.addCustomTypeParser = function(type, toStoreFunction, toDisplayFunction = templateUtil.noParseNeeded) {
+  templateUtil.customType[type] = {
     store : toStoreFunction,
     display: toDisplayFunction
   };
 };
 
-util.noParseNeeded = function(value) {
+templateUtil.noParseNeeded = function(value) {
   return value;
 };
 
-util.setValue = function(element, value) {
-  let valueType = util.getValueTypeFromName(element);
+templateUtil.setValue = function(element, value) {
+  let valueType = templateUtil.getValueTypeFromName(element);
 
   element = $(element);
-  if (valueType && util.customType[valueType]) {
-    value = util.customType[valueType].display(value);
+  if (valueType && templateUtil.customType[valueType]) {
+    value = templateUtil.customType[valueType].display(value);
   }
 
   if (element.prop("tagName") === "SELECT") {

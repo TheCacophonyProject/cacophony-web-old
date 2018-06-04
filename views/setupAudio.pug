@@ -6,7 +6,7 @@ html
     include includes/base.pug
     link(href='/stylesheets/setupAudio.css', rel='stylesheet', media='screen')
     script(src="javascripts/includes/jquery.serializejson.min.js")
-    script(type='text/javascript', src='javascripts/includes/util.js')
+    script(type='text/javascript', src='javascripts/includes/templateUtil.js')
     script(type='text/javascript', src='javascripts/includes/timeUtil.js')
     script(src="javascripts/setupAudio.js")
 
@@ -73,7 +73,7 @@ html
 
             .form-group.row
               label.col-xs-4 Play every
-              input.col-xs-7(name="[every]:asWait", value="10 mins")
+              input.col-xs-7(F="[every]:asWait", value="10 mins")
 
             .form-group.row
               label.col-xs-4 from time
@@ -82,8 +82,6 @@ html
             .form-group.row
               label.col-xs-4 until
               input.col-xs-7(name="[until]:timeOfDay", value="9:30pm")
-
-            input.all-randoms.hide.col-xs-7(name="allrandom", value="")
 
         .soundcombo.col-xs-12.col-sm-6
           h4 Sounds
