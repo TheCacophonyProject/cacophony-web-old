@@ -5,8 +5,8 @@ var scheduleApiUrl = api + '/api/v1/schedules';
 var filesApiUrl = api + '/api/v1/files';
 var schedule = {
   devices: [],
-  audioBaits: [],
-  nextcombo:100
+  nextcombo:100,
+  allAudioBaitIds: [],
 };
 
 window.onload = function() {
@@ -23,8 +23,11 @@ window.onload = function() {
     dataType: 'json',
 
     success: function(result) {
-      schedule.audioBaits = result.rows;
-      populateWithAllSounds($("#sound-template select.sound-file")[0]);
+      for (var i = 0; i < result.rows.length; i++) {
+        schedule.allAudioBaitIds.push(result.rows[i].id);
+      }
+
+      populateWithAllSounds(result.rows, $("#sound-template select.sound-file"));
     },
     error: function(err) {
       console.log(err);
@@ -165,15 +168,15 @@ function addSound(comboName, combo, data = null, counter = 0) {
   return sound;
 }
 
-function populateWithAllSounds(soundFileSelect) {
+function populateWithAllSounds(audiobaits, soundFileSelect) {
   if (soundFileSelect) {
-    for (var i = 0; i < schedule.audioBaits.length; i++) {
-      var audioBait = schedule.audioBaits[i];
+    for (var i = 0; i < audiobaits.length; i++) {
+      var audioBait = audiobaits[i];
       let audioName = "sound";
       if (audioBait.details && audioBait.details.name) {
         audioName = audioBait.details.name;
       }
-      util.addOptionElement(soundFileSelect, audioName + "-(" + audioBait.id + ")", audioBait.id);
+      util.addOptionElement(soundFileSelect[0], audioName + "-(" + audioBait.id + ")", audioBait.id);
     }
   }
 }
@@ -188,7 +191,7 @@ function deleteSound(element) {
   $(element.target).closest(".sound").remove();
 }
 
-function makeScheduleJson() {
+function makeScheduleMap() {
   var customTypes = {
     customTypes: {
       asWait: function(valueAsStr) {
@@ -200,10 +203,11 @@ function makeScheduleJson() {
     }
   };
 
-  var schedule = $('form#audio-schedule').serializeJSON(customTypes);
-  schedule = util.combineElementsStartingWith(schedule, "combo");
+  var scheduleMap = $('form#audio-schedule').serializeJSON(customTypes);
+  scheduleMap = util.combineElementsStartingWith(scheduleMap, "combo");
+  scheduleMap.allsounds = schedule.allAudioBaitIds;
 
-  return schedule;
+  return scheduleMap;
 }
 
 function makeDevicesArray() {
@@ -225,13 +229,13 @@ function makeDevicesArray() {
 function saveSchedule() {
   $(document.activeElement).trigger("change");
 
-  var schedule = makeScheduleJson();
+  var scheduleMap = makeScheduleMap();
 
   var devices = JSON.stringify(makeDevicesArray());
 
   var props = {
     devices : devices,
-    schedule: JSON.stringify(schedule),
+    schedule: JSON.stringify(scheduleMap),
   };
 
   $.ajax({
