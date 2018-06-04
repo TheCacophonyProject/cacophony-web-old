@@ -1,4 +1,4 @@
-/* global api, timeUtil, user, util */
+/* global api, timeUtil, user, templateUtil */
 
 var devicesApiUrl = api + '/api/v1/devices';
 var scheduleApiUrl = api + '/api/v1/schedules';
@@ -157,7 +157,7 @@ function addFirstSound(comboName, combo, data = null) {
   firstSound.find("label.play-sound").text("Play sound");
 
   // hide same option
-  sameSound = firstSound.find('option[value="same"]');
+  let sameSound = firstSound.find('option[value="same"]');
   if (sameSound.prop("selected")) {
     firstSound.find('option[value="random"]').prop("selected", true);
   }

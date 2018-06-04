@@ -1,13 +1,11 @@
 'use strict';
 
 const timeUtil = {
-  unitsMap: null,
-};
-
-timeUtil.unitsMap = {
-  s: ['s', 'sec', 'secs', 'second', 'seconds'],
-  m: ['m', 'min', 'mins', 'minute', 'minutes'],
-  h: ['h', 'hr', 'hrs', 'hour', 'hours'],
+  unitsMap: {
+    s: ['s', 'sec', 'secs', 'second', 'seconds'],
+    m: ['m', 'min', 'mins', 'minute', 'minutes'],
+    h: ['h', 'hr', 'hrs', 'hour', 'hours'],
+  },
 };
 
 timeUtil.unitValues = {
@@ -15,14 +13,6 @@ timeUtil.unitValues = {
   m: 60,
   h: 3600
 };
-
-/**
- * Parse a timestring
- *
- * @param  {String} string
- * @param  {Object} opts
- * @return {Number}
- */
 
 timeUtil.parseTimeToSeconds = function (timeString) {
   let totalSeconds = 0;
@@ -39,13 +29,6 @@ timeUtil.parseTimeToSeconds = function (timeString) {
   return totalSeconds;
 };
 
-/**
- * Get the key for a unit
- *
- * @param   {String} unit
- * @returns {String}
- */
-
 timeUtil.getUnitKey = function(unit) {
   for (let key of Object.keys(timeUtil.unitsMap)) {
     if (timeUtil.unitsMap[key].indexOf(unit) > -1) {
@@ -54,15 +37,6 @@ timeUtil.getUnitKey = function(unit) {
   }
   return null;
 };
-
-/**
- *  Get the number of seconds for a value, based on the unit
- *
- * @param   {Number} value
- * @param   {String} unit
- * @param   {Object} unitValues
- * @returns {Number}
- */
 
 timeUtil.getSeconds = function(value, unit) {
   let unitValue = timeUtil.unitValues[timeUtil.getUnitKey(unit)];
