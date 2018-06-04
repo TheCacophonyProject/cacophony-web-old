@@ -94,8 +94,7 @@ function loadSchedule(result) {
     for (var j = 0; j < schedule.combos.length; j++)  {
       addNewCombo(schedule.combos[j]);
     }
-  }
-  else {
+  } else {
     addNewCombo();
   }
 }
