@@ -162,6 +162,12 @@ user.getHeaders = function() {
 };
 
 function displayAlert(alertText) {
+  // Remove all existing alerts
+  currentAlerts = document.getElementsByClassName('alert');
+  for (let alert of currentAlerts) {
+    alert.style.display = 'none';
+  }
+  // Create new alert
   let div = document.createElement('div');
   div.classList.add('alert','alert-warning','alert-dismissible','fade','in');
   let button = document.createElement('button');
