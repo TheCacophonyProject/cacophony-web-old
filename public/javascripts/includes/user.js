@@ -6,7 +6,7 @@ var user = {};
 user.logout = function() {
   localStorage.removeItem('userData');
   localStorage.removeItem('JWT');
-  window.location.reload(false);
+  window.location.href = '/';
 };
 
 user.login = function(password, username) {
