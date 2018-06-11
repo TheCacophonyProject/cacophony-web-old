@@ -163,7 +163,7 @@ user.getHeaders = function() {
 
 function displayAlert(alertText) {
   // Remove all existing alerts
-  currentAlerts = document.getElementsByClassName('alert');
+  let currentAlerts = document.getElementsByClassName('alert');
   for (let alert of currentAlerts) {
     alert.style.display = 'none';
   }
@@ -177,6 +177,6 @@ function displayAlert(alertText) {
   let text = document.createTextNode(alertText);
   div.appendChild(button);
   div.appendChild(text);
-  let container = document.getElementsByClassName('form-horizontal')
+  let container = document.getElementsByClassName('form-horizontal');
   container[0].appendChild(div);
 }
