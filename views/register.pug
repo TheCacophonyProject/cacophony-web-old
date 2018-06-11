@@ -10,7 +10,7 @@ html
   div(class='container bs-docs-container')
     h2.
       Register
-    form#register-form.form-horizontal()
+    form#register-form.form-horizontal
       .form-group
         label.col-sm-2 Username
         .col-sm-4
@@ -27,4 +27,5 @@ html
           input.form-control#passwordRetype(type='password')
 
       .form-group
-        input.btn#register(type='button', value='Register')
+        .col-sm-2
+          input.btn#register(type='button', value='Register')
