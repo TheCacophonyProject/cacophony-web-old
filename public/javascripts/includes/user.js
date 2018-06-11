@@ -22,7 +22,7 @@ user.login = function(password, username) {
     error: function() {
       document.getElementById('inputUsername').value = '';
       document.getElementById('inputPassword').value = '';
-      displayAlert('Login Error. Please try again.')
+      displayAlert('Login Error. Please try again.');
     }
   });
 };
@@ -163,13 +163,13 @@ user.getHeaders = function() {
 
 function displayAlert(alertText) {
   let div = document.createElement('div');
-  div.classList.add('alert','alert-warning','alert-dismissible','fade','in')
+  div.classList.add('alert','alert-warning','alert-dismissible','fade','in');
   let button = document.createElement('button');
-  button.classList.add('close')
-  button.setAttribute('data-dismiss', 'alert')
+  button.classList.add('close');
+  button.setAttribute('data-dismiss', 'alert');
   button.innerHTML = '&times;';
   let text = document.createTextNode(alertText);
   div.appendChild(button);
   div.appendChild(text);
   document.body.appendChild(div);
-};
+}
