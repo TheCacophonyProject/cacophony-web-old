@@ -22,7 +22,7 @@ user.login = function(password, username) {
     error: function() {
       document.getElementById('inputUsername').value = '';
       document.getElementById('inputPassword').value = '';
-      window.alert('login failed');
+      displayAlert('Login Error. Please try again.')
     }
   });
 };
@@ -36,19 +36,19 @@ user.register = function(passEle1, passEle2, usernameEle) {
   if (username.length < 5) {
     passEle1.value = "";
     passEle2.value = "";
-    window.alert("Username not long enough.");
+    displayAlert('Username not long enough.');
     return;
   }
   if (password1.length < 5) {
     passEle1.value = "";
     passEle2.value = "";
-    window.alert("Password not long enough.");
+    displayAlert("Password not long enough.");
     return;
   }
   if (password1 != password2) {
     passEle1.value = "";
     passEle2.value = "";
-    window.alert("Passwords don't match.");
+    displayAlert("Passwords don't match.");
     return;
   }
 
@@ -64,7 +64,7 @@ user.register = function(passEle1, passEle2, usernameEle) {
     error: function(res) {
       console.log("Error");
       console.log(res);
-      window.alert("Error with registering a new user.");
+      displayAlert("Error with registering a new user.");
     }
   });
 };
@@ -109,7 +109,7 @@ user.updateUserData = function() {
     },
     error: function(err) {
       console.log(err);
-      window.alert('Error with loading user data.');
+      displayAlert('Error with loading user data.');
     }
   });
 };
@@ -159,4 +159,17 @@ user.getHeaders = function() {
     headers.Authorization = user.getJWT();
   }
   return headers;
+};
+
+function displayAlert(alertText) {
+  let div = document.createElement('div');
+  div.classList.add('alert','alert-warning','alert-dismissible','fade','in')
+  let button = document.createElement('button');
+  button.classList.add('close')
+  button.setAttribute('data-dismiss', 'alert')
+  button.innerHTML = '&times;';
+  let text = document.createTextNode(alertText);
+  div.appendChild(button);
+  div.appendChild(text);
+  document.body.appendChild(div);
 };
