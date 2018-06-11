@@ -176,3 +176,8 @@ function loginRedirect() {
 if (window.location.pathname.slice(0,6) !== '/login' && window.location.pathname !== '/register' && window.location.pathname !== '/' ) {
   loginRedirect();
 }
+
+// Skip the login page if already logged in
+if (window.location.pathname === '/login' && user.isLoggedIn()) {
+  window.location.href = '/user_home';
+}
