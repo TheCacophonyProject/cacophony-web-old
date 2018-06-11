@@ -9,6 +9,7 @@ if (user.isLoggedIn()) {
   document.getElementById('navbar-logout').onclick = user.logout;
   document.getElementById('navbar-hello-user').innerText = 'Hello ' + user.getAttr("username");
   $("#navbar-user-details").show();
+  $("#navbar-links").show();
 } else {
   $("#navbar-login").show();
 }
