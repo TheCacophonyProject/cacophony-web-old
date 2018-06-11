@@ -1,4 +1,4 @@
-/* global api, Promise */
+/* global api, Promise, next */
 /* exported user */
 
 var user = {};
