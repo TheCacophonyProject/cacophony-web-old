@@ -17,7 +17,11 @@ user.login = function(password, username) {
     success: function(res) {
       localStorage.setItem('JWT', res.token);
       localStorage.setItem('userData', JSON.stringify(res.userData));
-      window.location.assign("/user_home");
+      if (next === '') {
+        window.location.assign('/user_home');
+      } else {
+        window.location.assign(next);
+      }
     },
     error: function() {
       document.getElementById('inputUsername').value = '';
@@ -163,10 +167,12 @@ user.getHeaders = function() {
 
 function loginRedirect() {
   if (!user.isLoggedIn()) {
-    window.location.href = '/login';
+    let next = window.location.pathname.slice(1);
+    window.location.href = '/login' + '?next=' + next;
   }
 }
 
-if (window.location.pathname !== '/login' && window.location.pathname !== '/register' && window.location.pathname !== '/' ) {
+// Do not run the loginRedirect on the public facing web pages
+if (window.location.pathname.slice(0,6) !== '/login' && window.location.pathname !== '/register' && window.location.pathname !== '/' ) {
   loginRedirect();
 }

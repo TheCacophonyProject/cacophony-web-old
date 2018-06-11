@@ -4,6 +4,8 @@ html
     title Cacophony login
     include includes/base.pug
     script(type='text/javascript', src='javascripts/login.js')
+    script(type='text/javascript').
+      var next = "!{next}";
 
   body
     include includes/navbar.pug
