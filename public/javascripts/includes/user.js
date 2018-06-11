@@ -160,3 +160,13 @@ user.getHeaders = function() {
   }
   return headers;
 };
+
+function loginRedirect() {
+  if (!user.isLoggedIn()) {
+    window.location.href = '/login';
+  }
+}
+
+if (window.location.pathname !== '/login' && window.location.pathname !== '/register' && window.location.pathname !== '/' ) {
+  loginRedirect();
+}
