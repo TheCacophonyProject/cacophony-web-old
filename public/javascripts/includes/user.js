@@ -165,19 +165,20 @@ user.getHeaders = function() {
   return headers;
 };
 
-function loginRedirect() {
+// These paths don't require that the user is logged in.
+const noAuthPaths = Object.freeze([
+  '/login',
+  '/register',
+  '/',
+])
+
+function loginRedirect(pathname) {
+  if (noAuthPaths.includes(pathname)) {
+    return;
+  }
   if (!user.isLoggedIn()) {
-    let next = window.location.pathname.slice(1);
-    window.location.href = '/login' + '?next=' + next;
+    window.location.href = '/login' + '?next=' + encodeURIComponent(pathname);
   }
 }
 
-// Do not run the loginRedirect on the public facing web pages
-if (window.location.pathname.slice(0,6) !== '/login' && window.location.pathname !== '/register' && window.location.pathname !== '/' ) {
-  loginRedirect();
-}
-
-// Skip the login page if already logged in
-if (window.location.pathname === '/login' && user.isLoggedIn()) {
-  window.location.href = '/user_home';
-}
+loginRedirect(window.location.pathname);
