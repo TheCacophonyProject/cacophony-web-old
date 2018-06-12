@@ -170,7 +170,7 @@ const noAuthPaths = Object.freeze([
   '/login',
   '/register',
   '/',
-])
+]);
 
 function loginRedirect(pathname) {
   if (noAuthPaths.includes(pathname)) {
