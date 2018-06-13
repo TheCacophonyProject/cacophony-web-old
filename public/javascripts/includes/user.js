@@ -31,7 +31,10 @@ user.login = function(password, username) {
   });
 };
 
-user.register = function(passEle1, passEle2, usernameEle) {
+user.register = function(passEle1, passEle2, usernameEle, event) {
+
+  // Prevent page refresh when submit button pushed
+  event.preventDefault();
 
   var password1 = passEle1.value;
   var password2 = passEle2.value;
