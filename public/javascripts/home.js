@@ -3,8 +3,8 @@
 
 window.onload = function() {
   document.getElementById('username').innerText = user.getAttr("username");
-  document.getElementById('first-name').innerText = user.getAttr("firstname");
-  document.getElementById('last-name').innerText = user.getAttr("lastname");
+  document.getElementById('first-name').innerText = user.getAttr("firstName");
+  document.getElementById('last-name').innerText = user.getAttr("lastName");
   document.getElementById('email').innerText = user.getAttr("email");
   document.getElementById('groups').innerText = getGroupsListText();
 };
