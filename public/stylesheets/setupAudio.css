@@ -1,0 +1,87 @@
+.schedule-buttons input, .add-another-combo, .combo-timing .delete {
+    border: 1px solid lightgrey;
+    padding: 5px 5px;
+    max-height: 80px;
+    max-width: 80px;
+}
+
+.schedule-devices {
+    padding: 0 0 15px 0;
+}
+
+.schedule-devices img.add {
+    border: 1px solid lightgrey;
+    padding: 0px 0px;
+    max-height: 40px;
+    max-width: 40px;
+    margin: 10px 15px 0 0;
+}
+
+.schedule-devices .delete {
+    padding: 3px;
+}
+
+.soundcombo {
+    border: 1px solid lightgray;
+}
+
+input.delete {
+    padding: 0 0 0 3px;
+    margin-top: -5px;
+    max-height: 32px;
+    max-width: 32px;
+}
+
+img {
+    padding: 0;
+}
+
+h3 {
+    margin-bottom: 15px;
+}
+
+.cacophony-page .no-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.combo-timing {
+    padding-bottom: 15px;
+}
+
+.schedule-combo {
+    padding: 10px 0 5px 0;
+    margin: 20px 0;
+    border-top: 2px solid grey;
+}
+
+.schedule-combo:last-of-type {
+    border-bottom: 2px solid grey;
+}
+
+.right {
+    float: right;
+}
+
+.description input, .control div {
+    margin-left: -15px;
+}
+
+.control input {
+    width: 30px;
+    margin-left: 7px;
+    margin-right: 3px;
+    padding-left: 4px;
+}
+
+h3.schedule-title {
+    padding-top: 15px;
+}
+
+.centre {
+    text-align: center;
+}
+
+.or_label {
+    padding: 30px;
+}

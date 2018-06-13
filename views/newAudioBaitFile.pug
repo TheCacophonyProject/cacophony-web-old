@@ -1,0 +1,42 @@
+doctype html
+html
+  head
+    title Upload new audio bait file
+    include includes/base.pug
+    script(src="javascripts/includes/jquery.serializejson.min.js")
+    script(type='text/javascript', src='javascripts/newAudioBaitFile.js')
+
+  body
+    include includes/navbar.pug
+
+    .cacophony-page.max-width
+      h1#Setup.col-xs-12 Upload new audio bait
+
+      form.col-xs-12.col-sm-6(onsubmit="return false;")
+        .form-group.row
+          label.col-xs-5 Animal
+          input.col-xs-7(name="animal", value="")
+
+        .form-group.row
+          label.col-xs-5 Short description
+          input.col-xs-7(name="sound", value="")
+
+        .form-group.row
+          label.col-xs-5 Long description
+          input.col-xs-7(name="description", value="")
+
+        .form-group.row
+          label.col-xs-5 Owner/copyright
+          input.col-xs-7(name="source", value="")
+
+        .form-group.row
+          label.col-xs-5 Audio file
+          input.col.xs-7(type="file", name="Audio bait file", id="audio_bait_file")
+
+        .form-group.row
+          label.col-xs-5 Cacophony name
+          input.col-xs-7(name="name", value="", readonly)
+
+        input.right.upload-button(type="button", value="Upload file")
+
+

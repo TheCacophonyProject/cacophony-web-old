@@ -6795,3 +6795,11 @@ button.close {
     display: none !important;
   }
 }
+
+.cacophony-page {
+  padding: 0px 20px;
+}
+
+.cacophony-page.max-width {
+  max-width: 1024px;
+}

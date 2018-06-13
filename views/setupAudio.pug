@@ -1,0 +1,120 @@
+
+doctype html
+html
+  head
+    title Setup Audio Lure Schedule
+    include includes/base.pug
+    link(href='/stylesheets/setupAudio.css', rel='stylesheet', media='screen')
+    script(src="javascripts/includes/jquery.serializejson.min.js")
+    script(type='text/javascript', src='javascripts/includes/templateUtil.js')
+    script(type='text/javascript', src='javascripts/includes/timeUtil.js')
+    script(src="javascripts/setupAudio.js")
+
+  body
+    include includes/navbar.pug
+
+    .cacophony-page.max-width
+      h1.col-xs-12.col-sm-9.no-padding Setup Audio Bait Schedule
+
+      #choose-action
+
+        div#loading-message.col-xs-12.no-padding Loading your devices...
+
+        #choose-device.hide.row.col-xs-12
+          label.col-xs-6 Choose Device
+          select#deviceSelect.col-xs-6(onchange="getSchedule()")
+            option(value="select") &lt;select your device&gt;
+          span.col-xs-12 (To edit an existing schedule choose a device on that schedule)
+
+        label.or_label.centre.row.col-xs-12 or
+
+        input.row.col-xs-offset-3.col-xs-6(type='button', value='Upload new sound', onClick="window.location='/new_audio'")
+
+      form#audio-schedule.hide(onsubmit="return false;")
+        div.schedule-buttons.right
+          input.save(type="image", title="Save", src='/images/save.png')
+        div.clearfix
+
+        div.schedule-devices
+          div.row
+            h3.col-xs-9 Devices
+            img.add.right(type="image", title="Add device", src='/images/plus.png')
+          div.devices
+
+        h3.schedule-title.col-xs-12.no-padding Schedule
+
+        div.description.row.form-group
+          label.col-xs-3 Description
+          input.col-xs-9(name="description", value="")
+
+        div.control.row.form-group
+          label.col-xs-3 Play sounds
+          div.col-xs-9.no-padding
+            span for
+            input(name="playNights:number", value=3)
+            span nights then have
+            input(name="controlNights:number", value=2)
+            span nights without sound (as a control)
+
+        .combos
+
+        img.add-another-combo(type='image', title='Add another combo', src='/images/plus.png')
+
+        div.schedule-buttons.right
+          input.save(type="image", title="Save", src='/images/save.png')
+
+    #schedule-combo-template.hide
+      .schedule-combo.row
+        .combo-timing.col-xs-12.col-sm-6.no-padding
+          img.delete.col-xs-2.no-padding(type="image", title="Delete", src='/images/delete.png')
+
+          div.time.col-xs-10
+            h4 Timing
+
+            .form-group.row
+              label.col-xs-4 Play every
+              input.col-xs-7(F="[every]:asWait", value="10 mins")
+
+            .form-group.row
+              label.col-xs-4 from time
+              input.col-xs-7(name="[from]:timeOfDay", value="7:30pm")
+
+            .form-group.row
+              label.col-xs-4 until
+              input.col-xs-7(name="[until]:timeOfDay", value="9:30pm")
+
+        .soundcombo.col-xs-12.col-sm-6
+          h4 Sounds
+
+          .sounds
+
+          .form-group.row.col-xs-4
+            input.add-another-button(type='button', value='Add another sound')
+
+
+      #sound-template.hide
+        .sound
+          .wait.form-group.row
+            label.col-xs-4 then wait
+            input.col-xs-7(name="[waits][]:asWait", value="10 mins")
+          .form-group.row
+            label.play-sound.col-xs-4 then play sound
+            select.sound-file.col-xs-7(name="[sounds][]")
+              option(value="same") same sound
+              option(value="random") random sound
+            input.delete.col-xs-1(type="image", title="Delete sound", src='/images/delete.png')
+          .form-group.row
+            label.col-xs-4 at volume
+            input.col-xs-7(name="[volumes][]:number", value="10")
+          div.clearfix
+
+      #device-template.hide
+        .device.row.col-xs-12.col-sm-6
+          input.delete.col-xs-2(type="image", title="Remove device", src='/images/delete.png')
+          label.col-xs-10
+
+      #additional-device-template.hide
+        .additional-device.row.col-xs-12.col-sm-6
+          input.delete.col-xs-1(type="image", title="Remove device", src='/images/delete.png')
+          select.cml-xs-11
+            option &lt;select your device&gt;

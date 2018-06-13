@@ -41,6 +41,7 @@ module.exports = function(app) {
   app.get('/login', function(req, res) {
     res.render('login.pug', {
       'api': config.server.api,
+      'next': req.query.next
     });
   });
 
@@ -72,6 +73,18 @@ module.exports = function(app) {
 
   app.get('/devices', (request, response) => {
     response.render('devices.pug', {
+      'api': config.server.api,
+    });
+  });
+
+  app.get('/setup_audio', (request, response) => {
+    response.render('setupAudio.pug', {
+      'api': config.server.api,
+    });
+  });
+
+  app.get('/new_audio', (request, response) => {
+    response.render('newAudioBaitFile.pug', {
       'api': config.server.api,
     });
   });

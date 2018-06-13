@@ -1,9 +1,13 @@
 nav.navbar.navbar-default
   .navbar-header
-    a.navbar-brand(href='/') 
-      img(src='/images/titlebar.png') 
-  .navbar-collapse.collapse
-    ul.nav.navbar-nav#navbar-links
+    a.navbar-brand(href='/')
+      img(src='/images/titlebar.png')
+    button.navbar-toggle(type='button' data-toggle='collapse' data-target='#navbar')
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+  .navbar-collapse.collapse#navbar
+    ul.nav.navbar-nav#navbar-links(style='display: none;')
       li#navbar-home
         a(href='/user_home') Home
       li#navbar-audio
@@ -14,6 +18,8 @@ nav.navbar.navbar-default
         a(href='/groups') Groups
       li#navbar-devices
         a(href='/devices') Devices
+      li#navbar-devices
+        a(href='/setup_audio') Audio bait
     // Shown when the user is logged in.
     ul#navbar-user-details.nav.navbar-nav.navbar-right(style="display: none;")
       li
