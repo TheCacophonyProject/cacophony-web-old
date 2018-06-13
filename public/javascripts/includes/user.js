@@ -40,10 +40,11 @@ user.register = function(passEle1, passEle2, usernameEle, event) {
   var password2 = passEle2.value;
   var username = usernameEle.value;
 
-  if (username.length < 5) {
+  const usernameLength = 5;
+  if (username.length < usernameLength) {
     passEle1.value = "";
     passEle2.value = "";
-    displayAlert('Please choose a username that is at least 5 characters long.');
+    displayAlert(`Please choose a username that is at least ${usernameLength} characters long.`);
     return;
   }
   if (password1.length < 8) {
