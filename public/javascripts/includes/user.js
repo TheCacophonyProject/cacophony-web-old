@@ -43,7 +43,7 @@ user.register = function(passEle1, passEle2, usernameEle, event) {
   if (username.length < 5) {
     passEle1.value = "";
     passEle2.value = "";
-    displayAlert('Username not long enough.');
+    displayAlert('Please choose a username that is at least 5 characters long.');
     return;
   }
   if (password1.length < 8) {
