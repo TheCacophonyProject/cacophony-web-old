@@ -3,6 +3,7 @@
 
 window.onload = function() {
   document.getElementById('username').innerText = user.getAttr("username");
+  document.getElementById('greeting').innerText = 'Kia ora ' + (user.getAttr('firstName') || user.getAttr('username'));
   hideBlankUserFields('firstName');
   hideBlankUserFields('lastName');
   hideBlankUserFields('email');

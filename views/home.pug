@@ -10,8 +10,7 @@ html
     include includes/navbar.pug
     div.hero
     div(class='container bs-docs-container')
-      h2.
-        Hello User!
+      h2#greeting.
       dt.
         Username
       dd#username.
@@ -25,7 +24,7 @@ html
         Email
       dd#email.
       dt.
-        Groups
+        Your Groups
       dd#groups.
 
-      input#new-group(type='button', value='New Group', onclick='newGroup()')
+      input.btn#new-group(type='button', value='New Group', onclick='newGroup()')
