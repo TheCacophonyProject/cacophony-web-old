@@ -1,4 +1,4 @@
-/* global api, Promise */
+/* global api, Promise, next */
 /* exported user */
 
 var user = {};
@@ -17,7 +17,11 @@ user.login = function(password, username) {
     success: function(res) {
       localStorage.setItem('JWT', res.token);
       localStorage.setItem('userData', JSON.stringify(res.userData));
-      window.location.assign("/user_home");
+      if (next === '') {
+        window.location.assign('/user_home');
+      } else {
+        window.location.assign(next);
+      }
     },
     error: function() {
       document.getElementById('inputUsername').value = '';
@@ -180,3 +184,20 @@ function displayAlert(alertText) {
   let container = document.getElementsByClassName('form-horizontal');
   container[0].appendChild(div);
 }
+
+const noAuthPaths = Object.freeze([
+  '/login',
+  '/register',
+  '/',
+]);
+
+function loginRedirect(pathname) {
+  if (noAuthPaths.includes(pathname)) {
+    return;
+  }
+  if (!user.isLoggedIn()) {
+    window.location.href = '/login' + '?next=' + encodeURIComponent(pathname);
+  }
+}
+
+loginRedirect(window.location.pathname);

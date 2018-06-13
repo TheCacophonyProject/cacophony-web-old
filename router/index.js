@@ -41,6 +41,7 @@ module.exports = function(app) {
   app.get('/login', function(req, res) {
     res.render('login.pug', {
       'api': config.server.api,
+      'next': req.query.next
     });
   });
 
