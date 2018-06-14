@@ -11,6 +11,10 @@ try {
 
 var log = require('./logging');
 
+if (config.server.api.slice(-1) === '/') {
+  config.server.api = config.server.api.slice(0,-1);
+}
+
 log.info('Starting Full Noise.');
 var app = express();
 app.set('views', path.join(__dirname, 'views'));
