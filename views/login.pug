@@ -6,9 +6,11 @@ html
     script(type='text/javascript', src='javascripts/login.js')
     script(type='text/javascript').
       var next = "!{next}";
+    link(href='/stylesheets/heroImage.css', rel='stylesheet', media='screen')
 
   body
     include includes/navbar.pug
+    div.hero
     div(class='container bs-docs-container')
       h2.
         Login

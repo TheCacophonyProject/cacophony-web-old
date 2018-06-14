@@ -28,12 +28,6 @@ module.exports = function(app) {
     });
   });
 
-  app.get('/user_home', function(req, res) {
-    res.render('userHome.pug', {
-      'api': config.server.api,
-    });
-  });
-
   app.get('/ping', function(req, res) {
     res.end("pong...");
   });

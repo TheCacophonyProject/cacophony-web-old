@@ -18,7 +18,7 @@ user.login = function(password, username) {
       localStorage.setItem('JWT', res.token);
       localStorage.setItem('userData', JSON.stringify(res.userData));
       if (next === '') {
-        window.location.assign('/user_home');
+        window.location.assign('/');
       } else {
         window.location.assign(next);
       }
@@ -67,7 +67,7 @@ user.register = function(passEle1, passEle2, usernameEle, event) {
     success: function(res) {
       localStorage.setItem('userData', JSON.stringify(res.userData));
       localStorage.setItem('JWT', res.token);
-      window.location.assign("/user_home");
+      window.location.assign("/");
     },
     error: function(res) {
       console.log("Error");
@@ -113,7 +113,7 @@ user.updateUserData = function() {
     headers: { 'Authorization': user.getJWT() },
     success: function(res) {
       localStorage.setItem('userData', JSON.stringify(res.userData));
-      window.location.assign('/user_home');
+      window.location.assign('/');
     },
     error: function(err) {
       console.log(err);
@@ -191,8 +191,7 @@ function displayAlert(alertText) {
 
 const noAuthPaths = Object.freeze([
   '/login',
-  '/register',
-  '/',
+  '/register'
 ]);
 
 function loginRedirect(pathname) {

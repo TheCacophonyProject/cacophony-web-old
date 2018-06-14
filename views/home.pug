@@ -1,11 +1,30 @@
 doctype html
 html
   head
-    title Cacophony Project
+    title Home
     include includes/base.pug
+    script(type='text/javascript', src='javascripts/home.js')
+    link(href='/stylesheets/heroImage.css', rel='stylesheet', media='screen')
 
   body
     include includes/navbar.pug
-  div(class='container bs-docs-container')
-    h2.
-      Cacophony Project
+    div.hero
+    div(class='container bs-docs-container')
+      h2#greeting.
+      dt.
+        Username
+      dd#username.
+      dt#firstName-label.
+        First name
+      dd#firstName.
+      dt#lastName-label.
+        Last name
+      dd#lastName.
+      dt#email-label.
+        Email
+      dd#email.
+      dt.
+        Your Groups
+      dd#groups.
+
+      input.btn#new-group(type='button', value='New Group', onclick='newGroup()')
