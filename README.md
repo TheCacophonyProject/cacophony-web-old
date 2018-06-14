@@ -4,7 +4,8 @@ This is a web interface for querying with and interacting with Cacophony Project
 
 ## Setup  
 
-You will need node and npm installed and the URL of the Full_Noise server you will use.
+You will need Node and npm installed and the URL of the Cacophony API
+server you will use.
 
 * `git clone https://github.com/TheCacophonyProject/cacophony-web.git`
 * `cd cacophony-web`

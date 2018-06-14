@@ -2,8 +2,12 @@ nav.navbar.navbar-default
   .navbar-header
     a.navbar-brand(href='/')
       img(src='/images/titlebar.png')
-  .navbar-collapse.collapse
-    ul.nav.navbar-nav#navbar-links
+    button.navbar-toggle(type='button' data-toggle='collapse' data-target='#navbar')
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+  .navbar-collapse.collapse#navbar
+    ul.nav.navbar-nav#navbar-links(style='display: none;')
       li#navbar-home
         a(href='/user_home') Home
       li#navbar-audio
