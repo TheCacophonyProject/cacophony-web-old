@@ -60,7 +60,7 @@ templateUtil.populateElements = function(parent, values) {
     parent.find("[name]").each(function() {
       var names = templateUtil.splitInputNameIntoKeysArray(this);
       if (names.length === 1 ) {
-        if (values[names[0]]) {
+        if (names[0] in values) {
           templateUtil.setValue($(this), values[names[0]]);
         }
       }
@@ -80,7 +80,7 @@ templateUtil.populateFromArray = function(parent, values, counter) {
       var names = templateUtil.splitInputNameIntoKeysArray(this);
       if (names.length === 2 && names[1] === "" ) {
         var fieldname = names[0];
-        if (values[fieldname] && values[fieldname].length > counter) {
+        if (fieldname in values && values[fieldname].length > counter) {
           templateUtil.setValue(this, values[fieldname][counter]);
         }
       }
