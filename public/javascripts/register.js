@@ -6,7 +6,7 @@ window.onload = function() {
   document.getElementById('passwordRetype').addEventListener('input', passwordCheck);
 };
 
-function register() {
+function register(event) {
   user.register(
     document.getElementById("password"),
     document.getElementById("passwordRetype"),
