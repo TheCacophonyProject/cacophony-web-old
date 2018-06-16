@@ -67,6 +67,12 @@ timeUtil.addToPrintedTime = function(timeString, value, unit) {
     unit = unit + "s";
   }
 
+  console.log('value: ', value, ' unit: ', unit);
+
+  if (value === 0 && unit === 'sec') {
+    timeString = value + " " + unit;
+  }
+
   if (value > 0) {
     let newString = value + " "  + unit;
     if (timeString === "") {
