@@ -41,6 +41,7 @@ window.onload = function() {
     }
   });
 
+  // Add event listeners for duration slider
   let durationElement = document.getElementById('duration');
   let durationGhostElement = findGhost('duration');
   durationElement.addEventListener('change', addDurationFromSlider);
@@ -48,6 +49,11 @@ window.onload = function() {
   durationElement.addEventListener('input', updateDurationLabels);
   durationGhostElement.addEventListener('input', updateDurationLabels);
 
+  // Add event listeners for date selection
+  let fromDateElement = document.getElementById('fromDate');
+  let toDateElement = document.getElementById('toDate');
+  fromDateElement.addEventListener('input', addFromDate);
+  toDateElement.addEventListener('input', addToDate);
 };
 
 // Adds a Sequelize condition to the query.
@@ -117,24 +123,32 @@ function fromConditions() {
 }
 
 //===============ADD CONDITIONS==================
-function addBeforeDate() {
-  var date = document.getElementById('before-date').value;
-  addCondition({ recordingDateTime: { "$lt": date} });
+function addToDate() {
+  // Remove any existing toDate conditions
+  for (let i in conditions) {
+    if (conditions[i].recordingDateTime.$lt !== undefined) {
+      deleteCondition(i);
+    }
+  }
+  // Add new condition
+  var date = document.getElementById('toDate').value;
+  if (date != "") {
+    addCondition({ recordingDateTime: { "$lt": date} });
+  }
 }
 
-function addAfterDate() {
-  var date = document.getElementById('after-date').value;
-  addCondition({ recordingDateTime: { "$gt": date } });
-}
-
-function addLongerThan() {
-  var duration = document.getElementById('longer-than').value;
-  addCondition({ duration: { "$gt": duration } });
-}
-
-function addShorterThan() {
-  var duration = document.getElementById('shorter-than').value;
-  addCondition({ duration: { "$lt": duration } });
+function addFromDate() {
+  // Remove any existing fromDate conditions
+  for (let i in conditions) {
+    if (conditions[i].recordingDateTime.$gt !== undefined) {
+      deleteCondition(i);
+    }
+  }
+  // Add new condition
+  var date = document.getElementById('fromDate').value;
+  if (date != "") {
+    addCondition({ recordingDateTime: { "$gt": date } });
+  }
 }
 
 var durationMax = 100;
@@ -172,6 +186,7 @@ function updateDurationLabels() {
   durationGhostElement.style.setProperty("--high", 100 * durationHigh / durationMax - 1 + "%");
   // Update max value
   document.getElementById('durationMax').innerHTML = durationMax;
+  document.getElementById('durationMaxChange').style.display = 'inline';
 }
 
 function findGhost(id) {

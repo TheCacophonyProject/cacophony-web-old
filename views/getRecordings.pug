@@ -10,97 +10,96 @@ html
 
   body
     include includes/navbar.pug
-
-    .col-md-1
-    .col-md-3
-      h4.
-        Make new condition
-      .form-group.row
-        label.col-md-4 Before date
-        input#before-date(type='date').col-md-4
-        input(type='button', value='Add', onclick="addBeforeDate()").col-md-2
-      .form-group.row
-        label.col-md-4 After date
-        input#after-date(type='date').col-md-4
-        input(type='button', value='Add', onclick="addAfterDate()").col-md-2
-      .form-group.row
-        label.col-md-4 Longer than(s)
-        input#longer-than(type='number').col-md-4
-        input(type='button', value='Add', onclick="addLongerThan()").col-md-2
-      .form-group.row
-        label.col-md-4 Shorter than(s)
-        input#shorter-than(type='number').col-md-4
-        input(type='button', value='Add', onclick="addShorterThan()").col-md-2
-      .form-group.row
-        label.col-md-4 Duration (sec)
-        .col-md-6
-          .row
+    .container.clearfix
+      //- Heading
+      .col-xs-12
+        h4 Search Video Recordings
+      
+      //- Devices
+      .form-group.col-xs-12.col-sm-4
+        label.col-xs-5.align-right Devices
+        select.col-xs-7#deviceSelect
+          option all
+      
+      //- Tags
+      .form-group.col-xs-12.col-sm-4
+        label.col-xs-5.align-right Tags
+        select.col-xs-7#tagMode
+          option(value="any" selected) any
+          option(value="untagged") untagged only
+          option(value="tagged") tagged only
+          option(value="automatic-only") automatic only
+          option(value="human-only") manual only
+          option(value="automatic+human") both automatic & manual
+      
+      //- Duration
+      .form-group.col-xs-12.col-sm-4
+        .col-xs-5.align-right
+          label Duration (sec)
+        .col-xs-7(style="padding-right: 0; padding-left: 0;")
+          .col-xs-6(style="padding-right: 0; padding-left: 0;")
             span#durationLow 0
             span &nbsp;to&nbsp;
-            span#durationHigh 600
+            span#durationHigh max
             span &nbsp;sec
-          .row
+          .col-xs-6(style='text-align: right; font-size: small; padding-right: 0; padding-left: 0;')
+            span#durationMax &nbsp;
+            span &nbsp;
+            a(onclick='changeDurationSliderMax()')
+              i#durationMaxChange.fas.fa-angle-double-right(style="display: none; text-decoration: none;")
+          .col-xs-12(style="padding-right: 0; padding-left: 0;")
             input#duration(type='range' multiple value='0,100' onchange='addDurationFromSlider()' max='100')
-          .row
-            p(style='text-align: right; font-size: small;')
-              span#durationMax
-              span &nbsp;
-              a(onclick='changeDurationSliderMax()')
-                i#durationMaxChange.fas.fa-angle-double-right
+        
+      //- Date range
+      .form-group.col-xs-12
+        label.col-xs-5.col-sm-2.align-right From Date
+        input#fromDate.col-xs-7.col-sm-4.col-md-3.col-lg-2(type='date')
+        label.col-xs-5.col-sm-2.align-right To Date
+        input#toDate.col-xs-7.col-sm-4.col-md-3.col-lg-2(type='date')
+    
+      //- Hidden conditions information
+      .col-xs-12(style="display: none;")
+      //- .form-group.col-xs-12
+        h4.
+          Conditions (will be hidden once working!)
+        #conditions
+    
+      //- Query buttons
+      .form-group.col-xs-12.no-padding
+        .col-xs-6
+          input.btn.btn-block(type='button', value='Get all', onclick='getAll()')
+        .col-xs-6
+          input.btn.btn-block(type='button', value='Get all from conditions', onclick='fromConditions()')
+      //- Active query
+      .form-group.col-xs-12.col-md-4.no-padding
+        label.col-xs-5.align-right Active query
+        input.col-xs-5#active-query(type='text', value='{}')
+        input.col-xs-2.btn(type='button', value='Send', onclick="sendQuery()")
+      //- Count of matches
+      .form-group.col-xs-12.col-md-3
+        h5#count.text-info(style="text-align: center;")
+      //- Limit and offset
+      .form-group.col-xs-12.col-md-5.no-padding
+        label.col-xs-2.align-right Limit
+        input.col-xs-3#limit(type='number', value=100)
+        label.col-xs-2.align-right Offset
+        input.col-xs-3#offset(type='number', value=0)
+        input.col-xs-1.btn(type='button', value='<', onclick="dec()")
+        input.col-xs-1.btn(type='button', value='>', onclick="inc()")
 
-    .col-md-3
-      h4.
-        Conditions
-      #conditions
-    .col-md-4
-      h4.
-        Query
-      .form-group.row
-        label.col-sm-2 Device
-        select#deviceSelect.cml-sm-6
-          option all
-      .form-group.row
-        label.col-sm-2 Tags
-        select#tagMode.col-sm-6
-            option(value="any" selected) any
-            option(value="untagged") untagged only
-            option(value="tagged") tagged only
-            option(value="automatic-only") automatic only
-            option(value="human-only") manual only
-            option(value="automatic+human") both automatic & manual
-      .form-group.row
-        label.col-md-2 Limit
-        input#limit.col-md-2(type='number', value=100)
-      .form-group.row
-        label.col-md-2 Offset
-        input#offset.col-md-2(type='number', value=0)
-        input.col-md-1(type='button', value='<', onclick="dec()")
-        input.col-md-1(type='button', value='>', onclick="inc()")
-      .form-group.row
-        .col-md-offset-2
-          input(type='button', value='Get all', onclick='getAll()')
-          | &nbsp;
-          input(type='button', value='Get all from conditions', onclick='fromConditions()')
-      br
-      label Active query
-      input#active-query(type='text', value='{}')
-      input(type='button', value='Send', onclick="sendQuery()")
-      .h5#count.text-info
-
-
-    .col-md-1
-
-  table#results-table(class="table table-striped table-hover")
-    tr
-      th View
-      th ID
-      th Device
-      th Group
-      th Location
-      th Time
-      th Date
-      th Duration
-      th Tags
-      th Other
-      th File
-      th Raw data
+  .container-flex
+    .table-responsive
+      table#results-table(class="table table-striped table-hover")
+        tr
+          th View
+          th ID
+          th Device
+          th Group
+          th Location
+          th Time
+          th Date
+          th Duration
+          th Tags
+          th Other
+          th File
+          th Raw data
