@@ -8,7 +8,8 @@ http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 /* global api, user, Map */
 
 /* exported deleteCondition, addBeforeDate, addAfterDate,
- * addLongerThan, addShorterThan, fromConditions, inc, dec, getAll */
+ * addLongerThan, addShorterThan, fromConditions, inc, dec, getAll,
+ * addDurationFromSlider, changeDurationSliderMax */
 
 var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
@@ -39,11 +40,19 @@ window.onload = function() {
       console.log(err);
     }
   });
+
+  let durationElement = document.getElementById('duration');
+  let durationGhostElement = findGhost('duration');
+  durationElement.addEventListener('change', addDurationFromSlider);
+  durationGhostElement.addEventListener('change', addDurationFromSlider);
+  durationElement.addEventListener('input', updateDurationLabels);
+  durationGhostElement.addEventListener('input', updateDurationLabels);
+
 };
 
 // Adds a Sequelize condition to the query.
 function addCondition(sequelizeCondition) {
-  console.log('Add condition:', sequelizeCondition);
+  // console.log('Add condition:', sequelizeCondition);
   var id = nextId++;
   conditions[id] = sequelizeCondition;
   updateConditions();
@@ -51,14 +60,14 @@ function addCondition(sequelizeCondition) {
 
 // Removes a Sequelize condition with the given ID.
 function deleteCondition(id) {
-  console.log('Delete condition: ', id);
+  // console.log('Delete condition: ', id);
   delete conditions[id];
   updateConditions();
 }
 
 // Removes the display of the previous query and displays the new one.
 function updateConditions() {
-  console.log('Update conditions');
+  // console.log('Update conditions');
   // Delete display of old query.
   var conditionsElement = document.getElementById('conditions');
   conditionsElement.innerHTML = '';
@@ -126,6 +135,79 @@ function addLongerThan() {
 function addShorterThan() {
   var duration = document.getElementById('shorter-than').value;
   addCondition({ duration: { "$lt": duration } });
+}
+
+var durationMax = 100;
+
+function addDurationFromSlider() {
+  // Remove any existing duration conditions
+  for (let i in conditions) {
+    if (conditions[i].duration !== undefined) {
+      deleteCondition(i);
+    }
+  }
+
+  let durationElement = document.getElementById('duration');
+  let durationHigh = durationElement.valueHigh;
+  let durationLow = durationElement.valueLow;
+
+  // Add new duration conditions
+  addCondition({ duration: { "$lt": durationHigh } });
+  addCondition({ duration: { "$gt": durationLow } });
+
+  updateDurationLabels();
+}
+
+function updateDurationLabels() {
+  let durationGhostElement = findGhost('duration');
+  let durationElement = document.getElementById('duration');
+  let durationHigh = durationElement.valueHigh;
+  let durationLow = durationElement.valueLow;
+  let durationMax = durationElement.max;
+  // Update display underneath slider
+  document.getElementById('durationLow').innerHTML = durationLow;
+  document.getElementById('durationHigh').innerHTML = durationHigh;
+  // Update coloured slider
+  durationGhostElement.style.setProperty("--low", 100 * durationLow / durationMax + 1 + "%");
+  durationGhostElement.style.setProperty("--high", 100 * durationHigh / durationMax - 1 + "%");
+  // Update max value
+  document.getElementById('durationMax').innerHTML = durationMax;
+}
+
+function findGhost(id) {
+  // Find only the ghost element with given id
+  let allGhosts = document.querySelectorAll('.ghost');
+  for (let item of allGhosts) {
+    if (item.id === id) {
+      return item;
+    }
+  }
+}
+
+function changeDurationSliderMax() {
+  let durationElement = document.getElementById('duration');
+  let durationGhostElement = findGhost('duration');
+  let durationMaxChangeElement = document.getElementById('durationMaxChange');
+
+  let maxDurationMax = 600;
+  if (durationMax < maxDurationMax) {
+    durationMax += 100;
+  } else {
+    durationMax = 100;
+    // Change undo back to arrows
+    durationMaxChangeElement.classList.remove('fa-undo');
+    durationMaxChangeElement.classList.add('fa-angle-double-right');
+  }
+  if (durationMax === maxDurationMax) {
+    // Change arrows >> to undo
+    durationMaxChangeElement.classList.remove('fa-angle-double-right');
+    durationMaxChangeElement.classList.add('fa-undo');
+  }
+  durationElement.max = durationMax;
+  durationGhostElement.max = durationMax;
+  durationGhostElement.style.setProperty("--low", 100 * durationElement.valueLow / durationMax + 1 + "%");
+  durationGhostElement.style.setProperty("--high", 100 * durationElement.valueHigh / durationMax - 1 + "%");
+  addDurationFromSlider();
 }
 
 // Increase query offset, view next set of results.
