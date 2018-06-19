@@ -35,13 +35,18 @@ html
         label.col-md-4 Duration (sec)
         .col-md-6
           .row
-            input#duration.col-md-9(type='range' multiple value='0,100' onchange='addDurationFromSlider()')
-            input.col-md-3.btn(type='button' value='>>' onclick='changeMaxDuration()')
-          .row
             span#durationLow 0
             span &nbsp;to&nbsp;
             span#durationHigh 600
             span &nbsp;sec
+          .row
+            input#duration(type='range' multiple value='0,100' onchange='addDurationFromSlider()' max='100')
+          .row
+            p(style='text-align: right; font-size: small;')
+              span#durationMax
+              span &nbsp;
+              a(onclick='changeDurationSliderMax()')
+                i.fas.fa-angle-double-right
 
     .col-md-3
       h4.

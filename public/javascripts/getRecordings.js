@@ -9,7 +9,7 @@ http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 
 /* exported deleteCondition, addBeforeDate, addAfterDate,
  * addLongerThan, addShorterThan, fromConditions, inc, dec, getAll,
- * addDurationFromSlider, changeMaxDuration */
+ * addDurationFromSlider, changeDurationSliderMax */
 
 var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
@@ -42,17 +42,11 @@ window.onload = function() {
   });
 
   let durationElement = document.getElementById('duration');
-  // Find only the ghost element with id duration
-  // (just in case there is another multirange slider on the page)
-  let allGhosts = document.querySelectorAll('.ghost');
-  let durationGhostElement = '';
-  for (let item of allGhosts) {
-    if (item.id === 'duration') {
-      durationGhostElement = item;
-    }
-  }
-  durationElement.addEventListener('input', addDurationFromSlider);
-  durationGhostElement.addEventListener('input', addDurationFromSlider);
+  let durationGhostElement = findGhost('duration');
+  durationElement.addEventListener('change', addDurationFromSlider);
+  durationGhostElement.addEventListener('change', addDurationFromSlider);
+  durationElement.addEventListener('input', updateDurationLabels);
+  durationGhostElement.addEventListener('input', updateDurationLabels);
 
 };
 
@@ -143,9 +137,7 @@ function addShorterThan() {
   addCondition({ duration: { "$lt": duration } });
 }
 
-var durationScale = 1;
-
-
+var durationMax = 100;
 
 function addDurationFromSlider() {
   // Remove any existing duration conditions
@@ -156,54 +148,57 @@ function addDurationFromSlider() {
   }
 
   let durationElement = document.getElementById('duration');
-  // Add new duration conditions - scale as per durationScale factor
-  let durationHigh = durationElement.valueHigh * durationScale;
+  let durationHigh = durationElement.valueHigh;
+  let durationLow = durationElement.valueLow;
+
+  // Add new duration conditions
   addCondition({ duration: { "$lt": durationHigh } });
-  let durationLow = durationElement.valueLow * durationScale;
   addCondition({ duration: { "$gt": durationLow } });
 
+  updateDurationLabels();
+}
+
+function updateDurationLabels() {
+  let durationGhostElement = findGhost('duration');
+  let durationElement = document.getElementById('duration');
+  let durationHigh = durationElement.valueHigh;
+  let durationLow = durationElement.valueLow;
+  let durationMax = durationElement.max;
   // Update display underneath slider
   document.getElementById('durationLow').innerHTML = durationLow;
   document.getElementById('durationHigh').innerHTML = durationHigh;
+  // Update coloured slider
+  durationGhostElement.style.setProperty("--low", 100 * durationLow / durationMax + 1 + "%");
+  durationGhostElement.style.setProperty("--high", 100 * durationHigh / durationMax - 1 + "%");
+  // Update max value
+  document.getElementById('durationMax').innerHTML = durationMax;
 }
 
-
-function changeMaxDuration() {
-  // Adjust slider to new position
-  let durationElement = document.getElementById('duration');
-  // Find only the ghost element with id duration
-  // (just in case there is another multirange slider on the page)
+function findGhost(id) {
+  // Find only the ghost element with given id
   let allGhosts = document.querySelectorAll('.ghost');
-  let durationGhostElement = '';
   for (let item of allGhosts) {
-    if (item.id === 'duration') {
-      durationGhostElement = item;
+    if (item.id === id) {
+      return item;
     }
   }
-  let durationLow = durationElement.valueLow;
-  let durationHigh = durationElement.valueHigh;
+}
 
-  let maxScale = 6;
-  if (durationScale < maxScale) {
-    durationLow = durationLow * durationScale / (durationScale + 1);
-    durationHigh = durationHigh * durationScale / (durationScale + 1);
-    durationScale ++;
+function changeDurationSliderMax() {
+  let durationElement = document.getElementById('duration');
+  let durationGhostElement = findGhost('duration');
+
+  let maxDurationMax = 600;
+  if (durationMax < maxDurationMax) {
+    durationMax += 100;
   } else {
-    durationLow = durationLow * durationScale;
-    if (durationHigh * durationScale >= 100) {
-      durationHigh = 100;
-    } else {
-      durationHigh = durationHigh * durationScale;
-    }
-    durationScale = 1;
+    durationMax = 100;
   }
-  durationElement.valueLow = durationLow;
-  durationElement.valueHigh = durationHigh;
-  durationGhostElement.style.setProperty("--low", durationLow + 1 + "%");
-  durationGhostElement.style.setProperty("--high", durationHigh - 1 + "%");
-
-
-  addDurationFromSlider();
+  durationElement.max = durationMax;
+  durationGhostElement.max = durationMax;
+  durationGhostElement.style.setProperty("--low", 100 * durationElement.valueLow / durationMax + 1 + "%");
+  durationGhostElement.style.setProperty("--high", 100 * durationElement.valueHigh / durationMax - 1 + "%");
+  updateDurationLabels();
 }
 
 // Increase query offset, view next set of results.
