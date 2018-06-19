@@ -187,12 +187,21 @@ function findGhost(id) {
 function changeDurationSliderMax() {
   let durationElement = document.getElementById('duration');
   let durationGhostElement = findGhost('duration');
+  let durationMaxChangeElement = document.getElementById('durationMaxChange');
 
   let maxDurationMax = 600;
   if (durationMax < maxDurationMax) {
     durationMax += 100;
   } else {
     durationMax = 100;
+    // Change undo back to arrows
+    durationMaxChangeElement.classList.remove('fa-undo');
+    durationMaxChangeElement.classList.add('fa-angle-double-right');
+  }
+  if (durationMax === maxDurationMax) {
+    // Change arrows >> to undo
+    durationMaxChangeElement.classList.remove('fa-angle-double-right');
+    durationMaxChangeElement.classList.add('fa-undo');
   }
   durationElement.max = durationMax;
   durationGhostElement.max = durationMax;
