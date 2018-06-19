@@ -51,12 +51,17 @@ timeUtil.getSeconds = function(value, unit) {
 timeUtil.secondsToReadableTime = function(totalSecs) {
   let timeString = "";
 
-  let units = ["sec", "min", "hour"];
-  let timeLeft = totalSecs;
-  for (let i in units) {
-    let count = timeLeft % 60;
-    timeLeft = (timeLeft - count) / 60;
-    timeString = timeUtil.addToPrintedTime(timeString, count, units[i]);
+  if (totalSecs === 0) {
+    timeString = "0 sec";
+  } else {
+    let units = ["sec", "min", "hour"];
+    let timeLeft = totalSecs;
+    for (let i in units) {
+      let count = timeLeft % 60;
+      timeLeft = (timeLeft - count) / 60;
+      timeString = timeUtil.addToPrintedTime(timeString, count, units[i]);
+    }
+
   }
 
   return timeString;
