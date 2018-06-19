@@ -207,7 +207,7 @@ function changeDurationSliderMax() {
   durationGhostElement.max = durationMax;
   durationGhostElement.style.setProperty("--low", 100 * durationElement.valueLow / durationMax + 1 + "%");
   durationGhostElement.style.setProperty("--high", 100 * durationElement.valueHigh / durationMax - 1 + "%");
-  updateDurationLabels();
+  addDurationFromSlider();
 }
 
 // Increase query offset, view next set of results.
