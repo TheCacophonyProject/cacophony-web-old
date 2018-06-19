@@ -4,7 +4,9 @@ html
     title Get Recordings
     include includes/base.pug
     link(href='/stylesheets/getRecordings.css', rel='stylesheet', media='screen')
+    link(href='/stylesheets/multirange.css', rel='stylesheet', media='screen')
     script(type='text/javascript', src='javascripts/getRecordings.js')
+    script(type='text/javascript', src='javascripts/includes/multirange.js')
 
   body
     include includes/navbar.pug
@@ -29,6 +31,17 @@ html
         label.col-md-4 Shorter than(s)
         input#shorter-than(type='number').col-md-4
         input(type='button', value='Add', onclick="addShorterThan()").col-md-2
+      .form-group.row
+        label.col-md-4 Duration (sec)
+        .col-md-6
+          .row
+            input#duration.col-md-9(type='range' multiple value='0,100' onchange='addDurationFromSlider()')
+            input.col-md-3.btn(type='button' value='>>' onclick='changeMaxDuration()')
+          .row
+            span#durationLow 0
+            span &nbsp;to&nbsp;
+            span#durationHigh 600
+            span &nbsp;sec
 
     .col-md-3
       h4.

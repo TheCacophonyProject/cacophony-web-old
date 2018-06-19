@@ -8,7 +8,8 @@ http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 /* global api, user, Map */
 
 /* exported deleteCondition, addBeforeDate, addAfterDate,
- * addLongerThan, addShorterThan, fromConditions, inc, dec, getAll */
+ * addLongerThan, addShorterThan, fromConditions, inc, dec, getAll,
+ * addDurationFromSlider, changeMaxDuration */
 
 var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
@@ -39,11 +40,25 @@ window.onload = function() {
       console.log(err);
     }
   });
+
+  let durationElement = document.getElementById('duration');
+  // Find only the ghost element with id duration
+  // (just in case there is another multirange slider on the page)
+  let allGhosts = document.querySelectorAll('.ghost');
+  let durationGhostElement = '';
+  for (let item of allGhosts) {
+    if (item.id === 'duration') {
+      durationGhostElement = item;
+    }
+  }
+  durationElement.addEventListener('input', addDurationFromSlider);
+  durationGhostElement.addEventListener('input', addDurationFromSlider);
+
 };
 
 // Adds a Sequelize condition to the query.
 function addCondition(sequelizeCondition) {
-  console.log('Add condition:', sequelizeCondition);
+  // console.log('Add condition:', sequelizeCondition);
   var id = nextId++;
   conditions[id] = sequelizeCondition;
   updateConditions();
@@ -51,14 +66,14 @@ function addCondition(sequelizeCondition) {
 
 // Removes a Sequelize condition with the given ID.
 function deleteCondition(id) {
-  console.log('Delete condition: ', id);
+  // console.log('Delete condition: ', id);
   delete conditions[id];
   updateConditions();
 }
 
 // Removes the display of the previous query and displays the new one.
 function updateConditions() {
-  console.log('Update conditions');
+  // console.log('Update conditions');
   // Delete display of old query.
   var conditionsElement = document.getElementById('conditions');
   conditionsElement.innerHTML = '';
@@ -126,6 +141,69 @@ function addLongerThan() {
 function addShorterThan() {
   var duration = document.getElementById('shorter-than').value;
   addCondition({ duration: { "$lt": duration } });
+}
+
+var durationScale = 1;
+
+
+
+function addDurationFromSlider() {
+  // Remove any existing duration conditions
+  for (let i in conditions) {
+    if (conditions[i].duration !== undefined) {
+      deleteCondition(i);
+    }
+  }
+
+  let durationElement = document.getElementById('duration');
+  // Add new duration conditions - scale as per durationScale factor
+  let durationHigh = durationElement.valueHigh * durationScale;
+  addCondition({ duration: { "$lt": durationHigh } });
+  let durationLow = durationElement.valueLow * durationScale;
+  addCondition({ duration: { "$gt": durationLow } });
+
+  // Update display underneath slider
+  document.getElementById('durationLow').innerHTML = durationLow;
+  document.getElementById('durationHigh').innerHTML = durationHigh;
+}
+
+
+function changeMaxDuration() {
+  // Adjust slider to new position
+  let durationElement = document.getElementById('duration');
+  // Find only the ghost element with id duration
+  // (just in case there is another multirange slider on the page)
+  let allGhosts = document.querySelectorAll('.ghost');
+  let durationGhostElement = '';
+  for (let item of allGhosts) {
+    if (item.id === 'duration') {
+      durationGhostElement = item;
+    }
+  }
+  let durationLow = durationElement.valueLow;
+  let durationHigh = durationElement.valueHigh;
+
+  let maxScale = 6;
+  if (durationScale < maxScale) {
+    durationLow = durationLow * durationScale / (durationScale + 1);
+    durationHigh = durationHigh * durationScale / (durationScale + 1);
+    durationScale ++;
+  } else {
+    durationLow = durationLow * durationScale;
+    if (durationHigh * durationScale >= 100) {
+      durationHigh = 100;
+    } else {
+      durationHigh = durationHigh * durationScale;
+    }
+    durationScale = 1;
+  }
+  durationElement.valueLow = durationLow;
+  durationElement.valueHigh = durationHigh;
+  durationGhostElement.style.setProperty("--low", durationLow + 1 + "%");
+  durationGhostElement.style.setProperty("--high", durationHigh - 1 + "%");
+
+
+  addDurationFromSlider();
 }
 
 // Increase query offset, view next set of results.
