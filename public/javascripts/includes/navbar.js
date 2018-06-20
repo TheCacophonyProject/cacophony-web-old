@@ -17,6 +17,8 @@ if (user.isLoggedIn()) {
 // Changes the navbar to show what page is open.
 for (var i in document.getElementById('navbar-links').children) {
   var link = document.getElementById('navbar-links').children[i];
-  if (link.tagName == "LI" && link.children[0].href == window.location)
-  {link.setAttribute('class', 'active');}
+  console.log(link);
+  if (link.tagName == "A" && link.href == window.location) {
+    link.setAttribute('class', 'active');
+  }
 }

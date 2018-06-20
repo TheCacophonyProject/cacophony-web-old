@@ -1,25 +1,16 @@
-nav.navbar.navbar-default
-  .navbar-header
-    a.navbar-brand(href='/')
-      img(src='/images/titlebar.png')
-    button.navbar-toggle(type='button' data-toggle='collapse' data-target='#navbar')
-      span.icon-bar
-      span.icon-bar
-      span.icon-bar
+nav.navbar.navbar-light.navbar-expand-md.bg-light
+  a.navbar-brand(href='/')
+    img(src='/images/titlebar.png')
+  button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar')
+    span.navbar-toggler-icon
   .navbar-collapse.collapse#navbar
-    ul.nav.navbar-nav#navbar-links(style='display: none;')
-      li#navbar-home
-        a(href='/') Home
-      li#navbar-audio
-        a(href='/get_audio_recordings') Audio
-      li#navbar-recordings
-        a(href='/get_recordings') Recordings
-      li#navbar-groups
-        a(href='/groups') Groups
-      li#navbar-devices
-        a(href='/devices') Devices
-      li#navbar-devices
-        a(href='/setup_audio') Audio bait
+    .navbar-nav#navbar-links(style='display: none;')
+      a.nav-item.nav-link#navbar-home(href='/') Home
+      a.nav-item.nav-link#navbar-audio(href='/get_audio_recordings') Audio
+      a.nav-item.nav-link#navbar-recordings(href='/get_recordings') Recordings
+      a.nav-item.nav-link#navbar-groups(href='/groups') Groups
+      a.nav-item.nav-link#navbar-devices(href='/devices') Devices
+      a.nav-item.nav-link#navbar-devices(href='/setup_audio') Audio bait
     // Shown when the user is logged in.
     ul#navbar-user-details.nav.navbar-nav.navbar-right(style="display: none;")
       li
