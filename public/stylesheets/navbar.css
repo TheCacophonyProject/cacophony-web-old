@@ -3,3 +3,8 @@
   border-bottom: 1px solid #367F0D;
   border-radius: 4px;
 }
+
+.active {
+  background-color: #e7e7e7;
+  color: #555;
+}
