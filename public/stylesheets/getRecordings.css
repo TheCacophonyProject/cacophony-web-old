@@ -1,18 +1,5 @@
-/* .form-group {
-  margin-bottom: 20px;
-} */
-
 input[type="range"] {
   width: 100%;
   margin-left: 0;
   margin-right: 0;
-}
-
-.align-right {
-  text-align: right;
-}
-
-.no-padding {
-  padding-left: 0;
-  padding-right: 0;
 }

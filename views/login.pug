@@ -11,22 +11,18 @@ html
   body
     include includes/navbar.pug
     div.hero
-    div(class='container bs-docs-container')
-      h2.
-        Login
-      form#login-form.form-horizontal
+    div.container.col-md-6.col-lg-5
+      h2 Login
+      form#login-form
         .form-group
-          label.col-sm-2 Username
-          .col-sm-4
-            input.form-control#inputUsername(type='text' autofocus)
+          label Username
+          input.form-control#inputUsername(type='text' autofocus)
               
         .form-group
-          label.col-sm-2 Password
-          .col-sm-4
-            input.form-control#inputPassword(type='password')
+          label Password
+          input.form-control#inputPassword(type='password')
         
         .form-group
-          .col-sm-2
-            input.btn#login(type='button', value='Sign in')
+          input.btn#login(type='button', value='Sign in')
             
     include includes/footer.pug

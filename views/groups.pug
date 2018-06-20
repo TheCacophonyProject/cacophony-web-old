@@ -3,45 +3,55 @@ html
   head
     title Groups
     include includes/base.pug
-    link(href='/stylesheets/groups.css', rel='stylesheet', media='screen')
     script(type='text/javascript', src='/javascripts/groups.js')
+  
   body
     include includes/navbar.pug
 
-    h2#group-title Group
+    .container
+      .row
+        .col-12
+          h2#group-title Group
 
-    #groups
-      h4 Groups
-      table.table.table-striped#groups-table
-        tr
-          th ID
-          th Name
-          th Admin
+        .col-12.col-sm-4#groups
+          h4 Groups
+          table.table.table-striped#groups-table
+            tr
+              th ID
+              th Name
+              th Admin
 
-    #users
-      h4 Users
-      table.table.table-striped#users-table
-        tr
-          th Username
-          th Admin
-          
-    #devices
-      h4 Devices
-      table.table.table-striped#devices-table
-        tr
-          th Devicename
+        .col-12.col-sm-4#users
+          h4 Users
+          table.table.table-striped#users-table
+            tr
+              th Username
+              th Admin
+              
+        .col-12.col-sm-4#devices
+          h4 Devices
+          table.table.table-striped#devices-table
+            tr
+              th Devicename
 
-    #group-admin
-      h4 Group Admin
-      .input-group
-        lable Add user:
-        input#add-user-username(placeholder='username')
-        lable Admin:
-        input#add-user-as-admin(type='checkbox')
-        input#add-user-to-group(type='button', value='Add', onClick='addUserToGroupButton()')
-      .input-group
-        lable Remove user:
-        input#remove-user-username(placeholder='username')
-        input#remove-user(type='button', value='Remove', onclick='removeUserFromGroupButton()')
+        .col-12#group-admin
+          h4 Group Admin
+          .row
+            .col-sm-6
+              .form-group.form-row
+                .col-8
+                  label Add user:
+                  input.form-control#add-user-username(placeholder='username')
+                .col-4
+                  label Admin:
+                  input.form-check#add-user-as-admin(type='checkbox')
+              .form-group
+                input.btn.btn-block#add-user-to-group(type='button', value='Add', onClick='addUserToGroupButton()')
+            .col-sm-6
+              .form-group
+                label Remove user:
+                input.form-control#remove-user-username(placeholder='username')
+              .form-group
+                input.btn.btn-block#remove-user(type='button', value='Remove', onclick='removeUserFromGroupButton()')
 
     include includes/footer.pug
