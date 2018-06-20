@@ -4,7 +4,7 @@ nav.navbar.navbar-light.navbar-expand-md.bg-light
   button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar')
     span.navbar-toggler-icon
   .navbar-collapse.collapse#navbar
-    .navbar-nav#navbar-links(style='display: none;')
+    .nav.navbar-nav#navbar-links(style='display: none;')
       a.nav-item.nav-link#navbar-home(href='/') Home
       a.nav-item.nav-link#navbar-audio(href='/get_audio_recordings') Audio
       a.nav-item.nav-link#navbar-recordings(href='/get_recordings') Recordings
@@ -12,16 +12,12 @@ nav.navbar.navbar-light.navbar-expand-md.bg-light
       a.nav-item.nav-link#navbar-devices(href='/devices') Devices
       a.nav-item.nav-link#navbar-devices(href='/setup_audio') Audio bait
     // Shown when the user is logged in.
-    ul#navbar-user-details.nav.navbar-nav.navbar-right(style="display: none;")
-      li
-        a#navbar-hello-user User
-      li
-        a#navbar-logout Logout
+    .nav.nvbar-nav.ml-auto#navbar-user-details(style="display: none;")
+      a.nav-item.nav-link#navbar-hello-user User
+      a.nav-item.nav-link#navbar-logout Logout
     // Shown when the user is not logged in.
-    ul#navbar-login.nav.navbar-nav.navbar-right(style="display: none;")
-      li
-        a(href='/login') Login
-      li
-        a(href='/register') Register
+    .nav.navbar-nav.ml-auto#navbar-login(style="display: none;")
+      a.nav-item.nav-link(href='/login') Login
+      a.nav-item.nav-link(href='/register') Register
 
 script(type='text/javascript', src='/javascripts/includes/navbar.js')
