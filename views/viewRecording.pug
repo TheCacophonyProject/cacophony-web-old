@@ -3,13 +3,14 @@ html
   head
     title View Recording
     include includes/base.pug
+    include includes/bootstrap3.pug
     script(type'text/javascript').
       var id = !{id};
     script(type='text/javascript', src='/javascripts/viewRecording.js')
     link(href='/stylesheets/videoRecording.css', rel='stylesheet', media='screen')
 
   body.view-recordings-page
-    include includes/navbar.pug
+    include includes/navbar-bootstrap3.pug
 
     .container.view-recording
       .div.col-12.col-lg-8
@@ -66,5 +67,3 @@ html
           img.col-xs-2.col-lg-3(src='/images/previous-interesting.png')
           img.col-xs-2.col-lg-3(src='/images/next-interesting.png')
           p.col-xs-6 Move between 'interesting' tagged recordings for device where the first tag is not a a bird or false/positive
-
-    include includes/footer.pug
