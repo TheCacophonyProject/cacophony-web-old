@@ -61,36 +61,12 @@ function addCondition(sequelizeCondition) {
   // console.log('Add condition:', sequelizeCondition);
   var id = nextId++;
   conditions[id] = sequelizeCondition;
-  updateConditions();
 }
 
 // Removes a Sequelize condition with the given ID.
 function deleteCondition(id) {
   // console.log('Delete condition: ', id);
   delete conditions[id];
-  updateConditions();
-}
-
-// Removes the display of the previous query and displays the new one.
-function updateConditions() {
-  // console.log('Update conditions');
-  // Delete display of old query.
-  var conditionsElement = document.getElementById('conditions');
-  conditionsElement.innerHTML = '';
-
-  // Iterates through each condition displaying it along with a delete button.
-  for (var i in conditions) {
-    var l = document.createElement('label');
-    var deleteButton = document.createElement('input');
-    deleteButton.setAttribute('type', 'button');
-    deleteButton.value = 'Delete';
-    deleteButton.setAttribute('onclick', 'deleteCondition(' + i + ')');
-    var br = document.createElement('br');
-    l.innerHTML = JSON.stringify(conditions[i]);
-    conditionsElement.appendChild(l);
-    conditionsElement.appendChild(deleteButton);
-    conditionsElement.appendChild(br);
-  }
 }
 
 // Makes a Sequelize query from the user defined conditions.
