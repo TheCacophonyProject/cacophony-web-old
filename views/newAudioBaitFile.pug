@@ -3,13 +3,14 @@ html
   head
     title Upload new audio bait file
     include includes/base.pug
+    include includes/bootstrap4.pug
     script(src="javascripts/includes/jquery.serializejson.min.js")
     script(type='text/javascript', src='javascripts/newAudioBaitFile.js')
 
   body
     include includes/navbar.pug
 
-    .cacophony-page.max-width
+    .container
       h1#Setup.col-xs-12 Upload new audio bait
 
       form.col-xs-12.col-sm-6(onsubmit="return false;")
@@ -39,4 +40,4 @@ html
 
         input.right.upload-button(type="button", value="Upload file")
 
-
+    include includes/footer.pug

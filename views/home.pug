@@ -3,13 +3,14 @@ html
   head
     title Home
     include includes/base.pug
+    include includes/bootstrap4.pug
     script(type='text/javascript', src='javascripts/home.js')
     link(href='/stylesheets/heroImage.css', rel='stylesheet', media='screen')
 
   body
     include includes/navbar.pug
     div.hero
-    div(class='container bs-docs-container')
+    div.container
       h2#greeting.
       dt.
         Username
@@ -28,3 +29,5 @@ html
       dd#groups.
 
       input.btn#new-group(type='button', value='New Group', onclick='newGroup()')
+
+    include includes/footer.pug

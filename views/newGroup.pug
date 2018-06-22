@@ -3,19 +3,21 @@ html
   head
     title New Group
     include includes/base.pug
+    include includes/bootstrap4.pug
     script(type='text/javascript', src='javascripts/newGroup.js')
 
 
   body
     include includes/navbar.pug
-  div(class='container bs-docs-container')
-    h2.
-      Register
-    form#register-form.form-horizontal()
-      .form-group
-        label.col-sm-2 Groupname
-        .col-sm-4
-          input.form-control#group-name(type='text')
+    
+    .container.col-md-6.col-lg-5
+      h2 Register
+      form#register-form
+        .form-group
+          label Group Name
+          input.form-control#group-name(type='text' placeholder='groupname')
 
-      .form-group
-        input.btn#new-group(type='button', value='Create')
+        .form-group
+          input.btn#new-group(type='button', value='Create')
+
+    include includes/footer.pug

@@ -3,6 +3,7 @@ html
   head
     title Get Recordings
     include includes/base.pug
+    include includes/bootstrap4.pug
     link(href='/stylesheets/getRecordings.css', rel='stylesheet', media='screen')
     link(href='/stylesheets/multirange.css', rel='stylesheet', media='screen')
     script(type='text/javascript', src='javascripts/getRecordings.js')
@@ -10,75 +11,76 @@ html
 
   body
     include includes/navbar.pug
-    .container.clearfix
-      //- Heading
-      .col-xs-12
-        h4 Search Video Recordings
-      
-      //- Devices
-      .form-group.col-xs-12.col-sm-4
-        label.col-xs-5.align-right Devices
-        select.col-xs-7#deviceSelect
-          option all
-      
-      //- Tags
-      .form-group.col-xs-12.col-sm-4
-        label.col-xs-5.align-right Tags
-        select.col-xs-7#tagMode
-          option(value="any" selected) any
-          option(value="untagged") untagged only
-          option(value="tagged") tagged only
-          option(value="automatic-only") automatic only
-          option(value="human-only") manual only
-          option(value="automatic+human") both automatic & manual
-      
-      //- Duration
-      .form-group.col-xs-12.col-sm-4
-        .col-xs-5.align-right
-          label Duration (sec)
-        .col-xs-7(style="padding-right: 0; padding-left: 0;")
-          .col-xs-6(style="padding-right: 0; padding-left: 0;")
-            span#durationLow 0
-            span &nbsp;to&nbsp;
-            span#durationHigh max
-            span &nbsp;sec
-          .col-xs-6(style='text-align: right; font-size: small; padding-right: 0; padding-left: 0;')
-            span#durationMax &nbsp;
-            span &nbsp;
-            a(onclick='changeDurationSliderMax()')
-              i#durationMaxChange.fas.fa-angle-double-right(style="display: none; text-decoration: none;")
-          .col-xs-12(style="padding-right: 0; padding-left: 0;")
-            input#duration(type='range' multiple value='0,100' onchange='addDurationFromSlider()' max='100')
+    .container
+      .form-row
+        //- Heading
+        .form-group.col-12
+          h4 Search Video Recordings
         
-      //- Date range
-      .form-group.col-xs-12
-        label.col-xs-5.col-sm-2.align-right From Date
-        input#fromDate.col-xs-7.col-sm-4.col-md-3.col-lg-2(type='date')
-        label.col-xs-5.col-sm-2.align-right To Date
-        input#toDate.col-xs-7.col-sm-4.col-md-3.col-lg-2(type='date')
+        //- Devices
+        .form-group.col-sm-4
+          label Devices
+          select.form-control#deviceSelect
+            option all
+        
+        //- Tags
+        .form-group.col-sm-4
+          label Tags
+          select.form-control#tagMode
+            option(value="any" selected) any
+            option(value="untagged") untagged only
+            option(value="tagged") tagged only
+            option(value="automatic-only") automatic only
+            option(value="human-only") manual only
+            option(value="automatic+human") both automatic & manual
+        
+        //- Duration
+        .form-group.col-sm-4
+          label Duration (sec)
+          .row
+            .col-6
+              span#durationLow 0
+              span &nbsp;to&nbsp;
+              span#durationHigh max
+              span &nbsp;sec
+            .col-6(style='text-align: right; font-size: small;')
+              span#durationMax &nbsp;
+              span &nbsp;
+              a(onclick='changeDurationSliderMax()')
+                i#durationMaxChange.fas.fa-angle-double-right(style="display: none; text-decoration: none;")
+          .col(style="padding-right: 0; padding-left: 0;")
+            input.form-control#duration(type='range' multiple value='0,100' onchange='addDurationFromSlider()' max='100')
+          
+        //- Date range
+        .form-group.col
+          label From Date
+          input.form-control#fromDate(type='date')
+        .form-group.col
+          label To Date
+          input.form-control#toDate(type='date')
     
-      //- Query buttons
-      .form-group.col-xs-12.no-padding
-        .col-xs-6
+      .form-row
+        //- Query buttons
+        .form-group.col-12
           input.btn.btn-block(type='button', value='Get all', onclick='getAll()')
-        .col-xs-6
           input.btn.btn-block(type='button', value='Get all from conditions', onclick='fromConditions()')
-      //- Active query
-      .form-group.col-xs-12.col-md-4.no-padding
-        label.col-xs-5.align-right Active query
-        input.col-xs-5#active-query(type='text', value='{}')
-        input.col-xs-2.btn(type='button', value='Send', onclick="sendQuery()")
-      //- Count of matches
-      .form-group.col-xs-12.col-md-3
-        h5#count.text-info(style="text-align: center;")
-      //- Limit and offset
-      .form-group.col-xs-12.col-md-5.no-padding
-        label.col-xs-2.align-right Limit
-        input.col-xs-3#limit(type='number', value=100)
-        label.col-xs-2.align-right Offset
-        input.col-xs-3#offset(type='number', value=0)
-        input.col-xs-1.btn(type='button', value='<', onclick="dec()")
-        input.col-xs-1.btn(type='button', value='>', onclick="inc()")
+        //- Active query
+        .form-group.col-sm-4(style='display: none;')
+          label Active query
+          input.form-control#active-query(type='text', value='{}')
+          input.btn(type='button', value='Send', onclick="sendQuery()")
+        //- Count of matches
+        .form-group.col-12
+          h5.text-center#count(style="text-align: center;")
+        //- Limit and offset
+        .form-group.col-12
+          .form-row
+            label.col-2.col-md-1.col-form-label.text-right Limit
+            input.col-3.col-md-2.form-control#limit(type='number', value=100)
+            label.col-2.col-md-1.col-form-label.text-right Offset
+            input.col-3.col-md-2.form-control#offset(type='number', value=0)
+            input.col-1.col-md-1.btn(type='button', value='<', onclick="dec()")
+            input.col-1.col-md-1.btn(type='button', value='>', onclick="inc()")
 
   .container-flex
     .table-responsive
@@ -96,3 +98,5 @@ html
           th Other
           th File
           th Raw data
+
+    include includes/footer.pug

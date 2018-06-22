@@ -3,31 +3,29 @@ html
   head
     title Register
     include includes/base.pug
+    include includes/bootstrap4.pug
     script(type='text/javascript', src='javascripts/register.js')
     link(href='/stylesheets/register.css', rel='stylesheet')
 
   body
     include includes/navbar.pug
-  div(class='container bs-docs-container')
-    h2.
-      Register
-    form#register-form.form-horizontal
+  div.container.col-md-6.col-lg-5
+    h2 Register
+    form#register-form
       .form-group
-        label.col-sm-2 Username
-        .col-sm-4
-          input.form-control#username(type='text' pattern='^[a-zA-Z0-9]+(?:[_ -]?[a-zA-Z0-9])*$'
+        label Username
+        input.form-control#username(type='text' pattern='^[a-zA-Z0-9]+(?:[_ -]?[a-zA-Z0-9])*$'
           placeholder='letters and numbers only' autofocus)
 
       .form-group
-        label.col-sm-2 Password
-        .col-sm-4
-          input.form-control#password(type='password' pattern='.{8,}' placeholder='8 or more characters')
+        label Password
+        input.form-control#password(type='password' pattern='.{8,}' placeholder='8 or more characters')
 
       .form-group
-        label.col-sm-2 Retype Password
-        .col-sm-4
-          input.form-control#passwordRetype(type='password' pattern='.{8,}' placeholder='must match')
+        label Retype Password
+        input.form-control#passwordRetype(type='password' pattern='.{8,}' placeholder='must match')
 
       .form-group
-        .col-sm-2
-          input.btn#register(type='submit', value='Register')
+        input.btn#register(type='submit', value='Register')
+
+    include includes/footer.pug
