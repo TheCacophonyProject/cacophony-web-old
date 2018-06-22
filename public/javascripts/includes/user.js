@@ -177,7 +177,8 @@ function displayAlert(alertText) {
   }
   // Create new alert
   let div = document.createElement('div');
-  div.classList.add('alert','alert-warning','alert-dismissible','fade','in', 'col-sm-6');
+  div.classList.add('alert','alert-warning','alert-dismissible','fade','show');
+  div.setAttribute('role', 'alert');
   let button = document.createElement('button');
   button.classList.add('close');
   button.setAttribute('data-dismiss', 'alert');
@@ -185,7 +186,7 @@ function displayAlert(alertText) {
   let text = document.createTextNode(alertText);
   div.appendChild(button);
   div.appendChild(text);
-  let container = document.getElementsByClassName('form-horizontal');
+  let container = document.getElementsByClassName('container');
   container[0].appendChild(div);
 }
 
