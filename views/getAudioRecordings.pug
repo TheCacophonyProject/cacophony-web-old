@@ -3,11 +3,11 @@ html
   head
     title Get Audio Recordings
     include includes/base.pug
-    include includes/bootstrap4.pug
+    include includes/bootstrap3.pug
     script(type='text/javascript', src='javascripts/getAudioRecordings.js')
 
   body
-    include includes/navbar.pug
+    include includes/navbar-bootstrap3.pug
     .container
       include includes/getQuery.pug
 
@@ -28,5 +28,3 @@ html
             th AirplaneMode
             th File
             th Delete
-
-      include includes/footer.pug

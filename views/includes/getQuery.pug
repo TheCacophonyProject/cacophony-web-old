@@ -1,59 +1,62 @@
-.form-row
-  .col-md-4
-    h4 Make new condition
-    .form-group
-      label Before date
-      input.form-control#before-date(type='date')
-      input.btn(type='button', value='Add', onclick="queryUtil.addBeforeDate()")
-    .form-group
-      label After date
-      input.form-control#after-date(type='date')
-      input.btn(type='button', value='Add', onclick="queryUtil.addAfterDate()")
-    .form-group
-      label Before time:
-      input.form-control#before-time(type='time')
-      input.btn(type='button', value='Add', onclick="queryUtil.addBeforeTime()")
-    .form-group
-      label After time:
-      input.form-control#after-time(type='time')
-      input.btn(type='button', value='Add', onclick="queryUtil.addAfterTime()")
-    .form-group
-      label Longer than (seconds):
-      input.form-control#longer-than(type='number')
-      input.btn(type='button', value='Add', onclick="queryUtil.addLongerThan()")
-    .form-group
-      label Shorter than (seconds):
-      input.form-control#shorter-than(type='number')
-      input.btn(type='button', value='Add', onclick="queryUtil.addShorterThan()")
-    .form-group
-      label Device ID
-      input.form-control#device-id(type='number')
-      input.btn(type='button', value='Add', onClick="queryUtil.addDeviceId()")
+.col-md-1
+.col-md-3
+  h4.
+    Make new condition
+  .input-group
+    label Before date
+    input#before-date(type='date')
+    input(type='button', value='Add', onclick="queryUtil.addBeforeDate()")
+  .input-group
+    label After date
+    input#after-date(type='date')
+    input(type='button', value='Add', onclick="queryUtil.addAfterDate()")
+  .input-group
+    label Before time:
+    input#before-time(type='time')
+    input(type='button', value='Add', onclick="queryUtil.addBeforeTime()")
+  .input-group
+    label After time:
+    input#after-time(type='time')
+    input(type='button', value='Add', onclick="queryUtil.addAfterTime()")
+  .input-group
+    label Longer than (seconds):
+    input#longer-than(type='number')
+    input(type='button', value='Add', onclick="queryUtil.addLongerThan()")
+  .input-group
+    label Shorter than (seconds):
+    input#shorter-than(type='number')
+    input(type='button', value='Add', onclick="queryUtil.addShorterThan()")
+  .input-group
+    label Device ID
+    input#device-id(type='number')
+    input(type='button', value='Add', onClick="queryUtil.addDeviceId()")
 
-  .col-md-4
-    h4.
-      Conditions
-    #conditions
-  .col-md-3
-    h4.
-      Query
-    input.btn(type='button', value='Get all.', onclick='queryUtil.getAll()')
-    br
-    input.btn(type='button', value='Get all from conditions.', onclick='queryUtil.fromConditions()')
-    br
-    input.btn(type='button', value='Manual query (sequelize).')
-    input.btn(type='text')
-    br
-    label Active query
-    input.form-control#active-query(type='text', value='{}')
-    input.btn(type='button', value='Send', onclick="queryUtil.sendQuery()")
-    br
-    label.col-md-2 Limit
-    input.form-control#limit.col-md-2(type='number', value=20)
-    label.col-md-2 Offset
-    input.form-control#offset.col-md-2(type='number', value=0)
-    input.col-md-1(type='button', value='<', onclick="queryUtil.dec()")
-    input.col-md-1(type='button', value='>', onclick="queryUtil.inc()")
-    label#count 0 results
+.col-md-4
+  h4.
+    Conditions
+  #conditions
+.col-md-3
+  h4.
+    Query
+  input(type='button', value='Get all.', onclick='queryUtil.getAll()')
+  br
+  input(type='button', value='Get all from conditions.', onclick='queryUtil.fromConditions()')
+  br
+  input(type='button', value='Manual query (sequelize).')
+  input(type='text')
+  br
+  label Active query
+  input#active-query(type='text', value='{}')
+  input(type='button', value='Send', onclick="queryUtil.sendQuery()")
+  br
+  label.col-md-2 Limit
+  input#limit.col-md-2(type='number', value=20)
+  label.col-md-2 Offset
+  input#offset.col-md-2(type='number', value=0)
+  input.col-md-1(type='button', value='<', onclick="queryUtil.dec()")
+  input.col-md-1(type='button', value='>', onclick="queryUtil.inc()")
+  label#count 0 results
+
+.col-md-1
 
 script(type='text/javascript', src='javascripts/includes/queryUtil.js')
