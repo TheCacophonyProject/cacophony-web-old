@@ -7,9 +7,7 @@ http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 
 /* global api, user, Map */
 
-/* exported deleteCondition, addBeforeDate, addAfterDate,
- * addLongerThan, addShorterThan, fromConditions, inc, dec, getAll,
- * addDurationFromSlider, changeDurationSliderMax */
+/* exported changeDurationSliderMax, inc, dec */
 
 var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
@@ -56,46 +54,15 @@ window.onload = function() {
   toDateElement.addEventListener('input', addToDate);
 };
 
-// Adds a Sequelize condition to the query.
+// Adds a Sequelize condition.
 function addCondition(sequelizeCondition) {
-  // console.log('Add condition:', sequelizeCondition);
   var id = nextId++;
   conditions[id] = sequelizeCondition;
 }
 
 // Removes a Sequelize condition with the given ID.
 function deleteCondition(id) {
-  // console.log('Delete condition: ', id);
   delete conditions[id];
-}
-
-// Makes a Sequelize query from the user defined conditions.
-function fromConditions() {
-  var query = {type: 'thermalRaw'};
-  for (var i in conditions) {
-    var condition = conditions[i];
-    // Two examples that condition could be:
-    // {duration: {$lt: 10}} Duration should be less than 4.
-    // {duration: 2}        Duration should be equal to 2.
-    for (var key in condition) {
-      // Adding empty object if one is not already defined for that key.
-      if (query[key] === undefined) {query[key] = {};}
-
-      // If condition is an object append each condition. {duration: {$lt: 4}}
-      // Just one condition in this case.
-      // query.duration.$lt = 4;
-      if (typeof condition[key] === 'object')
-      {for (var j in condition[key]) {query[key][j] = condition[key][j];}}
-
-      // If not a object just set key to that value. {duration: 2}
-      // query.duration = 2;
-      else
-      {query[key] = condition[key];}
-    }
-  }
-
-  document.getElementById('active-query').value = JSON.stringify(query);
-  sendQuery();
 }
 
 //===============ADD CONDITIONS==================
@@ -227,24 +194,48 @@ function dec() {
   sendQuery();
 }
 
-// Get all results available
-function getAll() {
-  var query = {};
+// Creates a query string (replaces active query HTML field)
+function buildQuery() {
+  let query = {type: 'thermalRaw'};
 
-  var deviceId = document.getElementById("deviceSelect").selectedOptions[0].id;
-  if (deviceId != "") {query.DeviceId = deviceId;}
+  // Add device id to query
+  let deviceId = document.getElementById("deviceSelect").selectedOptions[0].id;
+  if (deviceId != "") {
+    query.DeviceId = deviceId;
+  }
 
-  document.getElementById('active-query').value = JSON.stringify(query);
-  sendQuery();
+  // Add conditions to query
+  for (var i in conditions) {
+    var condition = conditions[i];
+    // Two examples that condition could be:
+    // {duration: {$lt: 10}} Duration should be less than 4.
+    // {duration: 2}        Duration should be equal to 2.
+    for (var key in condition) {
+      // Adding empty object if one is not already defined for that key.
+      if (query[key] === undefined) {query[key] = {};}
+
+      // If condition is an object append each condition. {duration: {$lt: 4}}
+      // Just one condition in this case.
+      // query.duration.$lt = 4;
+      if (typeof condition[key] === 'object')
+      {for (var j in condition[key]) {query[key][j] = condition[key][j];}}
+
+      // If not a object just set key to that value. {duration: 2}
+      // query.duration = 2;
+      else
+      {query[key] = condition[key];}
+    }
+  }
+  console.log("Query: \n", query);
+  return JSON.stringify(query);
 }
 
-// Send the active query. Takes the query in the 'active-query' element and
-// updates the table with the new results.
+// Sends a query and updates the table with the new results.
 function sendQuery() {
+  let query = buildQuery();
   clearTable();
 
   // Get query params.
-  var query = document.getElementById('active-query').value;
   var limit = Number(document.getElementById('limit').value);
   var offset = Number(document.getElementById('offset').value);
   var tagMode = $('select#tagMode').val();
