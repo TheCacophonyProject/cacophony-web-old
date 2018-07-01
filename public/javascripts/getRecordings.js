@@ -102,8 +102,10 @@ function fromConditions() {
 function addToDate() {
   // Remove any existing toDate conditions
   for (let i in conditions) {
-    if (conditions[i].recordingDateTime.$lt !== undefined) {
-      deleteCondition(i);
+    if (conditions[i].recordingDateTime !== undefined) {
+      if (conditions[i].recordingDateTime.$lt !== undefined) {
+        deleteCondition(i);
+      }
     }
   }
   // Add new condition
@@ -116,8 +118,10 @@ function addToDate() {
 function addFromDate() {
   // Remove any existing fromDate conditions
   for (let i in conditions) {
-    if (conditions[i].recordingDateTime.$gt !== undefined) {
-      deleteCondition(i);
+    if (conditions[i].recordingDateTime !== undefined) {
+      if (conditions[i].recordingDateTime.$gt !== undefined) {
+        deleteCondition(i);
+      }
     }
   }
   // Add new condition
