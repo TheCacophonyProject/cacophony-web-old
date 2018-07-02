@@ -16,5 +16,6 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint public",
     "lintfix": "./node_modules/.bin/eslint public --fix"
-  }
+  },
+  "eslintIgnore": ["*.min.js"]
 }
