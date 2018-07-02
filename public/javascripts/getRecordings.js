@@ -5,13 +5,14 @@ for security, so it should follow the format given from Sequelize.
 http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 */
 
-/* global api, user, Map */
+/* global api, user, Map, Promise */
 
 /* exported changeDurationSliderMax, inc, dec */
 
 var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
 var viewUrl = '/view_recording/';
+const groupsApiUrl = api + '/api/v1/groups';
 
 const conditions = {};
 var nextId = 1;
@@ -56,7 +57,8 @@ window.onload = function() {
 // DEVICE LIST FUNCTIONS
 
 // Populate list with devices
-function deviceDropdown(devices) {
+async function deviceDropdown(devices) {
+  // Add devices
   let dropdownMenu = document.getElementsByClassName("dropdown-menu")[0];
   for (let device of devices) {
     let item = document.createElement("div");
@@ -65,6 +67,16 @@ function deviceDropdown(devices) {
     item.classList.add("dropdown-item");
     dropdownMenu.appendChild(item);
   }
+  // Add groups
+  let groups = await getGroups({});
+  for (let group of groups) {
+    let item = document.createElement("div");
+    item.innerText = group.name + " (group)";
+    item.id = group.devices;
+    item.classList.add("dropdown-item");
+    dropdownMenu.appendChild(item);
+  }
+  // Add event listeners
   for (let item of dropdownMenu.children) {
     item.addEventListener("click", (event) => {
       let device = {
@@ -131,6 +143,43 @@ function filterDropdown() {
       items[i].style.display = "none";
     }
   }
+}
+
+// Returns an array of groups, where each group is an object with name, id, and
+// array of devices, where each device has an id and name.
+function getGroups(where) {
+  const data = { where: JSON.stringify(where) };
+  const headers = {};
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      url: groupsApiUrl,
+      type: 'GET',
+      headers: headers,
+      data: data,
+      success: function(result) {
+        let groups = [];
+        // Extract device IDs
+        for (let item of result.groups) {
+          let deviceIds = [];
+          for (let device of item.Devices) {
+            deviceIds.push(device.id);
+          }
+          // Create group object
+          let group = {
+            name: item.groupname,
+            id: item.id,
+            devices: deviceIds
+          };
+          groups.push(group);
+        }
+        return resolve(groups);
+      },
+      error: reject,
+    });
+  });
 }
 
 //===============ADD CONDITIONS==================
@@ -284,7 +333,15 @@ function buildQuery() {
   if (deviceList.children.length !== 0) {
     query.DeviceId = [];
     for (let device of deviceList.children) {
-      query.DeviceId.push(device.id);
+      if (device.innerText.slice(-8) === "(group) ") {
+        // Add IDs for groups separately
+        let devices = device.id.split(',');
+        for (let id of devices) {
+          query.DeviceId.push(id);
+        }
+      } else {
+        query.DeviceId.push(device.id);
+      }
     }
   }
 
