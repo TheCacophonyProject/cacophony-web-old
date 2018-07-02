@@ -78,24 +78,27 @@ user.register = function(passEle1, passEle2, usernameEle, event) {
 };
 
 user.getAllAttrs = function() {
-  if (user.isLoggedIn())
-  {return JSON.parse(localStorage.getItem('userData'));}
-  else
-  {return null;}
+  if (user.isLoggedIn()) {
+    return JSON.parse(localStorage.getItem('userData'));
+  } else {
+    return null;
+  }
 };
 
 user.getAttr = function(field) {
-  if (user.isLoggedIn() == false)
-  {return null;}
-  else
-  {return user.getAllAttrs()[field];}
+  if (user.isLoggedIn() == false) {
+    return null;
+  } else {
+    return user.getAllAttrs()[field];
+  }
 };
 
 user.isLoggedIn = function() {
-  if (JSON.parse(localStorage.getItem('userData')))
-  {return true;}
-  else
-  {return false;}
+  if (JSON.parse(localStorage.getItem('userData'))) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 // Returns the JSON Web Token
@@ -147,16 +150,18 @@ user.get = async function(username) {
 
 user.getTagDefaults = function() {
   var defaults = JSON.parse(localStorage.getItem('tagDefaults'));
-  if (defaults == undefined)
-  {return {};}
-  else
-  {return defaults;}
+  if (defaults == undefined) {
+    return {};
+  } else {
+    return defaults;
+  }
 };
 
 user.setTagDefault = function(key, val) {
   var defaults = JSON.parse(localStorage.getItem('tagDefaults'));
-  if (defaults == undefined || typeof defaults != "object")
-  {defaults = {};}
+  if (defaults == undefined || typeof defaults != "object") {
+    defaults = {};
+  }
   defaults[key] = val;
   localStorage.setItem('tagDefaults', JSON.stringify(defaults));
 };

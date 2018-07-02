@@ -57,7 +57,9 @@ function addGroupToTable(group) {
 function clearTable(tableId) {
   var table = document.getElementById(tableId);
   var rowCount = table.rows.length;
-  while (--rowCount) {table.deleteRow(rowCount);}
+  while (--rowCount) {
+    table.deleteRow(rowCount);
+  }
 }
 
 function isAdmin(group) {
@@ -134,7 +136,9 @@ async function addUserToGroup(username, admin) {
     return;
   }
   const headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   const data = {
     groupId: groups[0].id,
     userId: targetUser.id,
@@ -172,7 +176,9 @@ async function removeUserFromGroup(username) {
     return;
   }
   const headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   const data = {
     groupId: groups[0].id,
     userId: targetUser.id,
@@ -195,7 +201,9 @@ async function removeUserFromGroup(username) {
 function getGroups(where) {
   const data = { where: JSON.stringify(where) };
   const headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   return new Promise(function(resolve, reject) {
     $.ajax({
       url: groupsApiUrl,

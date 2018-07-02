@@ -61,18 +61,22 @@ queryUtil.fromConditions = function() {
     // {duration: 2}        Duration should be equal to 2.
     for (var key in condition) {
       // Adding empty object if one is not already defined for that key.
-      if (query[key] === undefined) {query[key] = {};}
+      if (query[key] === undefined) {
+        query[key] = {};
+      }
 
       // If condition is an object append each condition. {duration: {$lt: 4}}
       // Just one condition in this case.
       // query.duration.$lt = 4;
-      if (typeof condition[key] === 'object')
-      {for (var j in condition[key]) {query[key][j] = condition[key][j];}}
-
-      // If not a object just set key to that value. {duration: 2}
-      // query.duration = 2;
-      else
-      {query[key] = condition[key];}
+      if (typeof condition[key] === 'object') {
+        for (var j in condition[key]) {
+          query[key][j] = condition[key][j];
+        }
+      } else {
+        // If not a object just set key to that value. {duration: 2}
+        // query.duration = 2;
+        query[key] = condition[key];
+      }
     }
   }
 
@@ -165,8 +169,9 @@ queryUtil.dec = function() {
   var offsetN = Number(offset.value);
   var limitN = Number(document.getElementById('limit').value);
   var newOffsetVal = offsetN - limitN;
-  if (newOffsetVal <= 0)
-  {newOffsetVal = 0;}
+  if (newOffsetVal <= 0) {
+    newOffsetVal = 0;
+  }
   offset.value = newOffsetVal;
   queryUtil.sendQuery();
 };
@@ -190,7 +195,9 @@ queryUtil.sendQuery = function() {
     offset: offset,
   };
 
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
 
   $.ajax({
     url: recordingApiUrl,
@@ -198,10 +205,12 @@ queryUtil.sendQuery = function() {
     headers: headers,
     success: function(res) {
       console.log('Successful request:', res);
-      if (res.result.count === 0)
-      {window.alert('No results for query.');}
-      for (var i in res.result.rows)
-      {queryUtil.appendDatapointToTable(res.result.rows[i]);}
+      if (res.result.count === 0) {
+        window.alert('No results for query.');
+      }
+      for (var i in res.result.rows) {
+        queryUtil.appendDatapointToTable(res.result.rows[i]);
+      }
       document.getElementById('offset').value = res.result.offset;
       document.getElementById('limit').value = res.result.limit;
       queryUtil.count = res.result.count; // number of results from query.
@@ -219,7 +228,9 @@ queryUtil.sendQuery = function() {
 queryUtil.clearTable = function() {
   var table = document.getElementById('results-table');
   var rowCount = table.rows.length;
-  while (--rowCount) {table.deleteRow(rowCount);}
+  while (--rowCount) {
+    table.deleteRow(rowCount);
+  }
 };
 
 // Parses throug a Datapoint and adds it to the result table.
@@ -264,7 +275,9 @@ queryUtil.deleteDatapointElement = function(datapoint, row) {
   button.innerHTML = "Delete";
 
   var headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   var id = datapoint.id;
 
   button.onclick = function() {
@@ -343,7 +356,9 @@ queryUtil.parseDownload = function(id) {
   button.onclick = function() {
     // Get server to generate a JWT for downloading the file.
     var headers = {};
-    if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+    if (user.isLoggedIn()) {
+      headers.Authorization = user.getJWT();
+    }
     var url = recordingApiUrl + '/' + id;
     $.ajax({
       url: url,
@@ -378,9 +393,10 @@ queryUtil.parseBoolean = function(boolean) {
 
 queryUtil.parseGroup = function(group) {
   var td = document.createElement("td");
-  if (typeof group !== 'string')
-  {td.innerHTML = 'No group';}
-  else
-  {td.innerHTML = group;}
+  if (typeof group !== 'string') {
+    td.innerHTML = 'No group';
+  } else {
+    td.innerHTML = group;
+  }
   return td;
 };

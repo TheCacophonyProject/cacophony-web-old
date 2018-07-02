@@ -96,8 +96,7 @@ timeUtil.timeOfDayToAmPm = function(timeString) {
 
   if (hours > 11) {
     amOrPm = "pm";
-  }
-  else if (!amOrPm) {
+  } else if (!amOrPm) {
     amOrPm = "am";
   }
 

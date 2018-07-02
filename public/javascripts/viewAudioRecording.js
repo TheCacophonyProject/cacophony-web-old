@@ -5,7 +5,9 @@ var recording = null;
 
 window.onload = function() {
   var headers = { where: '{"id": ' + id + '}' };
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   $.ajax({
     url: audioApiUrl,
     type: 'get',
@@ -85,7 +87,9 @@ function getPlayerSource(player) {
       source.src = api + "/api/v1/signedUrl?jwt=" + response.jwt;
       player.appendChild(source);
     },
-    error: function(err) { console.log(err); }
+    error: function(err) {
+      console.log(err); 
+    }
   });
 }
 
@@ -94,7 +98,9 @@ function deleteDatapoint() {
     url: audioApiUrl + '/' + id,
     type: 'DELETE',
     headers: { Authorization: user.getJWT() },
-    success: function() { window.alert("Datapoint deleted."); },
+    success: function() {
+      window.alert("Datapoint deleted."); 
+    },
     error: function(err) {
       console.log(err);
       window.alert("Failed to delete datapoint.");

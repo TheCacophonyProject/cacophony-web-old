@@ -30,19 +30,31 @@
 
     Object.defineProperty(input, "originalValue", descriptor.get ? descriptor : {
       // Fuck you Safari >:(
-      get: function() { return this.value; },
-      set: function(v) { this.value = v; }
+      get: function() {
+        return this.value; 
+      },
+      set: function(v) {
+        this.value = v; 
+      }
     });
 
     Object.defineProperties(input, {
       valueLow: {
-        get: function() { return Math.min(this.originalValue, ghost.value); },
-        set: function(v) { this.originalValue = v; },
+        get: function() {
+          return Math.min(this.originalValue, ghost.value); 
+        },
+        set: function(v) {
+          this.originalValue = v; 
+        },
         enumerable: true
       },
       valueHigh: {
-        get: function() { return Math.max(this.originalValue, ghost.value); },
-        set: function(v) { ghost.value = v; },
+        get: function() {
+          return Math.max(this.originalValue, ghost.value); 
+        },
+        set: function(v) {
+          ghost.value = v; 
+        },
         enumerable: true
       }
     });
@@ -50,7 +62,9 @@
     if (descriptor.get) {
       // Again, fuck you Safari
       Object.defineProperty(input, "value", {
-        get: function() { return this.valueLow + "," + this.valueHigh; },
+        get: function() {
+          return this.valueLow + "," + this.valueHigh; 
+        },
         set: function(v) {
           var values = v.split(",");
           this.valueLow = values[0];
@@ -82,8 +96,7 @@
 
   if (document.readyState == "loading") {
     document.addEventListener("DOMContentLoaded", multirange.init);
-  }
-  else {
+  } else {
     multirange.init();
   }
 

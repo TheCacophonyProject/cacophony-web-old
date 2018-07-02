@@ -32,7 +32,9 @@ function setCacophonyName() {
 
 function uploadAudioBait() {
   var headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
 
   var data = new FormData();
 

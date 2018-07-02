@@ -8,7 +8,9 @@ var recordingsApiUrl = api + '/api/v1/recordings';
 var recording = null;
 
 document.onkeypress = function (e) {
-  if (document.activeElement.tagName.toUpperCase() != 'BODY') { return; }
+  if (document.activeElement.tagName.toUpperCase() != 'BODY') {
+    return; 
+  }
   var key = e.key;
   if (key == 'n') {
     nextRecording("next", "no-human");
@@ -21,7 +23,9 @@ document.onkeypress = function (e) {
 
 window.onload = function() {
   var headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   $.ajax({
     url: recordingsApiUrl + '/' + id,
     type: 'GET',
@@ -34,8 +38,9 @@ window.onload = function() {
   var defaults = user.getTagDefaults();
   var setToDefaults = ['tagAnimalInput', 'tagEventInput', 'tagTrapTypeInput'];
   for (var i in setToDefaults) {
-    if (defaults[setToDefaults[i]] != undefined)
-    {document.getElementById([setToDefaults[i]]).value = defaults[setToDefaults[i]];}
+    if (defaults[setToDefaults[i]] != undefined) {
+      document.getElementById([setToDefaults[i]]).value = defaults[setToDefaults[i]];
+    }
   }
 };
 
@@ -45,7 +50,9 @@ function getRecordingError(result) {
 }
 
 function nextRecording(direction, tagMode, tags) {
-  if (recording == null) {return;}
+  if (recording == null) {
+    return;
+  }
 
   var query = {
     DeviceId: recording.Device.id,
@@ -69,7 +76,9 @@ function nextRecording(direction, tagMode, tags) {
   }
 
   var headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   $.ajax({
     url: recordingsApiUrl,
     type: 'GET',
@@ -121,7 +130,9 @@ function parseThermalRaw(result) {
     document.getElementById('tagStopTimeInput').value =
       secondsToMMSS(player.duration - 10);
   });
-  player.addEventListener('loadstart', function(res) { res.target.play(); });
+  player.addEventListener('loadstart', function(res) {
+    res.target.play(); 
+  });
 
   // Set source for player
   var source = document.createElement('source');
@@ -182,7 +193,9 @@ function falsePositive() {
 
 function deleteRecording() {
   var headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   $.ajax({
     url: recordingsApiUrl + '/' + id,
     type: 'DELETE',
@@ -201,7 +214,9 @@ function deleteRecording() {
 function updateComment() {
   var comment = document.getElementById('comment-text').value;
   var headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   $.ajax({
     url: recordingsApiUrl + '/' + id,
     type: 'PATCH',
