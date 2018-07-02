@@ -5,7 +5,7 @@ for security, so it should follow the format given from Sequelize.
 http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 */
 
-/* global api, user, Map */
+/* global api, user, Map, autoComplete */
 
 /* exported changeDurationSliderMax, inc, dec */
 
@@ -25,14 +25,8 @@ window.onload = function() {
     type: 'GET',
     headers: headers,
     success: function(result) {
-      var deviceSelect = document.getElementById("deviceSelect");
-      for (var i in result.devices.rows) {
-        var device = result.devices.rows[i];
-        var option = document.createElement("option");
-        option.innerText = device.devicename;
-        option.id = device.id;
-        deviceSelect.appendChild(option);
-      }
+      deviceAutocomplete(result.devices.rows);
+      deviceDropdown(result.devices.rows);
     },
     error: function(err) {
       console.log(err);
@@ -53,6 +47,68 @@ window.onload = function() {
   fromDateElement.addEventListener('input', addFromDate);
   toDateElement.addEventListener('input', addToDate);
 };
+
+// Create autocomplete box for devices
+// Source: https://goodies.pixabay.com/javascript/auto-complete/demo.html
+function deviceAutocomplete(devices) {
+  // Identify input element and display it
+  let element = document.getElementById('deviceAutocomplete');
+  // element.style.display = 'block';
+  // Create list of choice objects
+  let choices = devices.map(device => {
+    let choice = {
+      name: device.devicename,
+      id: device.id
+    };
+    return choice;
+  });
+  // Create autocomplete
+  new autoComplete({
+    selector: element,
+    minChars: 2,
+    source: function(term, suggest){
+      term = term.toLowerCase();
+      var matches = [];
+      for (let i=0; i<choices.length; i++) {
+        if (~choices[i].name.toLowerCase().indexOf(term)) {
+          matches.push(choices[i]);
+        }
+      }
+      suggest(matches);
+    },
+    // Update the select element to match choice
+    // #deviceSelect is used in query, not the autocomplete text input,
+    // because need to have id to run query
+    onSelect: function(e, term){
+      let select = document.getElementById('deviceSelect');
+      for (let selectItem of select) {
+        if (selectItem.value === term) {
+          select.selectedIndex = selectItem.index;
+        }
+      }
+      // Return autocomplete field to blank once value selected
+      let autocomplete = document.getElementById('deviceAutocomplete');
+      autocomplete.value = "";
+    },
+    // Modify default render item to display item.name
+    renderItem: function (item, search) {
+      search = search.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+      var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+      return '<div class="autocomplete-suggestion" data-val="' + item.name + '">' + item.name.replace(re, "<b>$1</b>") + '</div>';
+    }
+  });
+}
+
+// Create dropdown list for devices
+function deviceDropdown(devices) {
+  var deviceSelect = document.getElementById("deviceSelect");
+  for (let device of devices) {
+    var option = document.createElement("option");
+    option.innerText = device.devicename;
+    option.id = device.id;
+    deviceSelect.appendChild(option);
+  }
+}
 
 // Adds a Sequelize condition.
 function addCondition(sequelizeCondition) {
