@@ -13,8 +13,9 @@ window.onload = function() {
 function getGroupsListText() {
   var groups = [];
   var userGroups = user.getAttr("groups");
-  for (var i in userGroups)
-  {groups.push(userGroups[i].groupname);}
+  for (var i in userGroups) {
+    groups.push(userGroups[i].groupname);
+  }
   return groups.join(', ');
 }
 

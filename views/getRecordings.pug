@@ -62,13 +62,7 @@ html
       .form-row
         //- Query buttons
         .form-group.col-12
-          input.btn.btn-block(type='button', value='Get all', onclick='getAll()')
-          input.btn.btn-block(type='button', value='Get all from conditions', onclick='fromConditions()')
-        //- Active query
-        .form-group.col-sm-4(style='display: none;')
-          label Active query
-          input.form-control#active-query(type='text', value='{}')
-          input.btn(type='button', value='Send', onclick="sendQuery()")
+          input.btn.btn-block(type='button', value='Search', onclick='sendQuery()')
         //- Count of matches
         .form-group.col-12
           h5.text-center#count(style="text-align: center;")

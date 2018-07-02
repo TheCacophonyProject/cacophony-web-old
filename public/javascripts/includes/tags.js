@@ -37,8 +37,7 @@ tags.addTagToTable = function(tag) {
   var animal = document.createElement('td');
   if (tag.animal) {
     animal.innerHTML = tag.animal;
-  }
-  else {
+  } else {
     animal.innerHTML = "-";
   }
 
@@ -61,8 +60,7 @@ tags.addTagToTable = function(tag) {
     taggedby.innerHTML = "<img title='Cacophony AI' src='/images/auto.png'/>";
   } else if (tag.taggedbyme) {
     taggedby.innerHTML = "Me!";
-  }
-  else {
+  } else {
     taggedby.innerHTML = tag.taggerId;
   }
   row.appendChild(taggedby);
@@ -230,7 +228,9 @@ tags.parseSelect = function(id) {
  */
 tags.parseInt = function(id) {
   var i = parseInt(document.getElementById(id).value);
-  if (isNaN(i)) {i = null;}
+  if (isNaN(i)) {
+    i = null;
+  }
   return i;
 };
 
@@ -243,7 +243,9 @@ tags.parseAge = function(id) {
   var ageYears = parseInt(ageString.split(':')[0]);
   var ageMonths = parseInt(ageString.split(':')[1]);
   var age = ageYears * 12 + ageMonths;
-  if (isNaN(age)) {age = null;}
+  if (isNaN(age)) {
+    age = null;
+  }
   return age;
 };
 
@@ -256,7 +258,9 @@ tags.parseTime = function(id) {
   var timeMin = parseInt(timeString.split(':')[0]);
   var timeSec = parseInt(timeString.split(':')[1]);
   var time = timeMin * 60 + timeSec;
-  if (isNaN(time)) {time = null;}
+  if (isNaN(time)) {
+    time = null;
+  }
   return time;
 };
 
@@ -282,8 +286,12 @@ tags.parseDuration = function(startId, endId) {
   var endTime = tags.parseTime(endId);
   var startTime = tags.parseTime(startId);
   var duration = tags.parseTime(endId) - tags.parseTime(startId);
-  if (endTime == null || startTime == null) {return null;}
-  if (duration <= 0) {throw { message: "duration can't be negative" };}
+  if (endTime == null || startTime == null) {
+    return null;
+  }
+  if (duration <= 0) {
+    throw { message: "duration can't be negative" };
+  }
   return duration;
 };
 
@@ -293,7 +301,9 @@ tags.parseDuration = function(startId, endId) {
  */
 tags.parseString = function(id) {
   var val = document.getElementById(id).value;
-  if (val === "") {val = null;}
+  if (val === "") {
+    val = null;
+  }
   return val;
 };
 

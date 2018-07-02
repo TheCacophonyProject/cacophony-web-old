@@ -125,8 +125,7 @@ templateUtil.setValue = function(element, value) {
 
   if (element.prop("tagName") === "SELECT") {
     element.find('option[value="' + value + '"]').prop("selected", true);
-  }
-  else {
+  } else {
     element.val(value);
   }
 };
