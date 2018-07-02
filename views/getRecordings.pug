@@ -6,6 +6,7 @@ html
     include includes/bootstrap4.pug
     link(href='/stylesheets/getRecordings.css', rel='stylesheet', media='screen')
     link(href='/stylesheets/multirange.css', rel='stylesheet', media='screen')
+    link(href='/stylesheets/auto-complete.css', rel='stylesheet', media='screen')
     script(type='text/javascript', src='javascripts/getRecordings.js')
     script(type='text/javascript', src='javascripts/includes/multirange.js')
 
@@ -19,9 +20,11 @@ html
         
         //- Devices
         .form-group.col-sm-4
-          label Devices
-          select.form-control#deviceSelect
-            option all
+          label Device
+          .form-row(style="margin-right: 0px; margin-left: 0px;")
+            select.form-control.col-xs-12.col-sm-6#deviceSelect
+              option all
+            input.form-control.col-xs-12.col-sm-6#deviceAutocomplete(placeholder='filter' style="font-style: italic;")
         
         //- Tags
         .form-group.col-sm-4
@@ -94,3 +97,4 @@ html
           th Raw data
 
     include includes/footer.pug
+    script(type='text/javascript', src='javascripts/includes/auto-complete.min.js')
