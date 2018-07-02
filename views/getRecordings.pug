@@ -25,7 +25,7 @@ html
             input#deviceInput.form-control.dropdown-toggle(data-toggle="dropdown" placeholder="all devices")
             .dropdown-menu
         
-        //- Tags
+        //- Tag Types
         .form-group.col-sm-4
           label Tag Types
           select.form-control#tagMode
@@ -35,6 +35,30 @@ html
             option(value="automatic-only") automatic only
             option(value="human-only") manual only
             option(value="automatic+human") both automatic & manual
+        
+        //- Animals
+        .form-group.col-sm-4
+          label Animals
+          select.form-control#animals
+            option all
+            option bird
+            option bird/kiwi
+            option rat
+            option possum
+            option hedgehog
+            option stoat
+            option ferret
+            option weasel
+            option mouse
+            option cat
+            option dog
+            option rabbit
+            option hare
+            option human
+            option spider
+            option insect
+            option other
+            option unidentified
         
         //- Duration
         .form-group.col-sm-4

@@ -52,6 +52,10 @@ window.onload = function() {
   // Add event listeners for device selection
   let deviceInputElement = document.getElementById('deviceInput');
   deviceInputElement.addEventListener('input', filterDropdown);
+
+  // Add event listeners for animal selection
+  let animalInputElement = document.getElementById('animals');
+  animalInputElement.addEventListener('input', addAnimal);
 };
 
 // DEVICE LIST FUNCTIONS
@@ -224,6 +228,14 @@ function addFromDate() {
   if (date != "") {
     addCondition({ recordingDateTime: { "$gt": date } });
   }
+}
+
+function addAnimal() {
+  // Remove any existing animal conditions
+
+  // Add new condition
+  let animal = document.getElementById('animals').value;
+  addCondition({ animal: animal });
 }
 
 var durationMax = 100;
