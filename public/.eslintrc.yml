@@ -26,3 +26,5 @@ rules:
     - error
   no-unused-vars:
     - error
+  brace-style:
+    - error
