@@ -1,5 +1,4 @@
-.col-md-1
-.col-md-3
+.col-md-4
   h4.
     Make new condition
   .input-group
@@ -19,11 +18,11 @@
     input#after-time(type='time')
     input(type='button', value='Add', onclick="queryUtil.addAfterTime()")
   .input-group
-    label Longer than (seconds):
+    label Longer than (sec):
     input#longer-than(type='number')
     input(type='button', value='Add', onclick="queryUtil.addLongerThan()")
   .input-group
-    label Shorter than (seconds):
+    label Shorter than (sec):
     input#shorter-than(type='number')
     input(type='button', value='Add', onclick="queryUtil.addShorterThan()")
   .input-group
@@ -35,7 +34,7 @@
   h4.
     Conditions
   #conditions
-.col-md-3
+.col-md-4
   h4.
     Query
   input(type='button', value='Get all.', onclick='queryUtil.getAll()')
@@ -57,6 +56,5 @@
   input.col-md-1(type='button', value='>', onclick="queryUtil.inc()")
   label#count 0 results
 
-.col-md-1
 
 script(type='text/javascript', src='javascripts/includes/queryUtil.js')
