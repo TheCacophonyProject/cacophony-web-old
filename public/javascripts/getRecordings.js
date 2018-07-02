@@ -87,15 +87,16 @@ function addDeviceToList(device) {
   }
   // Create element and add to deviceList
   let element = document.createElement("button");
-  let span = ' <span class="badge badge-secondary"><i class="fas fa-times"></i></span>';
+  let span = ' <span class="badge badge-secondary" style="cursor: pointer;"><i class="fas fa-times"></i></span>';
   element.innerHTML = device.name + span;
   element.id = device.id;
   element.classList.add("btn");
+  element.style.cursor = "auto";
   deviceList.appendChild(element);
   // Add event listener for removal
   element = document.getElementById(device.id);
-  element.addEventListener('click', (event) => {
-    removeDeviceFromList(event.target.id);
+  element.children[0].addEventListener('click', () => {
+    removeDeviceFromList(device.id);
   });
   // Change placeholder text
   let deviceInput = document.getElementById('deviceInput');
