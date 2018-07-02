@@ -19,7 +19,9 @@ var count = 54;
 
 window.onload = function() {
   var headers = {};
-  if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
   $.ajax({
     url: devicesApiUrl,
     type: 'GET',
@@ -177,8 +179,9 @@ function inc() {
   var offset = document.getElementById('offset');
   var offsetN = Number(offset.value);
   var limitN = Number(document.getElementById('limit').value);
-  if (offsetN + limitN < count)
-  {offset.value = offsetN + limitN;}
+  if (offsetN + limitN < count) {
+    offset.value = offsetN + limitN;
+  }
   sendQuery();
 }
 
@@ -188,8 +191,9 @@ function dec() {
   var offsetN = Number(offset.value);
   var limitN = Number(document.getElementById('limit').value);
   var newOffsetVal = offsetN - limitN;
-  if (newOffsetVal <= 0)
-  {newOffsetVal = 0;}
+  if (newOffsetVal <= 0) {
+    newOffsetVal = 0;
+  }
   offset.value = newOffsetVal;
   sendQuery();
 }
@@ -212,18 +216,22 @@ function buildQuery() {
     // {duration: 2}        Duration should be equal to 2.
     for (var key in condition) {
       // Adding empty object if one is not already defined for that key.
-      if (query[key] === undefined) {query[key] = {};}
+      if (query[key] === undefined) {
+        query[key] = {};
+      }
 
       // If condition is an object append each condition. {duration: {$lt: 4}}
       // Just one condition in this case.
       // query.duration.$lt = 4;
-      if (typeof condition[key] === 'object')
-      {for (var j in condition[key]) {query[key][j] = condition[key][j];}}
-
-      // If not a object just set key to that value. {duration: 2}
-      // query.duration = 2;
-      else
-      {query[key] = condition[key];}
+      if (typeof condition[key] === 'object') {
+        for (var j in condition[key]) {
+          query[key][j] = condition[key][j];
+        }
+      } else {
+        // If not a object just set key to that value. {duration: 2}
+        // query.duration = 2;
+        query[key] = condition[key];
+      }
     }
   }
   console.log("Query: \n", query);
@@ -253,10 +261,12 @@ function sendQuery() {
     headers: { Authorization: user.getJWT() },
     success: function(res) {
       console.log('Successful request:', res);
-      if (res.count === 0)
-      {window.alert('No results for query.');}
-      for (var i in res.rows)
-      {appendDatapointToTable(res.rows[i]);}
+      if (res.count === 0) {
+        window.alert('No results for query.');
+      }
+      for (var i in res.rows) {
+        appendDatapointToTable(res.rows[i]);
+      }
       limit = res.limit;
       count = res.count; // number of results from query.
       document.getElementById('offset').value = res.offset;
@@ -338,8 +348,9 @@ function parseDuration(duration) {
 
 function parseTime(dateTime) {
   var td = document.createElement("td");
-  if (dateTime == null)
-  {return td;}
+  if (dateTime == null) {
+    return td;
+  }
   var d = new Date(dateTime);
   td.innerHTML = d.toLocaleTimeString();
   return td;
@@ -347,8 +358,9 @@ function parseTime(dateTime) {
 
 function parseDate(dateTime) {
   var td = document.createElement("td");
-  if (dateTime == null)
-  {return td;}
+  if (dateTime == null) {
+    return td;
+  }
   var d = new Date(dateTime);
   td.innerHTML = d.toLocaleDateString('en-NZ');
   return td;
@@ -417,7 +429,9 @@ function parseDownload(id, type) {
   button.onclick = function() {
     // Get server to generate a JWT for downloading the file.
     var headers = {};
-    if (user.isLoggedIn()) {headers.Authorization = user.getJWT();}
+    if (user.isLoggedIn()) {
+      headers.Authorization = user.getJWT();
+    }
     var url = recordingsApiUrl + '/' + id;
     $.ajax({
       url: url,
