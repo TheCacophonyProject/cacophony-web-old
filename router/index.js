@@ -82,4 +82,10 @@ module.exports = function(app) {
       'api': config.server.api,
     });
   });
+
+  app.get('/visualisations', (request, response) => {
+    response.render('visualisations.pug', {
+      'api': config.server.api,
+    });
+  });
 };

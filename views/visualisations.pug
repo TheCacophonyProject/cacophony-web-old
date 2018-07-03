@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title Visualisations
+    include includes/base.pug
+    include includes/bootstrap4.pug
+    script(type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js")
+
+  body
+    include includes/navbar.pug
+    div.container
+      canvas#myChart(width="400" height="400")
+    include includes/footer.pug
+
+    script(type='text/javascript', src='/javascripts/visualisations.js')
