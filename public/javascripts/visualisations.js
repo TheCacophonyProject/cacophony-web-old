@@ -4,6 +4,7 @@ var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
 
 window.onload = async function() {
+  // let query = {type: 'thermalRaw'};
   let query = {type: 'thermalRaw'};
   let deviceResponse = await getDevices();
   let devices = await deviceResponse.devices.rows;
@@ -17,28 +18,37 @@ async function getDevices() {
 
 async function graphDeviceRecordingCount(devices, query) {
   showLoader();
-  // Initiate data and label variables
-  let labels = [];
-  let data = [];
   // Set query parameters
-  let limit = 1;
+  let limit = 1000;
   let offset = 0;
   let tagMode = "any";
-  for (let device of devices) {
-    // Get recording count for each device
-    query.DeviceId = device.id;
+  // Get all data (first 1000 rows)
+  let url = getRecordingURL(query, limit, offset, tagMode);
+  let allData = await fetchData(url);
+  // Check whether all data was fetched - if not, run fetch again to get all rows
+  if (allData.count > limit) {
+    limit = allData.count;
     let url = getRecordingURL(query, limit, offset, tagMode);
-    let response = await fetchData(url);
-    let recordingCount = response.count;
+    allData = await fetchData(url);
+  }
+  // Create empty object to store number of recordings for each deviceId
+  let deviceCount = {};
+  devices.map((device) => deviceCount[device.id] = 0);
+  // For each recording, increment the device count
+  for (let row of allData.rows) {
+    deviceCount[row.Device.id] += 1;
+  }
+  // Create data and label variables
+  let labels = [];
+  let data = [];
+  for (let device of devices) {
     data.push({
       id: device.id,
-      count: recordingCount,
+      count: deviceCount[device.id],
       devicename: device.devicename
     });
-    // Add label for each device
     labels.push(device.devicename);
   }
-
   // Create colors for bar graphs
   let colors = data.map(() => colorPicker());
   // Create dataset suitable for ChartJS
@@ -49,7 +59,6 @@ async function graphDeviceRecordingCount(devices, query) {
     borderColor: colors,
     borderWidth: 1
   }];
-
 
   hideLoader();
   // Draw the chart
@@ -161,7 +170,6 @@ function colorPicker() {
     hue = lastHue - 339;
     lastHue = hue;
   }
-  console.log(hue);
   let hsl = `hsl(${hue}, 80%, 50%)`;
   return hsl;
 }
