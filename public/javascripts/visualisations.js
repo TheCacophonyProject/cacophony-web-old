@@ -39,28 +39,17 @@ async function graphDeviceRecordingCount(devices, query) {
     labels.push(device.devicename);
   }
 
+  // Create colors for bar graphs
+  let colors = data.map(() => colorPicker());
   // Create dataset suitable for ChartJS
   let dataset = [{
     label: "Number of recordings",
     data: data.map((item) => item.count),
-    backgroundColor: [
-      'rgba(255, 99, 132, 0.2)',
-      'rgba(54, 162, 235, 0.2)',
-      'rgba(255, 206, 86, 0.2)',
-      'rgba(75, 192, 192, 0.2)',
-      'rgba(153, 102, 255, 0.2)',
-      'rgba(255, 159, 64, 0.2)'
-    ],
-    borderColor: [
-      'rgba(255,99,132,1)',
-      'rgba(54, 162, 235, 1)',
-      'rgba(255, 206, 86, 1)',
-      'rgba(75, 192, 192, 1)',
-      'rgba(153, 102, 255, 1)',
-      'rgba(255, 159, 64, 1)'
-    ],
+    backgroundColor: colors,
+    borderColor: colors,
     borderWidth: 1
   }];
+
 
   hideLoader();
   // Draw the chart
@@ -160,4 +149,19 @@ function showLoader() {
 function hideLoader() {
   let loader = document.getElementById('loader');
   loader.style.display = "none";
+}
+
+var lastHue = -60;
+function colorPicker() {
+  let hue;
+  if (lastHue < 360) {
+    hue = lastHue + 60;
+    lastHue = hue;
+  } else {
+    hue = lastHue - 339;
+    lastHue = hue;
+  }
+  console.log(hue);
+  let hsl = `hsl(${hue}, 80%, 50%)`;
+  return hsl;
 }
