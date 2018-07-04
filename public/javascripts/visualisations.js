@@ -8,6 +8,19 @@ window.onload = async function() {
   let query = {type: 'thermalRaw'};
   let deviceResponse = await getDevices();
   let devices = await deviceResponse.devices.rows;
+  // Sort devices alphabetically by devicename
+  devices.sort(function(a, b) {
+    var nameA = a.devicename.toUpperCase(); // ignore upper and lowercase
+    var nameB = b.devicename.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
+  });
   graphDeviceRecordingCount(devices, query);
 };
 
