@@ -28,7 +28,18 @@ window.onload = function() {
     type: 'GET',
     headers: headers,
     success: function(result) {
-      deviceDropdown(result.devices.rows);
+      // Add extra mock data
+      let data = result.devices.rows;
+      for (let i = 0; i < 100; i++) {
+        data.push({
+          devicename: 'random' + i,
+          id: 100 + 1,
+          users: []
+        });
+      }
+      deviceDropdown(data);
+      // Without mock data
+      // deviceDropdown(result.devices.rows);
     },
     error: function(err) {
       console.log(err);
