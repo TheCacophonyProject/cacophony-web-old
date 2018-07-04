@@ -9,7 +9,8 @@ html
   body
     include includes/navbar.pug
     div.container
-      canvas#myChart(width="400" height="400")
+      .chart-container(style="position: relative; height:40vh; width:80vw")
+        canvas#myChart
     include includes/footer.pug
 
     script(type='text/javascript', src='/javascripts/visualisations.js')
