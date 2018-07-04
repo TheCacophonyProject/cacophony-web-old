@@ -27,13 +27,18 @@ window.onload = function() {
 
   // Add event listeners for device selection
   let deviceInputElement = document.getElementById('deviceInput');
-  deviceInputElement.addEventListener('input', filterDropdown);
+  deviceInputElement.addEventListener('input', filterDeviceDropdown);
 
   // Add event listeners for animal selection
-  let animalInputElement = document.getElementById('animals');
-  animalInputElement.addEventListener('input', (event) => {
-    addAnimalToList(event.target.value);
-  });
+  let animalDropdownElement = document.getElementById('animalDropdown');
+  let animalItems = animalDropdownElement.children;
+  for (let item of animalItems) {
+    item.addEventListener('click', (event) => {
+      addAnimalToList(event.target.innerText);
+    });
+  }
+  let animalInputElement = document.getElementById('animalInput');
+  animalInputElement.addEventListener('input', filterAnimalDropdown);
 };
 
 // DEVICE LIST FUNCTIONS
@@ -174,7 +179,7 @@ function removeDeviceFromList(deviceId) {
 }
 
 // Filter dropdown to hide devices as you type
-function filterDropdown() {
+function filterDeviceDropdown() {
   let input = document.getElementById("deviceInput");
   let filter = input.value.toUpperCase();
   let div = document.getElementsByClassName("dropdown-menu")[0];
@@ -246,20 +251,19 @@ function changeDurationSliderMax() {
 
 // ANIMAL SELECTOR FUNCTIONS
 
-// Add device to list of selected devices
+// Add animal to list of selected animals
 function addAnimalToList(animal) {
   let animalList = document.getElementById("animalList");
   // Check whether it is already selected
   for (let listItem of animalList.children) {
-    console.log(listItem);
     if (listItem.id === animal) {
       // Change placeholder text
-      let animalInput = document.getElementById('animals');
+      let animalInput = document.getElementById('animalInput');
       animalInput.value = 'add another animal';
       return;
     }
   }
-  // Create element and add to deviceList
+  // Create element and add to animalList
   let element = document.createElement("button");
   let span = ' <span class="badge badge-secondary" style="cursor: pointer;"><i class="fas fa-times"></i></span>';
   element.innerHTML = animal + span;
@@ -273,23 +277,37 @@ function addAnimalToList(animal) {
     removeAnimalFromList(animal);
   });
   // Change placeholder text
-  let animalInput = document.getElementById('animals');
-  animalInput.value = 'add another animal';
+  let animalInput = document.getElementById('animalInput');
+  animalInput.placeholder = 'add another animal';
 }
 
-// Remove device from list of selected devices
+// Remove animal from list of selected animals
 function removeAnimalFromList(animal) {
-  console.log('here');
   let animalList = document.getElementById("animalList");
   for (let listItem of animalList.children) {
     if (listItem.id === animal) {
       animalList.removeChild(listItem);
     }
   }
-  // Change placeholder text if no devices left
+  // Change placeholder text if no animals left
   if (animalList.children.length === 0) {
-    let animalInput = document.getElementById('animals');
-    animalInput.value = 'all';
+    let animalInput = document.getElementById('animalInput');
+    animalInput.placeholder = 'all animals';
+  }
+}
+
+// Filter dropdown to hide animals as you type
+function filterAnimalDropdown() {
+  let input = document.getElementById("animalInput");
+  let filter = input.value.toUpperCase();
+  let div = document.getElementsByClassName("dropdown-menu")[0];
+  let items = div.getElementsByTagName("div");
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+      items[i].style.display = "";
+    } else {
+      items[i].style.display = "none";
+    }
   }
 }
 
@@ -365,7 +383,7 @@ function sendQuery() {
 
   // Get animals
   let animals = [];
-  let animalSelected = document.getElementById('animals').value;
+  let animalSelected = document.getElementById('animalInput').value;
   if (animalSelected !== "all") {
     let animalList = document.getElementById('animalList');
     for (let animal of animalList.children) {
