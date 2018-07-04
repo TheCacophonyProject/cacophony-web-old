@@ -39,26 +39,29 @@ html
         //- Animals
         .form-group.col-sm-4
           label Animals
-          select.form-control#animals
-            option all
-            option bird
-            option bird/kiwi
-            option rat
-            option possum
-            option hedgehog
-            option stoat
-            option ferret
-            option weasel
-            option mouse
-            option cat
-            option dog
-            option rabbit
-            option hare
-            option human
-            option spider
-            option insect
-            option other
-            option unidentified
+          .form-row#animalList(style="margin-right: 0; margin-left: 0;")
+          .form-row(style="margin-right: 0; margin-left: 0;")
+            select.form-control#animals
+              option all
+              option bird
+              option bird/kiwi
+              option rat
+              option possum
+              option hedgehog
+              option stoat
+              option ferret
+              option weasel
+              option mouse
+              option cat
+              option dog
+              option rabbit
+              option hare
+              option human
+              option spider
+              option insect
+              option other
+              option unidentified
+              option#addAnotherAnimal(style="display: none;") add another animal
         
         //- Duration
         .form-group.col-sm-4

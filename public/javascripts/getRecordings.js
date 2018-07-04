@@ -29,6 +29,11 @@ window.onload = function() {
   let deviceInputElement = document.getElementById('deviceInput');
   deviceInputElement.addEventListener('input', filterDropdown);
 
+  // Add event listeners for animal selection
+  let animalInputElement = document.getElementById('animals');
+  animalInputElement.addEventListener('input', (event) => {
+    addAnimalToList(event.target.value);
+  });
 };
 
 // DEVICE LIST FUNCTIONS
@@ -239,6 +244,55 @@ function changeDurationSliderMax() {
   durationGhostElement.style.setProperty("--high", 100 * durationElement.valueHigh / durationMax - 1 + "%");
 }
 
+// ANIMAL SELECTOR FUNCTIONS
+
+// Add device to list of selected devices
+function addAnimalToList(animal) {
+  let animalList = document.getElementById("animalList");
+  // Check whether it is already selected
+  for (let listItem of animalList.children) {
+    console.log(listItem);
+    if (listItem.id === animal) {
+      // Change placeholder text
+      let animalInput = document.getElementById('animals');
+      animalInput.value = 'add another animal';
+      return;
+    }
+  }
+  // Create element and add to deviceList
+  let element = document.createElement("button");
+  let span = ' <span class="badge badge-secondary" style="cursor: pointer;"><i class="fas fa-times"></i></span>';
+  element.innerHTML = animal + span;
+  element.id = animal;
+  element.classList.add("btn");
+  element.style.cursor = "auto";
+  animalList.appendChild(element);
+  // Add event listener for removal
+  element = document.getElementById(animal);
+  element.children[0].addEventListener('click', () => {
+    removeAnimalFromList(animal);
+  });
+  // Change placeholder text
+  let animalInput = document.getElementById('animals');
+  animalInput.value = 'add another animal';
+}
+
+// Remove device from list of selected devices
+function removeAnimalFromList(animal) {
+  console.log('here');
+  let animalList = document.getElementById("animalList");
+  for (let listItem of animalList.children) {
+    if (listItem.id === animal) {
+      animalList.removeChild(listItem);
+    }
+  }
+  // Change placeholder text if no devices left
+  if (animalList.children.length === 0) {
+    let animalInput = document.getElementById('animals');
+    animalInput.value = 'all';
+  }
+}
+
 // QUERY FUNCTIONS
 
 // Creates a query string
@@ -288,7 +342,7 @@ function buildQuery() {
     query.recordingDateTime["$lt"] = toDate;
   }
 
-  console.log("Query: \n", query);
+  console.log("Query: \n", JSON.stringify(query));
   return JSON.stringify(query);
 }
 
@@ -313,8 +367,12 @@ function sendQuery() {
   let animals = [];
   let animalSelected = document.getElementById('animals').value;
   if (animalSelected !== "all") {
-    animals.push(animalSelected);
+    let animalList = document.getElementById('animalList');
+    for (let animal of animalList.children) {
+      animals.push(animal.id);
+    }
     data.tags = JSON.stringify(animals);
+    console.log("Animals:", data.tags);
   }
 
   var url = recordingsApiUrl;
