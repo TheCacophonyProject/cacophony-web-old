@@ -186,7 +186,7 @@ function filterDropdown() {
   }
 }
 
-//===============ADD CONDITIONS==================
+// DURATION SLIDER FUNCTIONS
 
 var durationMax = 100;
 
@@ -242,31 +242,9 @@ function changeDurationSliderMax() {
   durationGhostElement.style.setProperty("--high", 100 * durationElement.valueHigh / durationMax - 1 + "%");
 }
 
-// Increase query offset, view next set of results.
-function inc() {
-  var offset = document.getElementById('offset');
-  var offsetN = Number(offset.value);
-  var limitN = Number(document.getElementById('limit').value);
-  if (offsetN + limitN < count) {
-    offset.value = offsetN + limitN;
-  }
-  sendQuery();
-}
+// QUERY FUNCTIONS
 
-// Decrease query offset, vew previous set of results.
-function dec() {
-  var offset = document.getElementById('offset');
-  var offsetN = Number(offset.value);
-  var limitN = Number(document.getElementById('limit').value);
-  var newOffsetVal = offsetN - limitN;
-  if (newOffsetVal <= 0) {
-    newOffsetVal = 0;
-  }
-  offset.value = newOffsetVal;
-  sendQuery();
-}
-
-// Creates a query string (replaces active query HTML field)
+// Creates a query string
 function buildQuery() {
   let query = {type: 'thermalRaw'};
 
@@ -367,6 +345,32 @@ function clearTable() {
     table.deleteRow(rowCount);
   }
 }
+
+// Increase query offset, view next set of results.
+function inc() {
+  var offset = document.getElementById('offset');
+  var offsetN = Number(offset.value);
+  var limitN = Number(document.getElementById('limit').value);
+  if (offsetN + limitN < count) {
+    offset.value = offsetN + limitN;
+  }
+  sendQuery();
+}
+
+// Decrease query offset, vew previous set of results.
+function dec() {
+  var offset = document.getElementById('offset');
+  var offsetN = Number(offset.value);
+  var limitN = Number(document.getElementById('limit').value);
+  var newOffsetVal = offsetN - limitN;
+  if (newOffsetVal <= 0) {
+    newOffsetVal = 0;
+  }
+  offset.value = newOffsetVal;
+  sendQuery();
+}
+
+// TABLE FUNCTIONS
 
 // Parses throug a Datapoint and adds it to the result table.
 function appendDatapointToTable(datapoint) {
