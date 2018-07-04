@@ -19,21 +19,7 @@ var nextId = 1;
 var count = 54;
 
 window.onload = function() {
-  var headers = {};
-  if (user.isLoggedIn()) {
-    headers.Authorization = user.getJWT();
-  }
-  $.ajax({
-    url: devicesApiUrl,
-    type: 'GET',
-    headers: headers,
-    success: function(result) {
-      deviceDropdown(result.devices.rows);
-    },
-    error: function(err) {
-      console.log(err);
-    }
-  });
+  deviceDropdown();
 
   // Add event listeners for duration slider
   let durationElement = document.getElementById('duration');
@@ -60,9 +46,70 @@ window.onload = function() {
 
 // DEVICE LIST FUNCTIONS
 
+// Returns an array of groups, where each group is an object with name, id, and
+// array of devices, where each device has an id and name.
+function getGroups() {
+  const data = {where: JSON.stringify({}) };
+  const headers = {};
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      url: groupsApiUrl,
+      type: 'GET',
+      headers: headers,
+      data: data,
+      success: function(result) {
+        let groups = [];
+        // Extract device IDs
+        for (let item of result.groups) {
+          let deviceIds = [];
+          for (let device of item.Devices) {
+            deviceIds.push(device.id);
+          }
+          // Create group object
+          let group = {
+            name: item.groupname,
+            id: item.id,
+            devices: deviceIds
+          };
+          groups.push(group);
+        }
+        return resolve(groups);
+      },
+      error: reject,
+    });
+  });
+}
+
+function getDevices() {
+  const data = JSON.stringify({});
+  const headers = {};
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      url: devicesApiUrl,
+      type: 'GET',
+      headers: headers,
+      data: data,
+      success: function(result) {
+        return resolve(result.devices.rows);
+      },
+      error: reject,
+    });
+  });
+}
+
 // Populate list with devices
-async function deviceDropdown(devices) {
-  // Add devices
+async function deviceDropdown() {
+  // Extract data from API
+  let devices = await getDevices();
+  let groups = await getGroups();
+
+  // Add devices to dropdown
   let dropdownMenu = document.getElementsByClassName("dropdown-menu")[0];
   for (let device of devices) {
     let item = document.createElement("div");
@@ -71,8 +118,7 @@ async function deviceDropdown(devices) {
     item.classList.add("dropdown-item");
     dropdownMenu.appendChild(item);
   }
-  // Add groups
-  let groups = await getGroups({});
+  // Add groups to dropdown
   for (let group of groups) {
     let item = document.createElement("div");
     item.innerText = group.name + " (group)";
@@ -90,6 +136,8 @@ async function deviceDropdown(devices) {
       addDeviceToList(device);
     });
   }
+
+
 }
 
 // Add device to list of selected devices
@@ -149,42 +197,7 @@ function filterDropdown() {
   }
 }
 
-// Returns an array of groups, where each group is an object with name, id, and
-// array of devices, where each device has an id and name.
-function getGroups(where) {
-  const data = { where: JSON.stringify(where) };
-  const headers = {};
-  if (user.isLoggedIn()) {
-    headers.Authorization = user.getJWT();
-  }
-  return new Promise(function(resolve, reject) {
-    $.ajax({
-      url: groupsApiUrl,
-      type: 'GET',
-      headers: headers,
-      data: data,
-      success: function(result) {
-        let groups = [];
-        // Extract device IDs
-        for (let item of result.groups) {
-          let deviceIds = [];
-          for (let device of item.Devices) {
-            deviceIds.push(device.id);
-          }
-          // Create group object
-          let group = {
-            name: item.groupname,
-            id: item.id,
-            devices: deviceIds
-          };
-          groups.push(group);
-        }
-        return resolve(groups);
-      },
-      error: reject,
-    });
-  });
-}
+
 
 //===============ADD CONDITIONS==================
 // Adds a Sequelize condition.
