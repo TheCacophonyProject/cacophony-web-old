@@ -16,6 +16,7 @@ async function getDevices() {
 }
 
 async function graphDeviceRecordingCount(devices, query) {
+  showLoader();
   // Initiate data and label variables
   let labels = [];
   let data = [];
@@ -61,6 +62,7 @@ async function graphDeviceRecordingCount(devices, query) {
     borderWidth: 1
   }];
 
+  hideLoader();
   // Draw the chart
   drawBarChart(labels, dataset, "Total recordings on each device", "Device name", "Number of recordings");
 }
@@ -148,4 +150,14 @@ async function fetchData(url) {
     // Throw a tantrum!
     throw new Error(response.status);
   }
+}
+
+function showLoader() {
+  let loader = document.getElementById('loader');
+  loader.style.display = "block";
+}
+
+function hideLoader() {
+  let loader = document.getElementById('loader');
+  loader.style.display = "none";
 }

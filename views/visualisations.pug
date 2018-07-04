@@ -5,9 +5,11 @@ html
     include includes/base.pug
     include includes/bootstrap4.pug
     script(type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js")
+    link(rel='stylesheet' href='/stylesheets/loader.css')
 
   body
     include includes/navbar.pug
+    .loader#loader(style="display:none;")
     div.container
       .chart-container(style="position: relative; height:40vh; width:80vw")
         canvas#myChart
