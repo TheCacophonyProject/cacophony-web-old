@@ -29,9 +29,6 @@ window.onload = function() {
   let deviceInputElement = document.getElementById('deviceInput');
   deviceInputElement.addEventListener('input', filterDropdown);
 
-  // Add event listeners for animal selection
-  // let animalInputElement = document.getElementById('animals');
-  // animalInputElement.addEventListener('input', addAnimal);
 };
 
 // DEVICE LIST FUNCTIONS
@@ -304,17 +301,27 @@ function sendQuery() {
   var limit = Number(document.getElementById('limit').value);
   var offset = Number(document.getElementById('offset').value);
   var tagMode = $('select#tagMode').val();
+  // Build query data
+  let data = {
+    where: query,
+    limit: limit,
+    offset: offset,
+    tagMode: tagMode
+  };
+
+  // Get animals
+  let animals = [];
+  let animalSelected = document.getElementById('animals').value;
+  if (animalSelected !== "all") {
+    animals.push(animalSelected);
+    data.tags = JSON.stringify(animals);
+  }
 
   var url = recordingsApiUrl;
   $.ajax({
     url: url,
     type: 'GET',
-    data: {
-      where: query,
-      limit: limit,
-      offset: offset,
-      tagMode: tagMode,
-    },
+    data: data,
     headers: { Authorization: user.getJWT() },
     success: function(res) {
       console.log('Successful request:', res);
