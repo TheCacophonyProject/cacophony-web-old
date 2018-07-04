@@ -29,19 +29,13 @@ window.onload = function() {
   durationElement.addEventListener('input', updateDurationLabels);
   durationGhostElement.addEventListener('input', updateDurationLabels);
 
-  // Add event listeners for date selection
-  let fromDateElement = document.getElementById('fromDate');
-  let toDateElement = document.getElementById('toDate');
-  fromDateElement.addEventListener('input', addFromDate);
-  toDateElement.addEventListener('input', addToDate);
-
   // Add event listeners for device selection
   let deviceInputElement = document.getElementById('deviceInput');
   deviceInputElement.addEventListener('input', filterDropdown);
 
   // Add event listeners for animal selection
   let animalInputElement = document.getElementById('animals');
-  animalInputElement.addEventListener('input', addAnimal);
+  // animalInputElement.addEventListener('input', addAnimal);
 };
 
 // DEVICE LIST FUNCTIONS
@@ -83,6 +77,8 @@ function getGroups() {
   });
 }
 
+// Returns an array of devices, where each devices is an object with name, id,
+// and array of users
 function getDevices() {
   const data = JSON.stringify({});
   const headers = {};
@@ -103,12 +99,11 @@ function getDevices() {
   });
 }
 
-// Populate list with devices
+// Populate the device dropdown with devices and groups of devices
 async function deviceDropdown() {
   // Extract data from API
   let devices = await getDevices();
   let groups = await getGroups();
-
   // Add devices to dropdown
   let dropdownMenu = document.getElementsByClassName("dropdown-menu")[0];
   for (let device of devices) {
@@ -136,8 +131,6 @@ async function deviceDropdown() {
       addDeviceToList(device);
     });
   }
-
-
 }
 
 // Add device to list of selected devices
@@ -209,46 +202,6 @@ function addCondition(sequelizeCondition) {
 // Removes a Sequelize condition with the given ID.
 function deleteCondition(id) {
   delete conditions[id];
-}
-
-function addToDate() {
-  // Remove any existing toDate conditions
-  for (let i in conditions) {
-    if (conditions[i].recordingDateTime !== undefined) {
-      if (conditions[i].recordingDateTime.$lt !== undefined) {
-        deleteCondition(i);
-      }
-    }
-  }
-  // Add new condition
-  var date = document.getElementById('toDate').value;
-  if (date != "") {
-    addCondition({ recordingDateTime: { "$lt": date} });
-  }
-}
-
-function addFromDate() {
-  // Remove any existing fromDate conditions
-  for (let i in conditions) {
-    if (conditions[i].recordingDateTime !== undefined) {
-      if (conditions[i].recordingDateTime.$gt !== undefined) {
-        deleteCondition(i);
-      }
-    }
-  }
-  // Add new condition
-  var date = document.getElementById('fromDate').value;
-  if (date != "") {
-    addCondition({ recordingDateTime: { "$gt": date } });
-  }
-}
-
-function addAnimal() {
-  // Remove any existing animal conditions
-
-  // Add new condition
-  let animal = document.getElementById('animals').value;
-  addCondition({ animal: animal });
 }
 
 var durationMax = 100;
@@ -396,6 +349,20 @@ function buildQuery() {
       }
     }
   }
+
+  // Add date conditions to query
+  let fromDate = document.getElementById('fromDate').value;
+  let toDate = document.getElementById('toDate').value;
+  if (fromDate !== "" || toDate !== "") {
+    query.recordingDateTime = {};
+  }
+  if (fromDate !== "") {
+    query.recordingDateTime["$gt"] = fromDate;
+  }
+  if (toDate != "") {
+    query.recordingDateTime["$lt"] = toDate;
+  }
+
   console.log("Query: \n", query);
   return JSON.stringify(query);
 }
