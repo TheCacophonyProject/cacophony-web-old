@@ -64,7 +64,7 @@ html
         .form-group.col-sm-4
           label Duration (sec)
           .row
-            .col-6
+            .col-6#durationText
               span#durationLow 0
               span &nbsp;to&nbsp;
               span#durationHigh max
@@ -75,7 +75,7 @@ html
               a(onclick='changeDurationSliderMax()')
                 i#durationMaxChange.fas.fa-angle-double-right(style="display: none; text-decoration: none;")
           .col(style="padding-right: 0; padding-left: 0;")
-            input.form-control#duration(type='range' multiple value='0,100' onchange='addDurationFromSlider()' max='100')
+            input.form-control#duration(type='range' multiple value='0,100' max='100')
           
         //- Date range
         .form-group.col

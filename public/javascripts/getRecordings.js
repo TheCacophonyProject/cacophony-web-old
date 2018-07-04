@@ -14,8 +14,6 @@ var devicesApiUrl = api + '/api/v1/devices';
 var viewUrl = '/view_recording/';
 const groupsApiUrl = api + '/api/v1/groups';
 
-const conditions = {};
-var nextId = 1;
 var count = 54;
 
 window.onload = function() {
@@ -24,8 +22,6 @@ window.onload = function() {
   // Add event listeners for duration slider
   let durationElement = document.getElementById('duration');
   let durationGhostElement = findGhost('duration');
-  durationElement.addEventListener('change', addDurationFromSlider);
-  durationGhostElement.addEventListener('change', addDurationFromSlider);
   durationElement.addEventListener('input', updateDurationLabels);
   durationGhostElement.addEventListener('input', updateDurationLabels);
 
@@ -34,7 +30,7 @@ window.onload = function() {
   deviceInputElement.addEventListener('input', filterDropdown);
 
   // Add event listeners for animal selection
-  let animalInputElement = document.getElementById('animals');
+  // let animalInputElement = document.getElementById('animals');
   // animalInputElement.addEventListener('input', addAnimal);
 };
 
@@ -190,40 +186,9 @@ function filterDropdown() {
   }
 }
 
-
-
 //===============ADD CONDITIONS==================
-// Adds a Sequelize condition.
-function addCondition(sequelizeCondition) {
-  var id = nextId++;
-  conditions[id] = sequelizeCondition;
-}
-
-// Removes a Sequelize condition with the given ID.
-function deleteCondition(id) {
-  delete conditions[id];
-}
 
 var durationMax = 100;
-
-function addDurationFromSlider() {
-  // Remove any existing duration conditions
-  for (let i in conditions) {
-    if (conditions[i].duration !== undefined) {
-      deleteCondition(i);
-    }
-  }
-
-  let durationElement = document.getElementById('duration');
-  let durationHigh = durationElement.valueHigh;
-  let durationLow = durationElement.valueLow;
-
-  // Add new duration conditions
-  addCondition({ duration: { "$lt": durationHigh } });
-  addCondition({ duration: { "$gt": durationLow } });
-
-  updateDurationLabels();
-}
 
 function updateDurationLabels() {
   let durationGhostElement = findGhost('duration');
@@ -275,7 +240,6 @@ function changeDurationSliderMax() {
   durationGhostElement.max = durationMax;
   durationGhostElement.style.setProperty("--low", 100 * durationElement.valueLow / durationMax + 1 + "%");
   durationGhostElement.style.setProperty("--high", 100 * durationElement.valueHigh / durationMax - 1 + "%");
-  addDurationFromSlider();
 }
 
 // Increase query offset, view next set of results.
@@ -323,31 +287,17 @@ function buildQuery() {
     }
   }
 
-  // Add conditions to query
-  for (var i in conditions) {
-    var condition = conditions[i];
-    // Two examples that condition could be:
-    // {duration: {$lt: 10}} Duration should be less than 4.
-    // {duration: 2}        Duration should be equal to 2.
-    for (var key in condition) {
-      // Adding empty object if one is not already defined for that key.
-      if (query[key] === undefined) {
-        query[key] = {};
-      }
-
-      // If condition is an object append each condition. {duration: {$lt: 4}}
-      // Just one condition in this case.
-      // query.duration.$lt = 4;
-      if (typeof condition[key] === 'object') {
-        for (var j in condition[key]) {
-          query[key][j] = condition[key][j];
-        }
-      } else {
-        // If not a object just set key to that value. {duration: 2}
-        // query.duration = 2;
-        query[key] = condition[key];
-      }
-    }
+  // Add duration condition to query
+  let durationText = document.getElementById('durationText').innerText;
+  // Check whether the duration slider has moved or whether is still at default
+  // values
+  if (durationText !== "0 to max sec") {
+    let durationLow = document.getElementById('duration').valueLow;
+    let durationHigh = document.getElementById('duration').valueHigh;
+    query.duration = {
+      "$lt": durationHigh,
+      "$gt": durationLow
+    };
   }
 
   // Add date conditions to query
