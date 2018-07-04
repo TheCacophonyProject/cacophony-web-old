@@ -19,13 +19,15 @@ html
         
         //- Devices
         .form-group.col-sm-4
-          label Devices
-          select.form-control#deviceSelect
-            option all
+          label Device
+          .form-row#deviceList(style="margin-right: 0; margin-left: 0;")
+          .dropdown
+            input#deviceInput.form-control.dropdown-toggle(data-toggle="dropdown" placeholder="all devices")
+            .dropdown-menu
         
-        //- Tags
+        //- Tag Types
         .form-group.col-sm-4
-          label Tags
+          label Tag Types
           select.form-control#tagMode
             option(value="any" selected) any
             option(value="untagged") untagged only
@@ -34,11 +36,40 @@ html
             option(value="human-only") manual only
             option(value="automatic+human") both automatic & manual
         
+        //- Animals
+        .form-group.col-sm-4
+          label Animals
+          .form-row#animalList(style="margin-right: 0; margin-left: 0;")
+          .form-row(style="margin-right: 0; margin-left: 0;")
+            input#animalInput.form-control.dropdown-toggle(data-toggle="dropdown" placeholder="all animals")
+            .dropdown-menu#animalDropdown
+              .dropdown-item bird
+              .dropdown-item bird/kiwi
+              .dropdown-item cat
+              .dropdown-item dog
+              .dropdown-item ferret
+              .dropdown-item hare
+              .dropdown-item hedgehog
+              .dropdown-item human
+              .dropdown-item insect
+              .dropdown-item mouse
+              .dropdown-item possum
+              .dropdown-item rabbit
+              .dropdown-item rat
+              .dropdown-item spider
+              .dropdown-item stoat
+              .dropdown-item weasel
+              .dropdown-item other
+              .dropdown-divider
+              .dropdown-item false-positive
+              .dropdown-item interesting
+              .dropdown-item unidentified
+        
         //- Duration
         .form-group.col-sm-4
           label Duration (sec)
           .row
-            .col-6
+            .col-6#durationText
               span#durationLow 0
               span &nbsp;to&nbsp;
               span#durationHigh max
@@ -49,7 +80,7 @@ html
               a(onclick='changeDurationSliderMax()')
                 i#durationMaxChange.fas.fa-angle-double-right(style="display: none; text-decoration: none;")
           .col(style="padding-right: 0; padding-left: 0;")
-            input.form-control#duration(type='range' multiple value='0,100' onchange='addDurationFromSlider()' max='100')
+            input.form-control#duration(type='range' multiple value='0,100' max='100')
           
         //- Date range
         .form-group.col
