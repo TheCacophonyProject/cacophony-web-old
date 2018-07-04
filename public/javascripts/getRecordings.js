@@ -5,13 +5,14 @@ for security, so it should follow the format given from Sequelize.
 http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 */
 
-/* global api, user, Map */
+/* global api, user, Map, Promise */
 
 /* exported changeDurationSliderMax, inc, dec */
 
 var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
 var viewUrl = '/view_recording/';
+const groupsApiUrl = api + '/api/v1/groups';
 
 const conditions = {};
 var nextId = 1;
@@ -27,14 +28,7 @@ window.onload = function() {
     type: 'GET',
     headers: headers,
     success: function(result) {
-      var deviceSelect = document.getElementById("deviceSelect");
-      for (var i in result.devices.rows) {
-        var device = result.devices.rows[i];
-        var option = document.createElement("option");
-        option.innerText = device.devicename;
-        option.id = device.id;
-        deviceSelect.appendChild(option);
-      }
+      deviceDropdown(result.devices.rows);
     },
     error: function(err) {
       console.log(err);
@@ -54,8 +48,141 @@ window.onload = function() {
   let toDateElement = document.getElementById('toDate');
   fromDateElement.addEventListener('input', addFromDate);
   toDateElement.addEventListener('input', addToDate);
+
+  // Add event listeners for device selection
+  let deviceInputElement = document.getElementById('deviceInput');
+  deviceInputElement.addEventListener('input', filterDropdown);
 };
 
+// DEVICE LIST FUNCTIONS
+
+// Populate list with devices
+async function deviceDropdown(devices) {
+  // Add devices
+  let dropdownMenu = document.getElementsByClassName("dropdown-menu")[0];
+  for (let device of devices) {
+    let item = document.createElement("div");
+    item.innerText = device.devicename;
+    item.id = device.id;
+    item.classList.add("dropdown-item");
+    dropdownMenu.appendChild(item);
+  }
+  // Add groups
+  let groups = await getGroups({});
+  for (let group of groups) {
+    let item = document.createElement("div");
+    item.innerText = group.name + " (group)";
+    item.id = group.devices;
+    item.classList.add("dropdown-item");
+    dropdownMenu.appendChild(item);
+  }
+  // Add event listeners
+  for (let item of dropdownMenu.children) {
+    item.addEventListener("click", (event) => {
+      let device = {
+        id: event.target.id,
+        name: event.target.innerText
+      };
+      addDeviceToList(device);
+    });
+  }
+}
+
+// Add device to list of selected devices
+function addDeviceToList(device) {
+  let deviceList = document.getElementById("deviceList");
+  // Check whether it is already selected
+  for (let listItem of deviceList.children) {
+    if (listItem.innerText === device.name + ' ') {
+      return;
+    }
+  }
+  // Create element and add to deviceList
+  let element = document.createElement("button");
+  let span = ' <span class="badge badge-secondary" style="cursor: pointer;"><i class="fas fa-times"></i></span>';
+  element.innerHTML = device.name + span;
+  element.id = device.id;
+  element.classList.add("btn");
+  element.style.cursor = "auto";
+  deviceList.appendChild(element);
+  // Add event listener for removal
+  element = document.getElementById(device.id);
+  element.children[0].addEventListener('click', () => {
+    removeDeviceFromList(device.id);
+  });
+  // Change placeholder text
+  let deviceInput = document.getElementById('deviceInput');
+  deviceInput.placeholder = 'add more devices';
+}
+
+// Remove device from list of selected devices
+function removeDeviceFromList(deviceId) {
+  let deviceList = document.getElementById("deviceList");
+  for (let listItem of deviceList.children) {
+    if (listItem.id === deviceId) {
+      deviceList.removeChild(listItem);
+    }
+  }
+  // Change placeholder text if no devices left
+  if (deviceList.children.length === 0) {
+    let deviceInput = document.getElementById('deviceInput');
+    deviceInput.placeholder = 'all devices';
+  }
+}
+
+// Filter dropdown to hide devices as you type
+function filterDropdown() {
+  let input = document.getElementById("deviceInput");
+  let filter = input.value.toUpperCase();
+  let div = document.getElementsByClassName("dropdown-menu")[0];
+  let items = div.getElementsByTagName("div");
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+      items[i].style.display = "";
+    } else {
+      items[i].style.display = "none";
+    }
+  }
+}
+
+// Returns an array of groups, where each group is an object with name, id, and
+// array of devices, where each device has an id and name.
+function getGroups(where) {
+  const data = { where: JSON.stringify(where) };
+  const headers = {};
+  if (user.isLoggedIn()) {
+    headers.Authorization = user.getJWT();
+  }
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      url: groupsApiUrl,
+      type: 'GET',
+      headers: headers,
+      data: data,
+      success: function(result) {
+        let groups = [];
+        // Extract device IDs
+        for (let item of result.groups) {
+          let deviceIds = [];
+          for (let device of item.Devices) {
+            deviceIds.push(device.id);
+          }
+          // Create group object
+          let group = {
+            name: item.groupname,
+            id: item.id,
+            devices: deviceIds
+          };
+          groups.push(group);
+        }
+        return resolve(groups);
+      },
+      error: reject,
+    });
+  });
+}
+
+//===============ADD CONDITIONS==================
 // Adds a Sequelize condition.
 function addCondition(sequelizeCondition) {
   var id = nextId++;
@@ -67,7 +194,6 @@ function deleteCondition(id) {
   delete conditions[id];
 }
 
-//===============ADD CONDITIONS==================
 function addToDate() {
   // Remove any existing toDate conditions
   for (let i in conditions) {
@@ -203,9 +329,20 @@ function buildQuery() {
   let query = {type: 'thermalRaw'};
 
   // Add device id to query
-  let deviceId = document.getElementById("deviceSelect").selectedOptions[0].id;
-  if (deviceId != "") {
-    query.DeviceId = deviceId;
+  let deviceList = document.getElementById('deviceList');
+  if (deviceList.children.length !== 0) {
+    query.DeviceId = [];
+    for (let device of deviceList.children) {
+      if (device.innerText.slice(-8) === "(group) ") {
+        // Add IDs for groups separately
+        let devices = device.id.split(',');
+        for (let id of devices) {
+          query.DeviceId.push(id);
+        }
+      } else {
+        query.DeviceId.push(device.id);
+      }
+    }
   }
 
   // Add conditions to query

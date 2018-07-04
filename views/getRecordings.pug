@@ -19,13 +19,15 @@ html
         
         //- Devices
         .form-group.col-sm-4
-          label Devices
-          select.form-control#deviceSelect
-            option all
+          label Device
+          .form-row#deviceList(style="margin-right: 0; margin-left: 0;")
+          .dropdown
+            input#deviceInput.form-control.dropdown-toggle(data-toggle="dropdown" placeholder="all devices")
+            .dropdown-menu.scrollable-menu
         
         //- Tags
         .form-group.col-sm-4
-          label Tags
+          label Tag Types
           select.form-control#tagMode
             option(value="any" selected) any
             option(value="untagged") untagged only
