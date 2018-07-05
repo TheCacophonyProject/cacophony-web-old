@@ -33,6 +33,20 @@ html
               input(type="radio" id="alldays")
               label(for="alldays") All time
               
+        //- Device type
+        .form-group
+          label.col-12(style="padding-right: 0; padding-left: 0;") Device type
+          .btn-group.btn-group-toggle(data-toggle="buttons")#deviceType
+            .btn.btn-light.active(data-value="all")
+              input(type="radio" id="allDevices")
+              label(for="allDevices") All devices
+            .btn.btn-light(data-value="audio")
+              input(type="radio" id="audioDevices")
+              label(for="audioDevices") Audio devices
+            .btn.btn-light(data-value="video")
+              input(type="radio" id="videoDevices")
+              label(for="videoDevices") Video devices
+              
         //- Update button
         .form-group
           .btn.btn-success(onclick="updateGraph()") Update graph
