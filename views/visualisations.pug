@@ -10,9 +10,37 @@ html
   body
     include includes/navbar.pug
     .loader#loader(style="display:none;")
-    div.container
+    .container
+      .form-row
+        
+        //- Date range
+        .form-group
+          label.col-12(style="padding-right: 0; padding-left: 0;") Date range
+          .btn-group.btn-group-toggle(data-toggle="buttons")#date
+            .btn.btn-light.active(data-value="7")
+              input(type="radio" id="7days")
+              label(for="7days") Last 7 days
+            .btn.btn-light(data-value="30")
+              input(type="radio" id="30days")
+              label(for="30days") Last 30 days
+            .btn.btn-light(data-value="90")
+              input(type="radio" id="90days")
+              label(for="90days") Last 90 days
+            .btn.btn-light(data-value="365")
+              input(type="radio" id="365days")
+              label(for="365days") Last 365 days
+            .btn.btn-light(data-value="0")
+              input(type="radio" id="alldays")
+              label(for="alldays") All time
+              
+        //- Update button
+        .form-group
+          .btn.btn-success(onclick="updateGraph()") Update graph
+    
+    //- Display graph here
+    .container
       .chart-container(style="position: relative; height:40vh; width:80vw")
         canvas#myChart
+          
     include includes/footer.pug
-
     script(type='text/javascript', src='/javascripts/visualisations.js')

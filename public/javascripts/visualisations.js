@@ -2,35 +2,57 @@
 
 var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
+var theChart;
 
 window.onload = async function() {
-  // let query = {type: 'thermalRaw'};
-  let query = {type: 'thermalRaw'};
-  let deviceResponse = await getDevices();
-  let devices = await deviceResponse.devices.rows;
-  // Sort devices alphabetically by devicename
-  devices.sort(function(a, b) {
-    var nameA = a.devicename.toUpperCase(); // ignore upper and lowercase
-    var nameB = b.devicename.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    // names must be equal
-    return 0;
-  });
-  graphDeviceRecordingCount(devices, query);
+  let title = "Recordings on each device";
+  let xAxisLabel = "Device name";
+  let yAxisLabel = "Number of recordings";
+  createEmptyGraph(title, xAxisLabel, yAxisLabel);
+  updateGraph();
 };
 
-async function getDevices() {
-  let response = await fetchData(devicesApiUrl);
-  return response;
+function createEmptyGraph(title, xAxisLabel, yAxisLabel) {
+  let myChart = document.getElementById("myChart");
+  theChart = new Chart(myChart, {
+    type: 'bar',
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          },
+          scaleLabel: {
+            display: true,
+            labelString: yAxisLabel
+          }
+        }],
+        xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: xAxisLabel
+          }
+        }]
+      },
+      title: {
+        display: true,
+        text: title
+      },
+      legend: {
+        display: false
+      }
+    }
+  });
 }
 
-async function graphDeviceRecordingCount(devices, query) {
+async function updateGraph() {
   showLoader();
+  // Extract query information
+  let query = {type: 'thermalRaw'};
+  query.recordingDateTime = dateQuery();
+  console.log('Query:\n', query);
+  // Get devices
+  let devices = await getDevices();
   // Set query parameters
   let limit = 1000;
   let offset = 0;
@@ -63,6 +85,7 @@ async function graphDeviceRecordingCount(devices, query) {
     labels.push(device.devicename);
   }
   // Create colors for bar graphs
+  lastHue = -60; // reset starting hue
   let colors = data.map(() => colorPicker());
   // Create dataset suitable for ChartJS
   let dataset = [{
@@ -72,48 +95,37 @@ async function graphDeviceRecordingCount(devices, query) {
     borderColor: colors,
     borderWidth: 1
   }];
+  let title = `Recordings on each device (Last ${getDateRange()} days)`;
 
   hideLoader();
   // Draw the chart
-  drawBarChart(labels, dataset, "Total recordings on each device", "Device name", "Number of recordings");
+  updateBarChart(labels, dataset, title);
 }
 
-// Draw chart
-function drawBarChart(labels, datasets, title, xAxisLabel, yAxisLabel) {
-  let myChart = document.getElementById("myChart");
-  new Chart(myChart, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: datasets
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero:true
-          },
-          scaleLabel: {
-            display: true,
-            labelString: yAxisLabel
-          }
-        }],
-        xAxes: [{
-          scaleLabel: {
-            display: true,
-            labelString: xAxisLabel
-          }
-        }]
-      },
-      title: {
-        display: true,
-        text: title
-      },
-      legend: {
-        display: false
-      }
+function updateBarChart(labels, datasets, title) {
+  theChart.data.labels = labels;
+  theChart.data.datasets = datasets;
+  theChart.options.title.text = title;
+  theChart.update();
+}
+
+async function getDevices() {
+  let response = await fetchData(devicesApiUrl);
+  let devices = response.devices.rows;
+  // Sort devices alphabetically by devicename
+  devices.sort(function(a, b) {
+    var nameA = a.devicename.toUpperCase(); // ignore upper and lowercase
+    var nameB = b.devicename.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
     }
+    if (nameA > nameB) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
   });
+  return devices;
 }
 
 function getRecordingURL(query, limit, offset, tagMode) {
@@ -185,4 +197,45 @@ function colorPicker() {
   }
   let hsl = `hsl(${hue}, 80%, 50%)`;
   return hsl;
+}
+
+function getDateRange() {
+  let dateParent = document.getElementById('date');
+  for (let date of dateParent.children) {
+    if (date.classList.contains('active')) {
+      return date.getAttribute('data-value');
+    }
+  }
+}
+
+function dateQuery() {
+  let days = Number(getDateRange()); // number of days to go back in time
+  if (days === 0) {
+    return;
+  } else {
+    let today = new Date(Date.now()); // today
+    let todayms = today.getTime(); // today in ms
+    let daysms = days*24*60*60*1000; // days to go back in ms
+    let fromdatems = todayms - daysms; // from date in ms
+    let fromDate = parseDate(new Date(fromdatems)); // from date as text
+    let toDate = parseDate(today); // to date as text
+    let query = {};
+    if (fromDate !== "" || toDate !== "") {
+      query.recordingDateTime = {};
+    }
+    if (fromDate !== "") {
+      query.recordingDateTime["$gt"] = fromDate;
+    }
+    if (toDate != "") {
+      query.recordingDateTime["$lt"] = toDate;
+    }
+    return query.recordingDateTime;
+  }
+}
+
+function parseDate(date) {
+  let day = (0 + date.getDate().toString()).slice(-2);
+  let month = (0 + (date.getMonth() + 1).toString()).slice(-2);
+  let year = date.getFullYear();
+  return year + "-" + month + "-" + day;
 }
