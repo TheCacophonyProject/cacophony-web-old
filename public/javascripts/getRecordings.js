@@ -164,7 +164,7 @@ function addDeviceToList(device) {
   let deviceInput = document.getElementById('deviceInput');
   deviceInput.placeholder = 'add more devices';
   deviceInput.value = "";
-
+  filterDeviceDropdown();
 }
 
 // Remove device from list of selected devices
@@ -286,6 +286,7 @@ function addAnimalToList(animal) {
   let animalInput = document.getElementById('animalInput');
   animalInput.placeholder = 'add another animal';
   animalInput.value = "";
+  filterAnimalDropdown();
 }
 
 // Remove animal from list of selected animals
