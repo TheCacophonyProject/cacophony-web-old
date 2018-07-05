@@ -152,6 +152,8 @@ function addDeviceToList(device) {
   element.id = device.id;
   element.classList.add("btn");
   element.classList.add("btn-secondary");
+  element.classList.add("mr-1");
+  element.classList.add("mb-1");
   element.style.cursor = "auto";
   element.setAttribute("role", "button");
   deviceList.appendChild(element);
@@ -274,6 +276,8 @@ function addAnimalToList(animal) {
   element.id = animal;
   element.classList.add("btn");
   element.classList.add("btn-secondary");
+  element.classList.add("mr-1");
+  element.classList.add("mb-1");
   element.style.cursor = "auto";
   element.setAttribute("role", "button");
   animalList.appendChild(element);
