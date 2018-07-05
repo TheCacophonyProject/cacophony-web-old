@@ -5,12 +5,27 @@ var devicesApiUrl = api + '/api/v1/devices';
 var theChart;
 
 window.onload = async function() {
+  buttonGroupOrientation();
   let title = "Recordings on each device";
   let xAxisLabel = "Device name";
   let yAxisLabel = "Number of recordings";
   createEmptyGraph(title, xAxisLabel, yAxisLabel);
   updateGraph();
 };
+
+window.onresize = () => buttonGroupOrientation();
+
+function buttonGroupOrientation() {
+  let width = window.innerWidth;
+  let max = 768;
+  let dateElement = document.getElementById('date');
+  console.log('width', width);
+  if (width < max) {
+    dateElement.classList.replace('btn-group', 'btn-group-vertical');
+  } else {
+    dateElement.classList.replace('btn-group-vertical', 'btn-group');
+  }
+}
 
 function createEmptyGraph(title, xAxisLabel, yAxisLabel) {
   let myChart = document.getElementById("myChart");
@@ -40,7 +55,8 @@ function createEmptyGraph(title, xAxisLabel, yAxisLabel) {
       },
       legend: {
         display: false
-      }
+      },
+      maintainAspectRatio: false
     }
   });
 }
