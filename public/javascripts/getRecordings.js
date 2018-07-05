@@ -146,21 +146,25 @@ function addDeviceToList(device) {
     }
   }
   // Create element and add to deviceList
-  let element = document.createElement("button");
+  let element = document.createElement("div");
   let span = ' <span class="badge badge-secondary" style="cursor: pointer;"><i class="fas fa-times"></i></span>';
   element.innerHTML = device.name + span;
   element.id = device.id;
   element.classList.add("btn");
+  element.classList.add("btn-secondary");
   element.style.cursor = "auto";
+  element.setAttribute("role", "button");
   deviceList.appendChild(element);
   // Add event listener for removal
   element = document.getElementById(device.id);
   element.children[0].addEventListener('click', () => {
     removeDeviceFromList(device.id);
   });
-  // Change placeholder text
+  // Change placeholder text and clear input box
   let deviceInput = document.getElementById('deviceInput');
   deviceInput.placeholder = 'add more devices';
+  deviceInput.value = "";
+
 }
 
 // Remove device from list of selected devices
@@ -264,21 +268,24 @@ function addAnimalToList(animal) {
     }
   }
   // Create element and add to animalList
-  let element = document.createElement("button");
+  let element = document.createElement("div");
   let span = ' <span class="badge badge-secondary" style="cursor: pointer;"><i class="fas fa-times"></i></span>';
   element.innerHTML = animal + span;
   element.id = animal;
   element.classList.add("btn");
+  element.classList.add("btn-secondary");
   element.style.cursor = "auto";
+  element.setAttribute("role", "button");
   animalList.appendChild(element);
   // Add event listener for removal
   element = document.getElementById(animal);
   element.children[0].addEventListener('click', () => {
     removeAnimalFromList(animal);
   });
-  // Change placeholder text
+  // Change placeholder text and clear input box
   let animalInput = document.getElementById('animalInput');
   animalInput.placeholder = 'add another animal';
+  animalInput.value = "";
 }
 
 // Remove animal from list of selected animals
@@ -300,7 +307,7 @@ function removeAnimalFromList(animal) {
 function filterAnimalDropdown() {
   let input = document.getElementById("animalInput");
   let filter = input.value.toUpperCase();
-  let div = document.getElementsByClassName("dropdown-menu")[0];
+  let div = document.getElementById("animalDropdown");
   let items = div.getElementsByTagName("div");
   for (let i = 0; i < items.length; i++) {
     if (items[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
