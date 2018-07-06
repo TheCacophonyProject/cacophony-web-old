@@ -393,7 +393,7 @@ function sendQuery() {
     tagMode: tagMode
   };
 
-  // Get animals
+  // Add animals to query
   let animals = [];
   let animalSelected = document.getElementById('animalInput').value;
   if (animalSelected !== "all") {
@@ -415,6 +415,9 @@ function sendQuery() {
       console.log('Successful request:', res);
       if (res.count === 0) {
         window.alert('No results for query.');
+      } else if (res.count < offset) {
+        document.getElementById('offset').value = 0;
+        sendQuery();
       }
       for (var i in res.rows) {
         appendDatapointToTable(res.rows[i]);
