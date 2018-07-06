@@ -68,17 +68,18 @@ tags.addTagToTable = function(tag) {
   var tagtime = document.createElement('td');
   tagtime.innerHTML = new Date(tag.createdAt).toLocaleString();
   row.appendChild(tagtime);
-  
+
   var additionalInfo = document.createElement('td');
   row.appendChild(additionalInfo);
 
   // Add delete button
   var del = document.createElement('td');
-  var deleteButton = document.createElement('button');
+  var deleteButton = document.createElement('div');
   deleteButton.innerHTML = "<img title='Delete sighting' src='/images/delete.png'/>";
   deleteButton.onclick = tags.delete;
   deleteButton.tagId = tag.id;
   deleteButton.tagRow = row;
+  deleteButton.style.cursor = "pointer";
   del.appendChild(deleteButton);
   row.appendChild(del);
 
