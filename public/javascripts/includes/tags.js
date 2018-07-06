@@ -68,22 +68,23 @@ tags.addTagToTable = function(tag) {
   var tagtime = document.createElement('td');
   tagtime.innerHTML = new Date(tag.createdAt).toLocaleString();
   row.appendChild(tagtime);
-  
+
   var additionalInfo = document.createElement('td');
   row.appendChild(additionalInfo);
 
   // Add delete button
   var del = document.createElement('td');
-  var deleteButton = document.createElement('button');
+  var deleteButton = document.createElement('div');
   deleteButton.innerHTML = "<img title='Delete sighting' src='/images/delete.png'/>";
   deleteButton.onclick = tags.delete;
   deleteButton.tagId = tag.id;
   deleteButton.tagRow = row;
+  deleteButton.style.cursor = "pointer";
   del.appendChild(deleteButton);
   row.appendChild(del);
 
   if (tag.number != null && tag.number > 1.5) {
-    additionalInfo.innerHTML += "<p> Number of animals is '" + tag.number + "'</p>";  
+    additionalInfo.innerHTML += "<p> Number of animals is '" + tag.number + "'</p>";
   }
 
   if (tag.event != null && tag.event != "just wandering about") {
@@ -265,7 +266,7 @@ tags.parseTime = function(id) {
 };
 
 /**
- * Takes time in total seconds and parses it back into minutes and seconds format. 
+ * Takes time in total seconds and parses it back into minutes and seconds format.
  */
 tags.displayTime = function(timeInSeconds) {
   var timeString = "";
