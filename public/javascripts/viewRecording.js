@@ -42,6 +42,9 @@ window.onload = function() {
       document.getElementById([setToDefaults[i]]).value = defaults[setToDefaults[i]];
     }
   }
+
+  activateDownloadButton("downloadFileJWT");
+  activateDownloadButton("downloadRawJWT");
 };
 
 function getRecordingError(result) {
@@ -232,4 +235,39 @@ function updateComment() {
       window.alert("Failed to save comment.");
     },
   });
+}
+
+// Adds functionality to download buttons
+function activateDownloadButton(type) {
+  let button;
+  if (type === "downloadFileJWT") {
+    button = document.getElementById('processedDownload');
+  } else {
+    button = document.getElementById('rawDownload');
+  }
+
+
+  let onclick = function() {
+    // Get server to generate a JWT for downloading the file.
+    var headers = {};
+    if (user.isLoggedIn()) {
+      headers.Authorization = user.getJWT();
+    }
+    var url = recordingsApiUrl + '/' + id;
+    $.ajax({
+      url: url,
+      type: 'GET',
+      headers: headers,
+      success: function(res) {
+        var url = api + "/api/v1/signedUrl?jwt=" + res[type];
+        var linkElement = document.createElement('a');
+        linkElement.href = url;
+        var click = document.createEvent('MouseEvents');
+        click.initEvent('click', true, true);
+        linkElement.dispatchEvent(click);
+      },
+      error: console.log,
+    });
+  };
+  button.addEventListener('click', onclick);
 }
