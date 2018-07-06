@@ -597,47 +597,6 @@ function parseOther() {
   return td;
 }
 
-
-// Generates a Download button to download the recording
-function parseDownload(id, type) {
-  var td = document.createElement("td");
-  var button = document.createElement("button");
-  button.innerHTML = "Download";
-
-  button.onclick = function() {
-    // Get server to generate a JWT for downloading the file.
-    var headers = {};
-    if (user.isLoggedIn()) {
-      headers.Authorization = user.getJWT();
-    }
-    var url = recordingsApiUrl + '/' + id;
-    $.ajax({
-      url: url,
-      type: 'GET',
-      headers: headers,
-      success: function(res) {
-        var url = api + "/api/v1/signedUrl?jwt=" + res[type];
-        var linkElement = document.createElement('a');
-        linkElement.href = url;
-        var click = document.createEvent('MouseEvents');
-        click.initEvent('click', true, true);
-        linkElement.dispatchEvent(click);
-      },
-      error: console.log,
-    });
-  };
-  td.appendChild(button);
-  return td;
-}
-
-function parseDownloadRaw(id) {
-  return parseDownload(id, 'downloadRawJWT');
-}
-
-function parseDownloadFile(id) {
-  return parseDownload(id, 'downloadFileJWT');
-}
-
 function parseGroup(group) {
   var td = document.createElement("td");
   td.innerHTML = group.groupname;
@@ -695,16 +654,6 @@ function getTableData() {
     tableName: "Other",
     datapointField: "datapoint",
     parseFunction: parseOther,
-  },
-  {
-    tableName: "File",
-    datapointField: "id",
-    parseFunction: parseDownloadFile
-  },
-  {
-    tableName: "File",
-    datapointField: "id",
-    parseFunction: parseDownloadRaw
   },
   ];
 }
