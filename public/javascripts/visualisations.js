@@ -14,12 +14,11 @@ window.onload = async function() {
 };
 
 window.onresize = () => buttonGroupOrientation();
-
+// Change horizontal button groups to vertical on smaller devices widths
 function buttonGroupOrientation() {
   let width = window.innerWidth;
   let max = 768;
   let dateElement = document.getElementById('date');
-  console.log('width', width);
   if (width < max) {
     dateElement.classList.replace('btn-group', 'btn-group-vertical');
   } else {
@@ -27,6 +26,7 @@ function buttonGroupOrientation() {
   }
 }
 
+// Create empty graph axis with basic options
 function createEmptyGraph(title, xAxisLabel, yAxisLabel) {
   let myChart = document.getElementById("myChart");
   theChart = new Chart(myChart, {
@@ -61,6 +61,7 @@ function createEmptyGraph(title, xAxisLabel, yAxisLabel) {
   });
 }
 
+// Get the query information and update the graph object with new data
 async function updateGraph() {
   showLoader();
   // Extract query information
@@ -92,13 +93,18 @@ async function updateGraph() {
   // Create data and label variables
   let labels = [];
   let data = [];
+  let unused = [];
   for (let device of devices) {
-    data.push({
-      id: device.id,
-      count: deviceCount[device.id],
-      devicename: device.devicename
-    });
-    labels.push(device.devicename);
+    if (deviceCount[device.id] > 0) {
+      data.push({
+        id: device.id,
+        count: deviceCount[device.id],
+        devicename: device.devicename
+      });
+      labels.push(device.devicename);
+    } else {
+      unused.push(device.devicename);
+    }
   }
   // Create colors for bar graphs
   lastHue = -60; // reset starting hue
@@ -116,6 +122,8 @@ async function updateGraph() {
   hideLoader();
   // Draw the chart
   updateBarChart(labels, dataset, title);
+  // List devices with no recordings
+  unusedDevices(unused);
 }
 
 function updateBarChart(labels, datasets, title) {
@@ -254,4 +262,26 @@ function parseDate(date) {
   let month = (0 + (date.getMonth() + 1).toString()).slice(-2);
   let year = date.getFullYear();
   return year + "-" + month + "-" + day;
+}
+
+function unusedDevices(devices) {
+  // Remove any previous #unused divs
+  let previous = document.getElementsByClassName("unused");
+  console.log(previous);
+  for (let item of previous) {
+    item.remove();
+  }
+  // Add a new unused list if there are unused devices
+  if (devices.length > 0) {
+    let parent = document.getElementById("myChart").parentNode.parentNode;
+    let div = document.createElement("div");
+    div.style["margin-top"] = "15px";
+    div.className = "unused";
+    let text = "Devices with no recordings for the selected time period: " + devices[0];
+    for (let i = 1; i < devices.length; i++) {
+      text = text + ", " + devices[i];
+    }
+    div.innerText = text;
+    parent.appendChild(div);
+  }
 }
