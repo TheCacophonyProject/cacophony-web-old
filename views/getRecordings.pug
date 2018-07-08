@@ -94,19 +94,22 @@ html
       .form-row
         //- Query buttons
         .form-group.col-12
-          input.btn.btn-block(type='button', value='Search', onclick='sendQuery()')
+          input.btn.btn-block(type='button', value='Search', onclick='sendQuery(0)')
         //- Count of matches
         .form-group.col-12
           h5.text-center#count(style="text-align: center;")
-        //- Limit and offset
-        .form-group.col-12
-          .form-row
-            label.col-2.col-md-1.col-form-label.text-right Limit
-            input.col-3.col-md-2.form-control#limit(type='number', value=100)
-            label.col-2.col-md-1.col-form-label.text-right Offset
-            input.col-3.col-md-2.form-control#offset(type='number', value=0)
-            input.col-1.col-md-1.btn(type='button', value='<', onclick="dec()")
-            input.col-1.col-md-1.btn(type='button', value='>', onclick="inc()")
+        
+        //- Limit and page buttons
+        .form-group.form-row.col-12.col-md-4
+          label.col-6.col-form-label.text-right Rows to display
+          input.col-6.form-control#limit(type='number', value=100)
+        .col-md-4
+          //- Empty space for larger devices only
+        .form-group.form-row.col-12.col-md-4.change-page
+          input.prevPage.col-4.btn(type='button', value='<', onclick="changePage('-1')" style="visibility: hidden;")
+          label.pageLabel.col-4.col-form-label.text-center(style="visibility: hidden;") page&nbsp;
+            span#pageNumber 1
+          input.nextPage.col-4.btn(type='button', value='>', onclick="changePage('+1')" style="visibility: hidden;")
 
   .container-flex
     .table-responsive
@@ -124,5 +127,14 @@ html
           th Other
           th File
           th Raw data
+
+    .form-group.form-row.col-12
+      .col-md-8
+          //- Empty
+      .form-group.form-row.col-12.col-md-4.change-page
+        input.prevPage.col-4.btn(type='button', value='<', onclick="changePage('-1')" style="visibility: hidden;")
+        label.pageLabel.col-4.col-form-label.text-center(style="visibility: hidden;") page&nbsp;
+          span#pageNumberBottom 1
+        input.nextPage.col-4.btn(type='button', value='>', onclick="changePage('+1')" style="visibility: hidden;")
 
     include includes/footer.pug
