@@ -9,7 +9,7 @@ var recording = null;
 
 document.onkeypress = function (e) {
   if (document.activeElement.tagName.toUpperCase() != 'BODY') {
-    return; 
+    return;
   }
   var key = e.key;
   if (key == 'n') {
@@ -134,7 +134,7 @@ function parseThermalRaw(result) {
       secondsToMMSS(player.duration - 10);
   });
   player.addEventListener('loadstart', function(res) {
-    res.target.play(); 
+    res.target.play();
   });
 
   // Set source for player
@@ -242,7 +242,7 @@ function activateDownloadButton(type) {
   let button;
   if (type === "downloadFileJWT") {
     button = document.getElementById('processedDownload');
-  } else {
+  } else if (type === "downloadRawJWT") {
     button = document.getElementById('rawDownload');
   }
 
