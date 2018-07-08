@@ -120,7 +120,12 @@ async function deviceDropdown() {
   for (let group of groups) {
     let item = document.createElement("div");
     item.innerText = group.name + " (group)";
-    item.id = group.devices;
+    if (group.devices.length > 0) {
+      item.id = group.devices;
+    } else {
+      item.id = "none" + group.name;
+    }
+
     item.classList.add("dropdown-item");
     dropdownMenu.appendChild(item);
   }
@@ -335,10 +340,13 @@ function buildQuery() {
     query.DeviceId = [];
     for (let device of deviceList.children) {
       if (device.innerText.slice(-8) === "(group) ") {
-        // Add IDs for groups separately
-        let devices = device.id.split(',');
-        for (let id of devices) {
-          query.DeviceId.push(id);
+        // Check whether the device group has no devices
+        if (device.id.slice(0,4) !== "none") {
+          // Add IDs for groups separately
+          let devices = device.id.split(',');
+          for (let id of devices) {
+            query.DeviceId.push(id);
+          }
         }
       } else {
         query.DeviceId.push(device.id);
