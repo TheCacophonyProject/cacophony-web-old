@@ -597,6 +597,13 @@ function parseOther() {
   return td;
 }
 
+function parseProcessingState(result) {
+  let td = document.createElement("td");
+  let string = result.processingState.toLowerCase();
+  string = string.charAt(0).toUpperCase() + string.slice(1);
+  td.innerHTML = string;
+  return td;
+}
 
 // Generates a Download button to download the recording
 function parseDownload(id, type) {
@@ -705,6 +712,11 @@ function getTableData() {
     tableName: "File",
     datapointField: "id",
     parseFunction: parseDownloadRaw
+  },
+  {
+    tableName: "Processing State",
+    datapointField: "datapoint",
+    parseFunction: parseProcessingState
   },
   ];
 }
