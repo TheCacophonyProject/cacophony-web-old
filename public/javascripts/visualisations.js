@@ -6,7 +6,7 @@ var theChart;
 
 window.onload = async function() {
   buttonGroupOrientation();
-  let title = "Recordings on each device";
+  let title = "Device Activity";
   let xAxisLabel = "Device name";
   let yAxisLabel = "Number of recordings";
   createEmptyGraph(title, xAxisLabel, yAxisLabel);
@@ -117,7 +117,7 @@ async function updateGraph() {
     borderColor: colors,
     borderWidth: 1
   }];
-  let title = `Recordings on each device (Last ${getDateRange()} days)`;
+  let title = `Device Activity (Last ${getDateRange()} days)`;
 
   hideLoader();
   // Draw the chart
@@ -267,7 +267,6 @@ function parseDate(date) {
 function unusedDevices(devices) {
   // Remove any previous #unused divs
   let previous = document.getElementsByClassName("unused");
-  console.log(previous);
   for (let item of previous) {
     item.remove();
   }
