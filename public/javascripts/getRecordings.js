@@ -609,6 +609,14 @@ function parseDevice(device) {
   return td;
 }
 
+function parseProcessingState(result) {
+  let td = document.createElement("td");
+  let string = result.processingState.toLowerCase();
+  string = string.charAt(0).toUpperCase() + string.slice(1);
+  td.innerHTML = string;
+  return td;
+}
+
 function getTableData() {
   return [{
     tableName: "ID",
@@ -654,6 +662,11 @@ function getTableData() {
     tableName: "Other",
     datapointField: "datapoint",
     parseFunction: parseOther,
+  },
+  {
+    tableName: "Processing State",
+    datapointField: "datapoint",
+    parseFunction: parseProcessingState
   },
   ];
 }
