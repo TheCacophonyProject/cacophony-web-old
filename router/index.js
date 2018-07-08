@@ -83,8 +83,8 @@ module.exports = function(app) {
     });
   });
 
-  app.get('/visualisations', (request, response) => {
-    response.render('visualisations.pug', {
+  app.get('/data', (request, response) => {
+    response.render('data.pug', {
       'api': config.server.api,
     });
   });
