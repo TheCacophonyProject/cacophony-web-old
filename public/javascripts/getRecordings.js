@@ -430,13 +430,13 @@ function sendQuery(page) {
       count = res.count; // number of results from query.
       document.getElementById('limit').value = res.limit;
       document.getElementById('count').innerHTML = count + " matches found (total)";
+      pageButtons(page);
     },
     error: function(err) {
       window.alert('Error with query.');
       console.log('Error:', err);
     },
   });
-  pageButtons(page);
 }
 
 // Clears the results table.
@@ -467,18 +467,26 @@ function pageButtons(page) {
   pageNumberBottom.innerText = page;
   // Show/hide page buttons
   let limit = Number(document.getElementById('limit').value);
-  if (page === 1) {
-    // Hide previous page button when on page 1
-    changeVisibility(document.getElementsByClassName('prevPage'), "hidden");
-    changeVisibility(document.getElementsByClassName('pageLabel'), "visible");
-    changeVisibility(document.getElementsByClassName('nextPage'), "visible");
-  } else if (page * limit > count) {
-    // Hide next page button when on final page
-    changeVisibility(document.getElementsByClassName('nextPage'), "hidden");
+  let numberOfPages = Math.ceil(count / limit);
+  if (numberOfPages > 1) {
+    if (page === 1) {
+      // Hide previous page button when on page 1
+      changeVisibility(document.getElementsByClassName('prevPage'), "hidden");
+      changeVisibility(document.getElementsByClassName('pageLabel'), "visible");
+      changeVisibility(document.getElementsByClassName('nextPage'), "visible");
+    } else if (page * limit > count) {
+      // Hide next page button when on final page
+      changeVisibility(document.getElementsByClassName('nextPage'), "hidden");
+      changeVisibility(document.getElementsByClassName('prevPage'), "visible");
+    } else {
+      // Show both buttons on intermediate pages
+      changeVisibility(document.getElementsByClassName('prevPage'), "visible");
+      changeVisibility(document.getElementsByClassName('nextPage'), "visible");
+    }
   } else {
-    // Show both buttons on intermediate pages
-    changeVisibility(document.getElementsByClassName('prevPage'), "visible");
-    changeVisibility(document.getElementsByClassName('nextPage'), "visible");
+    changeVisibility(document.getElementsByClassName('prevPage'), "hidden");
+    changeVisibility(document.getElementsByClassName('pageLabel'), "hidden");
+    changeVisibility(document.getElementsByClassName('nextPage'), "hidden");
   }
 }
 
