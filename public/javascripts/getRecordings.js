@@ -7,7 +7,7 @@ http://docs.sequelizejs.com/manual/tutorial/querying.html#where
 
 /* global api, user, Map, Promise */
 
-/* exported changeDurationSliderMax, inc, dec */
+/* exported changeDurationSliderMax, changePage */
 
 var recordingsApiUrl = api + '/api/v1/recordings';
 var devicesApiUrl = api + '/api/v1/devices';
@@ -120,7 +120,12 @@ async function deviceDropdown() {
   for (let group of groups) {
     let item = document.createElement("div");
     item.innerText = group.name + " (group)";
-    item.id = group.devices;
+    if (group.devices.length > 0) {
+      item.id = group.devices;
+    } else {
+      item.id = "none" + group.name;
+    }
+
     item.classList.add("dropdown-item");
     dropdownMenu.appendChild(item);
   }
@@ -335,10 +340,13 @@ function buildQuery() {
     query.DeviceId = [];
     for (let device of deviceList.children) {
       if (device.innerText.slice(-8) === "(group) ") {
-        // Add IDs for groups separately
-        let devices = device.id.split(',');
-        for (let id of devices) {
-          query.DeviceId.push(id);
+        // Check whether the device group has no devices
+        if (device.id.slice(0,4) !== "none") {
+          // Add IDs for groups separately
+          let devices = device.id.split(',');
+          for (let id of devices) {
+            query.DeviceId.push(id);
+          }
         }
       } else {
         query.DeviceId.push(device.id);
@@ -377,13 +385,20 @@ function buildQuery() {
 }
 
 // Sends a query and updates the table with the new results.
-function sendQuery() {
+function sendQuery(page) {
   let query = buildQuery();
   clearTable();
 
   // Get query params.
   var limit = Number(document.getElementById('limit').value);
-  var offset = Number(document.getElementById('offset').value);
+  let offset;
+  if (!page) {
+    offset = 0;
+    page = 1;
+  } else {
+    offset = limit * (page - 1);
+  }
+  console.log('query page', page);
   var tagMode = $('select#tagMode').val();
   // Build query data
   let data = {
@@ -421,9 +436,9 @@ function sendQuery() {
       }
       limit = res.limit;
       count = res.count; // number of results from query.
-      document.getElementById('offset').value = res.offset;
       document.getElementById('limit').value = res.limit;
       document.getElementById('count').innerHTML = count + " matches found (total)";
+      pageButtons(page);
     },
     error: function(err) {
       window.alert('Error with query.');
@@ -441,28 +456,53 @@ function clearTable() {
   }
 }
 
-// Increase query offset, view next set of results.
-function inc() {
-  var offset = document.getElementById('offset');
-  var offsetN = Number(offset.value);
-  var limitN = Number(document.getElementById('limit').value);
-  if (offsetN + limitN < count) {
-    offset.value = offsetN + limitN;
-  }
-  sendQuery();
+// View next page (increase query offset and send query again)
+function changePage(increment) {
+  let pageNumber = document.getElementById('pageNumber');
+  let currentPage = Number(pageNumber.innerText);
+  console.log('current page', currentPage);
+  let nextPage = currentPage + Number(increment);
+  console.log('next page', nextPage);
+  sendQuery(nextPage);
 }
 
-// Decrease query offset, vew previous set of results.
-function dec() {
-  var offset = document.getElementById('offset');
-  var offsetN = Number(offset.value);
-  var limitN = Number(document.getElementById('limit').value);
-  var newOffsetVal = offsetN - limitN;
-  if (newOffsetVal <= 0) {
-    newOffsetVal = 0;
+// Update page number and show/hide page buttons
+function pageButtons(page) {
+  // Update top and bottom page number
+  let pageNumber = document.getElementById('pageNumber');
+  pageNumber.innerText = page;
+  let pageNumberBottom = document.getElementById('pageNumberBottom');
+  pageNumberBottom.innerText = page;
+  // Show/hide page buttons
+  let limit = Number(document.getElementById('limit').value);
+  let numberOfPages = Math.ceil(count / limit);
+  if (numberOfPages > 1) {
+    if (page === 1) {
+      // Hide previous page button when on page 1
+      changeVisibility(document.getElementsByClassName('prevPage'), "hidden");
+      changeVisibility(document.getElementsByClassName('pageLabel'), "visible");
+      changeVisibility(document.getElementsByClassName('nextPage'), "visible");
+    } else if (page * limit > count) {
+      // Hide next page button when on final page
+      changeVisibility(document.getElementsByClassName('nextPage'), "hidden");
+      changeVisibility(document.getElementsByClassName('prevPage'), "visible");
+    } else {
+      // Show both buttons on intermediate pages
+      changeVisibility(document.getElementsByClassName('prevPage'), "visible");
+      changeVisibility(document.getElementsByClassName('nextPage'), "visible");
+    }
+  } else {
+    changeVisibility(document.getElementsByClassName('prevPage'), "hidden");
+    changeVisibility(document.getElementsByClassName('pageLabel'), "hidden");
+    changeVisibility(document.getElementsByClassName('nextPage'), "hidden");
   }
-  offset.value = newOffsetVal;
-  sendQuery();
+}
+
+// Iterate through element group to change their visibility
+function changeVisibility(elements, visibility) {
+  for (let item of elements) {
+    item.style.visibility = visibility;
+  }
 }
 
 // TABLE FUNCTIONS
