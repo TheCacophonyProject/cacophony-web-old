@@ -215,7 +215,6 @@ tags.confirm = function(tag) {
     let tag = {};
     tag.event = "false positive";
     tag.confidence = 0.6;
-    console.log(tags.parseSelect('tagEventInput'));
     tags.send(tag);
   } else {
     tags.quickNew(animal);
