@@ -120,7 +120,12 @@ async function deviceDropdown() {
   for (let group of groups) {
     let item = document.createElement("div");
     item.innerText = group.name + " (group)";
-    item.id = group.devices;
+    if (group.devices.length > 0) {
+      item.id = group.devices;
+    } else {
+      item.id = "none" + group.name;
+    }
+
     item.classList.add("dropdown-item");
     dropdownMenu.appendChild(item);
   }
@@ -335,10 +340,13 @@ function buildQuery() {
     query.DeviceId = [];
     for (let device of deviceList.children) {
       if (device.innerText.slice(-8) === "(group) ") {
-        // Add IDs for groups separately
-        let devices = device.id.split(',');
-        for (let id of devices) {
-          query.DeviceId.push(id);
+        // Check whether the device group has no devices
+        if (device.id.slice(0,4) !== "none") {
+          // Add IDs for groups separately
+          let devices = device.id.split(',');
+          for (let id of devices) {
+            query.DeviceId.push(id);
+          }
         }
       } else {
         query.DeviceId.push(device.id);
@@ -597,47 +605,6 @@ function parseOther() {
   return td;
 }
 
-
-// Generates a Download button to download the recording
-function parseDownload(id, type) {
-  var td = document.createElement("td");
-  var button = document.createElement("button");
-  button.innerHTML = "Download";
-
-  button.onclick = function() {
-    // Get server to generate a JWT for downloading the file.
-    var headers = {};
-    if (user.isLoggedIn()) {
-      headers.Authorization = user.getJWT();
-    }
-    var url = recordingsApiUrl + '/' + id;
-    $.ajax({
-      url: url,
-      type: 'GET',
-      headers: headers,
-      success: function(res) {
-        var url = api + "/api/v1/signedUrl?jwt=" + res[type];
-        var linkElement = document.createElement('a');
-        linkElement.href = url;
-        var click = document.createEvent('MouseEvents');
-        click.initEvent('click', true, true);
-        linkElement.dispatchEvent(click);
-      },
-      error: console.log,
-    });
-  };
-  td.appendChild(button);
-  return td;
-}
-
-function parseDownloadRaw(id) {
-  return parseDownload(id, 'downloadRawJWT');
-}
-
-function parseDownloadFile(id) {
-  return parseDownload(id, 'downloadFileJWT');
-}
-
 function parseGroup(group) {
   var td = document.createElement("td");
   td.innerHTML = group.groupname;
@@ -647,6 +614,14 @@ function parseGroup(group) {
 function parseDevice(device) {
   var td = document.createElement("td");
   td.innerHTML = device.devicename;
+  return td;
+}
+
+function parseProcessingState(result) {
+  let td = document.createElement("td");
+  let string = result.processingState.toLowerCase();
+  string = string.charAt(0).toUpperCase() + string.slice(1);
+  td.innerHTML = string;
   return td;
 }
 
@@ -697,14 +672,9 @@ function getTableData() {
     parseFunction: parseOther,
   },
   {
-    tableName: "File",
-    datapointField: "id",
-    parseFunction: parseDownloadFile
-  },
-  {
-    tableName: "File",
-    datapointField: "id",
-    parseFunction: parseDownloadRaw
+    tableName: "Processing State",
+    datapointField: "datapoint",
+    parseFunction: parseProcessingState
   },
   ];
 }
