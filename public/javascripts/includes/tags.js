@@ -83,6 +83,20 @@ tags.addTagToTable = function(tag) {
   del.appendChild(deleteButton);
   row.appendChild(del);
 
+  // Add a confirm button if tag created by Cacophony AI
+  var confirm = document.createElement('td');
+  console.log(tag);
+  if (tag.automatic  && tag.animal !== "unidentified") {
+    var confirmButton = document.createElement('button');
+    confirmButton.innerHTML = "<i class='fas fa-check-circle fa-3x text-secondary'></i>";
+    confirmButton.onclick = tags.confirm;
+    confirmButton.tagId = tag.id;
+    confirmButton.tagRow = row;
+    confirm.appendChild(confirmButton);
+  }
+  row.appendChild(confirm);
+
+
   if (tag.number != null && tag.number > 1.5) {
     additionalInfo.innerHTML += "<p> Number of animals is '" + tag.number + "'</p>";
   }
@@ -193,6 +207,20 @@ tags.quickNew = function(animal) {
   tags.send(tag);
 };
 
+tags.confirm = function(tag) {
+  let tr = tag.target.parentNode.parentNode.parentNode;
+  let animal = tr.children[0].innerText;
+  if (animal === "-") {
+    // false positive
+    let tag = {};
+    tag.event = "false positive";
+    tag.confidence = 0.6;
+    tags.send(tag);
+  } else {
+    tags.quickNew(animal);
+  }
+  tag.target.classList.replace('text-secondary', 'text-success');
+};
 
 tags.send = function(tag) {
   var data = {recordingId: id};
