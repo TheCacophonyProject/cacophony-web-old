@@ -152,6 +152,7 @@ function parseThermalRaw(result) {
   document.getElementById('time-text').innerHTML = date.toLocaleTimeString();
   document.getElementById('device-text').innerHTML =
     result.recording.Device.devicename;
+  document.getElementById('id-text').innerHTML = id;
   document.getElementById('processing-state-text').innerHTML =
     result.recording.processingState;
   document.getElementById('comment-text').value = result.recording.comment;
