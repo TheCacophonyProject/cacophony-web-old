@@ -23,7 +23,12 @@ window.onload = function() {
 
 function requestError(err) {
   console.log(err);
-  window.alert(err);
+  const message = err.responseJSON.message;
+  if (message) {
+    window.alert(message);
+  } else {
+    window.alert(err);
+  }
 }
 
 function requestSuccess(res) {
@@ -74,7 +79,13 @@ function getStartTimeText() {
 }
 
 function getLocationText() {
-  return recording.location;
+  const loc = recording.location;
+  if (typeof loc === 'object') {
+    var latitude = loc.coordinates[0];
+    var longitude = loc.coordinates[1];
+    return latitude + ', ' + longitude;
+  }
+  return "unknown";
 }
 
 function getPlayerSource(player) {
