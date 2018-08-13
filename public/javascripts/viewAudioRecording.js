@@ -23,7 +23,12 @@ window.onload = function() {
 
 function requestError(err) {
   console.log(err);
-  window.alert(err);
+  const message = err.responseJSON.message;
+  if (message) {
+    window.alert(message);
+  } else {
+    window.alert(err);
+  }
 }
 
 function requestSuccess(res) {
