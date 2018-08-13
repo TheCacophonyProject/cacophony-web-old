@@ -79,7 +79,13 @@ function getStartTimeText() {
 }
 
 function getLocationText() {
-  return recording.location;
+  const loc = recording.location;
+  if (typeof loc === 'object') {
+    var latitude = loc.coordinates[0];
+    var longitude = loc.coordinates[1];
+    return latitude + ', ' + longitude;
+  }
+  return "unknown";
 }
 
 function getPlayerSource(player) {
