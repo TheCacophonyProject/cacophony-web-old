@@ -9,12 +9,6 @@ module.exports = function(app) {
     });
   });
 
-  app.get('/get_audio_recordings', function(req, res) {
-    res.render('getAudioRecordings.pug', {
-      'api': config.server.api,
-    });
-  });
-
   app.get('/get_recordings', function(req, res) {
     res.render('getRecordings.pug', {
       'api': config.server.api,
@@ -42,13 +36,6 @@ module.exports = function(app) {
   app.get('/new_group', function(req, res) {
     res.render('newGroup.pug', {
       'api': config.server.api,
-    });
-  });
-
-  app.get('/view_audio_recording/:id', function(req, res) {
-    res.render('viewAudioRecording.pug', {
-      'api': config.server.api,
-      'id': req.params.id,
     });
   });
 
