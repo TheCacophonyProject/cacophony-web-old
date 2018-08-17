@@ -126,6 +126,14 @@ function getRecordingSuccess(result) {
   document.getElementById('device-text').innerHTML = recording.Device.devicename;
   document.getElementById('id-text').innerHTML = id;
   document.getElementById('processing-state-text').innerHTML = recording.processingState;
+  document.getElementById('relative-to-dusk').innerHTML = recording.relativeToDusk;
+  document.getElementById('relative-to-dawn').innerHTML = recording.relativeToDawn;
+  document.getElementById('location').innerHTML = formatLocation(recording.location);
+  document.getElementById('battery-level').innerHTML = recording.batteryLevel;
+  document.getElementById('battery-charging').innerHTML = recording.batteryCharging;
+  document.getElementById('airplane-mode').innerHTML = recording.airplaneModeOn;
+  document.getElementById('version').innerHTML = recording.version;
+  document.getElementById('additional-metadata').innerHTML = formatMetadata(recording.additionalMetadata);
   document.getElementById('comment-text').value = recording.comment;
 
   if (result.downloadFileJWT) {
@@ -142,6 +150,22 @@ function getRecordingSuccess(result) {
   }
 
   tags.load(result.recording.Tags);
+}
+
+function formatLocation(location) {
+  if (location && typeof location === 'object') {
+    const latitude = location.coordinates[0];
+    const longitude = location.coordinates[1];
+    return latitude + ', ' + longitude;
+  }
+  return '(unknown)';
+}
+
+function formatMetadata(metadata) {
+  if (metadata) {
+    return JSON.stringify(metadata, null, 4);
+  }
+  return '(none)';
 }
 
 function setupVideoPlayer(jwt) {

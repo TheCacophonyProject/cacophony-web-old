@@ -41,16 +41,51 @@ html
 
       div.vid-properties.col-12.col-lg-4
         h3 Properties
-        .form-horizonal
-          .form-group
-            label.col-xs-4 Processing
-            col-xs-8#processing-state-text Unknown file state
-          .form-group
-            label.col-xs-4 Comment
-            input.col-xs-6#comment-text
-            | &nbsp;
-            button.col(onclick="updateComment()") Save
-          .form-group
+        .form
+          .row
+            .form-group
+              label.col-xs-4 Processing
+              .col-xs-8#processing-state-text Unknown file state
+          .row
+            .form-group
+              label.col-xs-4 Location
+              .col-xs-8#location -
+          .row
+            .form-group
+              label.col-xs-4 Relative To Dusk
+              .col-xs-8#relative-to-dusk -
+          .row
+            .form-group
+              label.col-xs-4 Relative To Dawn
+              .col-xs-8#relative-to-dawn -
+          .row
+            .form-group
+              label.col-xs-4 Battery Level
+              .col-xs-8#battery-level -
+          .row
+            .form-group
+              label.col-xs-4 Battery Charging
+              .col-xs-8#battery-charging -
+          .row
+            .form-group
+              label.col-xs-4 Airplane Mode
+              .col-xs-8#airplane-mode -
+          .row
+            .form-group
+              label.col-xs-4 Version
+              .col-xs-8#version -
+          .row
+            .form-group
+              label.col-xs-4 Additional Metadata
+              .col-xs-8
+                pre#additional-metadata -
+          .row
+              .form-group
+                label.col-xs-4 Comment
+                input.col-xs-6#comment-text
+                | &nbsp;
+                button.col(onclick="updateComment()") Save
+          .row
             button.col(onclick="deleteRecording()") Delete Recording
 
       div.col-12.col-lg-4
