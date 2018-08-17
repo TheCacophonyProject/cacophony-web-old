@@ -13,10 +13,6 @@ html
     include includes/navbar.pug
     .container
       .form-row
-        //- Heading
-        .form-group.col-12
-          h4 Search Video Recordings
-        
         //- Devices
         .form-group.col-sm-4
           label Device
@@ -82,7 +78,7 @@ html
                 i#durationMaxChange.fas.fa-angle-double-right(style="display: none; text-decoration: none;")
           .col(style="padding-right: 0; padding-left: 0;")
             input.form-control#duration(type='range' multiple value='0,100' max='100')
-          
+
         //- Date range
         .form-group.col
           label From Date
@@ -90,22 +86,24 @@ html
         .form-group.col
           label To Date
           input.form-control#toDate(type='date')
-    
+
       .form-row
-        //- Query buttons
-        .form-group.col-12
-          input.btn.btn-block(type='button', value='Search', onclick='sendQuery(0)')
-        //- Count of matches
-        .form-group.col-12
-          h5.text-center#count(style="text-align: center;")
-        
-        //- Limit and page buttons
-        .form-group.form-row.col-12.col-md-4
-          label.col-6.col-form-label.text-right Rows to display
-          input.col-6.form-control#limit(type='number', value=100)
-        .col-md-4
-          //- Empty space for larger devices only
-        .form-group.form-row.col-12.col-md-4.change-page
+        .col.form-inline
+          .form-group.mr-sm-2
+            .label.mr-sm-2 Max Results
+            select.form-control#limit()
+                option 10
+                option 50
+                option("selected") 100
+                option 250
+                option 1000
+          input.btn.btn-primary.btn-lg(type='button', value='Search', onclick='sendQuery(0)')
+
+      //- Count of matches
+      .form-row
+        .col.my-auto
+          span#count
+        .form-group.form-row.col-md-4.change-page
           input.prevPage.col-4.btn(type='button', value='<', onclick="changePage('-1')" style="visibility: hidden;")
           label.pageLabel.col-4.col-form-label.text-center(style="visibility: hidden;") page&nbsp;
             span#pageNumber 1
