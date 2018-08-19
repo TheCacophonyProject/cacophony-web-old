@@ -115,20 +115,63 @@ function getRecordingSuccess(result) {
     //TODO deal with not getting a recording back
     return;
   }
+
+  // Set global.
   recording = result.recording;
-  console.log(recording);
-  switch(result.recording.type) {
-  case 'thermalRaw':
-    parseThermalRaw(result);
-    break;
+
+  // Populate page fields
+  const date = new Date(recording.recordingDateTime);
+  document.getElementById('date-text').innerHTML = date.toLocaleDateString();
+  document.getElementById('time-text').innerHTML = date.toLocaleTimeString();
+  document.getElementById('device-text').innerHTML = recording.Device.devicename;
+  document.getElementById('id-text').innerHTML = id;
+  document.getElementById('processing-state-text').innerHTML = recording.processingState;
+  document.getElementById('relative-to-dusk').innerHTML = recording.relativeToDusk;
+  document.getElementById('relative-to-dawn').innerHTML = recording.relativeToDawn;
+  document.getElementById('location').innerHTML = formatLocation(recording.location);
+  document.getElementById('battery-level').innerHTML = recording.batteryLevel;
+  document.getElementById('battery-charging').innerHTML = recording.batteryCharging;
+  document.getElementById('airplane-mode').innerHTML = recording.airplaneModeOn;
+  document.getElementById('version').innerHTML = recording.version;
+  document.getElementById('additional-metadata').innerHTML = formatMetadata(recording.additionalMetadata);
+  document.getElementById('comment-text').value = recording.comment;
+
+  if (result.downloadFileJWT) {
+    switch (recording.type) {
+    case 'thermalRaw':
+      setupVideoPlayer(result.downloadFileJWT);
+      break;
+    case 'audio':
+      setupAudioPlayer(result.downloadFileJWT);
+      break;
+    }
+  } else {
+    window.alert("Recording has not been processed yet.");
   }
+
   tags.load(result.recording.Tags);
 }
 
-function parseThermalRaw(result) {
-  console.log("Got a thermal raw data");
-  // Add event listner to set end time to length - 10 seconds.
+function formatLocation(location) {
+  if (location && typeof location === 'object') {
+    const latitude = location.coordinates[0];
+    const longitude = location.coordinates[1];
+    return latitude + ', ' + longitude;
+  }
+  return '(unknown)';
+}
+
+function formatMetadata(metadata) {
+  if (metadata) {
+    return JSON.stringify(metadata, null, 4);
+  }
+  return '(none)';
+}
+
+function setupVideoPlayer(jwt) {
   var player = document.getElementById('player');
+
+  // Add event listener to set end time to length - 10 seconds.
   player.addEventListener('loadedmetadata', function() {
     document.getElementById('tagStopTimeInput').value =
       secondsToMMSS(player.duration - 10);
@@ -139,24 +182,21 @@ function parseThermalRaw(result) {
 
   // Set source for player
   var source = document.createElement('source');
-  if (result.downloadFileJWT != null) {
-    source.src = api + "/api/v1/signedUrl?jwt=" + result.downloadFileJWT;
-    player.appendChild(source);
-  } else {
-    window.alert("Recording has not been processed yet.");
-  }
-
-  // Get metadata.
-  var date = new Date(result.recording.recordingDateTime);
-  document.getElementById('date-text').innerHTML = date.toLocaleDateString();
-  document.getElementById('time-text').innerHTML = date.toLocaleTimeString();
-  document.getElementById('device-text').innerHTML =
-    result.recording.Device.devicename;
-  document.getElementById('id-text').innerHTML = id;
-  document.getElementById('processing-state-text').innerHTML =
-    result.recording.processingState;
-  document.getElementById('comment-text').value = result.recording.comment;
+  source.src = api + "/api/v1/signedUrl?jwt=" + jwt;
+  player.appendChild(source);
 }
+
+function setupAudioPlayer(jwt) {
+  const audio = document.createElement('audio');
+  audio.controls = true;
+  audio.src = api + "/api/v1/signedUrl?jwt=" + jwt;
+  audio.className = "center-block";
+
+  const player = document.getElementById('player');
+  const parent = player.parentNode;
+  parent.replaceChild(audio, player);
+}
+
 
 function secondsToMMSS(seconds) {
   seconds = Math.ceil(seconds);

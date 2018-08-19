@@ -332,7 +332,7 @@ function filterAnimalDropdown() {
 
 // Creates a query string
 function buildQuery() {
-  let query = {type: 'thermalRaw'};
+  let query = {};
 
   // Add device id to query
   let deviceList = document.getElementById('deviceList');
@@ -427,7 +427,6 @@ function sendQuery(page) {
     data: data,
     headers: { Authorization: user.getJWT() },
     success: function(res) {
-      console.log('Successful request:', res);
       if (res.count === 0) {
         window.alert('No results for query.');
       }
@@ -512,8 +511,7 @@ function appendDatapointToTable(datapoint) {
   var table = document.getElementById('results-table');
   var newRow = table.insertRow(table.rows.length);
   var tableData = getTableData();
-  newRow.appendChild(datapointViewElement(datapoint));
-  // Itterate through tableData appending elements onto the new row for each
+  // Iterate through tableData appending elements onto the new row for each
   // field in tableData. tableData describes what the columns should look like.
   for (var i in tableData) {
     // Some columns need the whole datapoint to parse not just one element.
@@ -529,20 +527,22 @@ function appendDatapointToTable(datapoint) {
   }
 }
 
-// Returns an element that links to a page to view the recording.
-function datapointViewElement(datapoint) {
+function formatId(id) {
   var link = document.createElement("a");
-  link.setAttribute('href', viewUrl + datapoint.id);
+  link.setAttribute('href', viewUrl + id);
   link.setAttribute('target', '_blank');
-  link.innerHTML = 'View';
+  link.innerHTML = id;
   var td = document.createElement("td");
   td.appendChild(link);
   return td;
 }
 
-function parseNumber(number) {
+function formatType(type) {
+  if (type == "thermalRaw") {
+    type = "video";
+  }
   var td = document.createElement("td");
-  td.innerHTML = number;
+  td.innerHTML = type;
   return td;
 }
 
@@ -661,7 +661,12 @@ function getTableData() {
   return [{
     tableName: "ID",
     datapointField: "id",
-    parseFunction: parseNumber
+    parseFunction: formatId
+  },
+  {
+    tableName: "Type",
+    datapointField: "type",
+    parseFunction: formatType
   },
   {
     tableName: "Device",
