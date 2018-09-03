@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    title Cacophony add email
+    include includes/base.pug
+    include includes/bootstrap4.pug
+    script(type='text/javascript', src='javascripts/addEmail.js')
+    script(type='text/javascript').
+      var next = "!{next}";
+    link(href='/stylesheets/heroImage.css', rel='stylesheet', media='screen')
+
+  body
+    include includes/navbar.pug
+    div.hero
+    div.container.col-md-6.col-lg-5
+      p Users now require an email. Please enter in your email below.
+      form
+        .form-group
+          label Email
+          input.form-control#inputEmail(type='email' autofocus)
+
+        .form-group
+          input.btn#addEmail(type='button', value='Save email')
+
+    include includes/footer.pug

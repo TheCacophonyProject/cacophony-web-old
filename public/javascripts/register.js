@@ -11,6 +11,7 @@ function register(event) {
     document.getElementById("password"),
     document.getElementById("passwordRetype"),
     document.getElementById("username"),
+    document.getElementById("email"),
     event
   );
 }

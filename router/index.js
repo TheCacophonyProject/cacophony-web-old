@@ -69,4 +69,11 @@ module.exports = function(app) {
       'api': config.server.api,
     });
   });
+
+  app.get('/add_email', (request, response) => {
+    response.render('addEmail.pug', {
+      'api': config.server.api,
+      'next': request.query.next,
+    });
+  });
 };
