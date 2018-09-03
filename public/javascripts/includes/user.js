@@ -2,6 +2,7 @@
 /* exported user */
 
 var user = {};
+const emailReg = /^(([^<>()[]\\.,;:\s@"]+(\.[^<>()[]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 user.logout = function() {
   localStorage.removeItem('userData');
@@ -31,7 +32,7 @@ user.login = function(password, username) {
   });
 };
 
-user.register = function(passEle1, passEle2, usernameEle, event) {
+user.register = function(passEle1, passEle2, usernameEle, emailEle, event) {
 
   // Prevent page refresh when submit button pushed
   event.preventDefault();
@@ -39,6 +40,7 @@ user.register = function(passEle1, passEle2, usernameEle, event) {
   var password1 = passEle1.value;
   var password2 = passEle2.value;
   var username = usernameEle.value;
+  var email = emailEle.value;
 
   const usernameLength = 5;
   if (username.length < usernameLength) {
@@ -59,11 +61,15 @@ user.register = function(passEle1, passEle2, usernameEle, event) {
     displayAlert("Passwords don't match.");
     return;
   }
+  if (emailReg.test(String(email).toLowerCase())) {
+    displayAlert("Invalid email");
+    return;
+  }
 
   $.ajax({
     url: api + '/api/v1/Users',
     type: 'post',
-    data: "password=" + password1 + "&username=" + username,
+    data: "password=" + password1 + "&username=" + username + "&email=" + email,
     success: function(res) {
       localStorage.setItem('userData', JSON.stringify(res.userData));
       localStorage.setItem('JWT', res.token);
@@ -174,6 +180,21 @@ user.getHeaders = function() {
   return headers;
 };
 
+user.updateFields = function(data) {
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      url: api + "/api/v1/users",
+      type: 'PATCH',
+      headers: { 'Authorization': user.getJWT() },
+      data: {data: JSON.stringify(data)},
+      success: () => resolve(true),
+      error: (err) => {
+        reject(err);
+      },
+    });
+  });
+};
+
 function displayAlert(alertText) {
   // Remove all existing alerts
   let currentAlerts = document.getElementsByClassName('alert');
@@ -197,7 +218,8 @@ function displayAlert(alertText) {
 
 const noAuthPaths = Object.freeze([
   '/login',
-  '/register'
+  '/register',
+  '/add_email',
 ]);
 
 function loginRedirect(pathname) {
@@ -206,6 +228,8 @@ function loginRedirect(pathname) {
   }
   if (!user.isLoggedIn()) {
     window.location.href = '/login' + '?next=' + encodeURIComponent(pathname);
+  } else if (!user.getAttr('email')) {
+    window.location.href = '/add_email' + '?next=' + encodeURIComponent(pathname);
   }
 }
 
