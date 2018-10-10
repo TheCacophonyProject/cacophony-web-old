@@ -8,7 +8,8 @@ window.onload = function() {
   }
 };
 
-async function addEmail() {
+async function addEmail(event) {
+  event.preventDefault();
   var data = {
     email: document.getElementById('inputEmail').value
   };
