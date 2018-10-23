@@ -63,11 +63,11 @@ function nextRecording(direction, tagMode, tags) {
   var order;
   switch (direction) {
   case "next":
-    query.recordingDateTime = {gt: recording.recordingDateTime};
+    query.recordingDateTime = {"$gt": recording.recordingDateTime};
     order = "ASC";
     break;
   case "previous":
-    query.recordingDateTime = {lt: recording.recordingDateTime};
+    query.recordingDateTime = {"$lt": recording.recordingDateTime};
     order = "DESC";
     break;
   default:
