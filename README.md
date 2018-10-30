@@ -2,6 +2,8 @@
 
 This is a web interface for querying with and interacting with Cacophony Project recordings via the project's API. 
 
+**Note**: this is no longer the primary web interface for the project. See https://github.com/TheCacophonyProject/cacophony-browse for the modern, maintained front end.
+
 ## Setup  
 
 You will need Node and npm installed and the URL of the Cacophony API
