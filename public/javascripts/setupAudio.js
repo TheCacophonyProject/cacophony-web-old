@@ -58,9 +58,9 @@ function populateDevicesSelect(deviceSelect) {
 }
 
 function getSchedule() {
-  var selectDevice = document.getElementById("deviceSelect").selectedOptions[0].value;
-  if (selectDevice !== "select") {
-    var scheduleDeviceUrl = scheduleApiUrl + "/" + selectDevice;
+  var deviceID = document.getElementById("deviceSelect").selectedOptions[0].value;
+  if (deviceID !== "select") {
+    var scheduleDeviceUrl = scheduleApiUrl + "/" + deviceID;
     $.ajax({
       url: scheduleDeviceUrl,
       type: 'GET',
