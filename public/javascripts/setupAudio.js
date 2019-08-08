@@ -41,7 +41,7 @@ window.onload = function() {
       schedule.devices = result.devices;
       populateDevicesSelect(document.getElementById("deviceSelect"));
       $("#loading-message").addClass("hide");
-      $("#choose-device").click(getSchedule).removeClass("hide");
+      $("#choose-device").change(getSchedule).removeClass("hide");
     },
     error: function(err) {
       $("#loading-message").text("Failed to find any devices that you can set.");
